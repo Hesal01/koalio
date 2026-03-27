@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SheetLayoutComponent } from './sheet-layout/sheet-layout.component';
-import { MOCK_SHEET_MATH } from '../../core/services/mock-data';
+import { MOCK_SHEET_DINO_P1 } from '../../core/services/mock-data';
 
 @Component({
   selector: 'app-generator-result',
@@ -36,7 +36,7 @@ import { MOCK_SHEET_MATH } from '../../core/services/mock-data';
   styleUrl: './generator-result.component.scss',
 })
 export class GeneratorResultComponent {
-  sheet = MOCK_SHEET_MATH;
+  sheet = MOCK_SHEET_DINO_P1;
   showAnswers = false;
 
   toggleAnswers() {

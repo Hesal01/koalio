@@ -299,3 +299,42 @@
     }
   }
 }
+
+// Counting layout
+.dz-counting {
+  .dz-items {
+    margin-bottom: 0;
+  }
+}
+
+// Open / free draw layout
+.dz-open {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.dz-open-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: $dark-light;
+}
+
+.dz-open-space {
+  height: 100px;
+  border: 2px dashed rgba(0, 0, 0, 0.15);
+  border-radius: $radius-md;
+  background: rgba(255, 255, 255, 0.6);
+  position: relative;
+
+  &::after {
+    content: '✏️ dessine la situation ici';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.75rem;
+    color: rgba(0, 0, 0, 0.18);
+    white-space: nowrap;
+  }
+}

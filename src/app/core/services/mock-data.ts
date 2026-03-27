@@ -1,12 +1,86 @@
 import { Sheet } from '../models/sheet.model';
 
-export const MOCK_SHEET_MATH: Sheet = {
+// ---- Fiche Maths P1 — Dinosaures — Additions jusqu'à 20 ----
+export const MOCK_SHEET_DINO_P1: Sheet = {
   id: '1',
+  childName: 'Emma',
+  level: 'P1',
+  subject: 'math',
+  theme: 'additions',
+  createdAt: new Date('2026-03-27'),
+  exercises: [
+    // Exercice 1 — Dénombrement avec zone de dessin
+    {
+      instruction: 'Le Tricératops a trouvé des œufs dans la jungle ! Compte les œufs et écris le nombre.',
+      questions: [
+        { text: 'Combien y a-t-il d\'œufs ? ___', answer: '8' },
+      ],
+      drawingZone: {
+        type: 'counting',
+        funTheme: 'dinosaurs',
+        params: { existing: 8 },
+      },
+    },
+    // Exercice 2 — Additions simples (pas de zone de dessin)
+    {
+      instruction: 'Le petit dinosaure calcule ! Trouve le résultat.',
+      questions: [
+        { text: '3 + 4 = ___', answer: '7' },
+        { text: '5 + 5 = ___', answer: '10' },
+        { text: '8 + 2 = ___', answer: '10' },
+        { text: '6 + 3 = ___', answer: '9' },
+        { text: '7 + 1 = ___', answer: '8' },
+        { text: '4 + 6 = ___', answer: '10' },
+      ],
+    },
+    // Exercice 3 — Compléter pour faire 10, avec zone de dessin addition
+    {
+      instruction: 'Maman dinosaure veut 10 œufs dans son nid. Elle en a déjà quelques-uns. Dessine les œufs manquants !',
+      questions: [
+        { text: '7 + ___ = 10', answer: '3' },
+      ],
+      drawingZone: {
+        type: 'addition',
+        funTheme: 'dinosaurs',
+        params: { existing: 7, target: 3 },
+      },
+    },
+    // Exercice 4 — Partage avec zone de dessin division
+    {
+      instruction: 'Le Diplodocus a 10 feuilles à partager entre ses 2 bébés. Dessine les feuilles dans chaque nid.',
+      questions: [
+        { text: '10 partagé en 2, ça fait ___ chacun.', answer: '5' },
+      ],
+      drawingZone: {
+        type: 'division',
+        funTheme: 'dinosaurs',
+        params: { total: 10, groups: 2 },
+      },
+    },
+    // Exercice 5 — Problème de vie quotidienne
+    {
+      instruction: 'Lis et résous le problème.',
+      questions: [
+        { text: 'Emma a trouvé 6 œufs de dinosaure le matin. L\'après-midi, elle en trouve 4 de plus. Combien d\'œufs a-t-elle en tout ? ___', answer: '10' },
+        { text: 'Opération : ___ + ___ = ___', answer: '6 + 4 = 10' },
+      ],
+      drawingZone: {
+        type: 'open',
+        funTheme: 'dinosaurs',
+        params: {},
+      },
+    },
+  ],
+};
+
+// ---- Fiche Maths P3 (ancienne mock, gardée) ----
+export const MOCK_SHEET_MATH: Sheet = {
+  id: '2',
   childName: 'Emma',
   level: 'P3',
   subject: 'math',
   theme: 'additions',
-  createdAt: new Date('2026-03-27'),
+  createdAt: new Date('2026-03-26'),
   exercises: [
     {
       instruction: 'Calcule les additions suivantes.',
@@ -45,7 +119,7 @@ export const MOCK_SHEET_MATH: Sheet = {
 };
 
 export const MOCK_SHEET_FRENCH: Sheet = {
-  id: '2',
+  id: '3',
   childName: 'Lucas',
   level: 'P4',
   subject: 'french',
@@ -84,15 +158,7 @@ export const MOCK_SHEET_FRENCH: Sheet = {
 };
 
 export const MOCK_SHEETS: Sheet[] = [
+  MOCK_SHEET_DINO_P1,
   MOCK_SHEET_MATH,
   MOCK_SHEET_FRENCH,
-  {
-    id: '3',
-    childName: 'Emma',
-    level: 'P3',
-    subject: 'math',
-    theme: 'soustractions',
-    createdAt: new Date('2026-03-25'),
-    exercises: [],
-  },
 ];

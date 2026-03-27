@@ -88,6 +88,23 @@ import { Sheet, DrawingZone } from '../../../core/models/sheet.model';
                     </div>
                   </div>
                 }
+
+                @if (exercise.drawingZone.type === 'counting') {
+                  <div class="dz-counting">
+                    <div class="dz-items">
+                      @for (item of getItems(exercise.drawingZone.params.existing || 0); track $index) {
+                        <span class="dz-item">{{ getItemEmoji(exercise.drawingZone.funTheme) }}</span>
+                      }
+                    </div>
+                  </div>
+                }
+
+                @if (exercise.drawingZone.type === 'open') {
+                  <div class="dz-open">
+                    <div class="dz-open-label">Dessine la situation :</div>
+                    <div class="dz-open-space"></div>
+                  </div>
+                }
               </div>
             }
 
