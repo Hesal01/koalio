@@ -1,22 +1,38 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { HeaderComponent } from './shared/components/header/header.component';
+import { filter, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, HeaderComponent],
   template: `
-    <app-header />
-    <main>
+    @if (showHeader) {
+      <app-header />
+    }
+    <main [class.with-header]="showHeader">
       <router-outlet />
     </main>
   `,
   styles: [`
     main {
-      padding-top: 72px;
       min-height: 100vh;
+    }
+    main.with-header {
+      padding-top: 72px;
     }
   `],
 })
-export class AppComponent {}
+export class AppComponent {
+  showHeader = false;
+
+  constructor(private router: Router) {
+    this.router.events.pipe(
+      filter(e => e instanceof NavigationEnd),
+      map((e: NavigationEnd) => e.urlAfterRedirects),
+    ).subscribe(url => {
+      this.showHeader = !['/home', '/login'].includes(url);
+    });
+  }
+}

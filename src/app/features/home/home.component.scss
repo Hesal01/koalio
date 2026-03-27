@@ -1,0 +1,546 @@
+@use '../../styles/variables' as *;
+
+// ---- Layout helpers ----
+.section-container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 $spacing-lg;
+}
+
+.section-title {
+  font-family: $font-family-display;
+  font-size: 2rem;
+  font-weight: 700;
+  color: $dark;
+  text-align: center;
+  margin-bottom: $spacing-sm;
+}
+
+.section-sub {
+  text-align: center;
+  color: $gray;
+  font-size: 1.05rem;
+  margin-bottom: $spacing-2xl;
+}
+
+// ---- Navbar ----
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 $spacing-xl;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid $gray-medium;
+  z-index: 100;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  text-decoration: none;
+
+  &-icon { font-size: 1.5rem; }
+  &-text {
+    font-family: $font-family-display;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: $corail;
+  }
+}
+
+.nav-links {
+  display: flex;
+  gap: $spacing-lg;
+  margin-left: $spacing-2xl;
+
+  a {
+    color: $gray;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s;
+    &:hover { color: $dark; }
+  }
+
+  @media (max-width: $tablet) { display: none; }
+}
+
+.nav-cta {
+  margin-left: auto;
+  padding: $spacing-sm $spacing-lg;
+  background: $corail;
+  color: $white;
+  border-radius: $radius-md;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  &:hover { background: $corail-dark; transform: translateY(-1px); }
+}
+
+// ---- Hero ----
+.hero {
+  padding: 120px $spacing-lg $spacing-3xl;
+  display: flex;
+  align-items: center;
+  gap: $spacing-3xl;
+  max-width: 1080px;
+  margin: 0 auto;
+
+  @media (max-width: $tablet) {
+    flex-direction: column;
+    padding-top: 100px;
+    gap: $spacing-xl;
+    text-align: center;
+  }
+}
+
+.hero-content {
+  flex: 1;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: $spacing-xs $spacing-md;
+  background: $menthe-light;
+  color: $menthe-dark;
+  border-radius: $radius-full;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: $spacing-lg;
+}
+
+.hero h1 {
+  font-family: $font-family-display;
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: $dark;
+  line-height: 1.15;
+  margin-bottom: $spacing-lg;
+
+  @media (max-width: $tablet) { font-size: 2rem; }
+}
+
+.highlight {
+  color: $corail;
+  position: relative;
+}
+
+.hero-sub {
+  font-size: 1.1rem;
+  color: $dark-light;
+  line-height: 1.6;
+  margin-bottom: $spacing-xl;
+  max-width: 480px;
+
+  @media (max-width: $tablet) { max-width: 100%; }
+}
+
+.hero-actions {
+  display: flex;
+  gap: $spacing-md;
+  margin-bottom: $spacing-md;
+
+  @media (max-width: $tablet) { justify-content: center; flex-wrap: wrap; }
+}
+
+.hero-note {
+  font-size: 0.8rem;
+  color: $gray;
+}
+
+// Hero visual (mini sheet)
+.hero-visual {
+  flex-shrink: 0;
+  width: 320px;
+
+  @media (max-width: $tablet) { width: 280px; }
+}
+
+.hero-sheet {
+  background: $white;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-lg;
+  border: 1px solid $gray-medium;
+  transform: rotate(2deg);
+  transition: transform 0.3s;
+
+  &:hover { transform: rotate(0deg) scale(1.02); }
+}
+
+.sheet-mini-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-sm;
+}
+
+.mini-logo {
+  font-family: $font-family-display;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: $corail;
+}
+
+.mini-title {
+  font-family: $font-family-display;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: $dark;
+}
+
+.sheet-mini-divider {
+  height: 2px;
+  background: $corail;
+  margin-bottom: $spacing-md;
+  border-radius: 1px;
+}
+
+.sheet-mini-exercise {
+  display: flex;
+  align-items: baseline;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-xs;
+}
+
+.mini-ex-num {
+  font-family: $font-family-display;
+  font-weight: 700;
+  font-size: 0.7rem;
+  color: $menthe;
+}
+
+.mini-ex-title {
+  font-weight: 600;
+  font-size: 0.72rem;
+  color: $dark;
+}
+
+.sheet-mini-questions {
+  padding-left: $spacing-md;
+  margin-bottom: $spacing-md;
+}
+
+.mini-q {
+  font-size: 0.72rem;
+  color: $dark-light;
+  line-height: 1.9;
+}
+
+.mini-blank {
+  color: $gray;
+  letter-spacing: 0.1em;
+  font-size: 0.65rem;
+}
+
+.sheet-mini-footer {
+  display: flex;
+  justify-content: space-between;
+  padding-top: $spacing-sm;
+  border-top: 1px solid $gray-medium;
+  font-size: 0.6rem;
+  color: $gray;
+
+  span:first-child {
+    font-family: $font-family-display;
+    font-weight: 600;
+    color: $corail;
+  }
+}
+
+// ---- Features ----
+.features {
+  padding: $spacing-3xl 0;
+  background: $white;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-lg;
+
+  @media (max-width: $tablet) { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: $mobile) { grid-template-columns: 1fr; }
+}
+
+.feature-card {
+  padding: $spacing-xl;
+  border-radius: $radius-lg;
+  background: $gray-light;
+  transition: all 0.2s;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $shadow-md;
+  }
+
+  .feature-icon {
+    font-size: 2rem;
+    margin-bottom: $spacing-md;
+  }
+
+  h3 {
+    font-family: $font-family-display;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: $dark;
+    margin-bottom: $spacing-sm;
+  }
+
+  p {
+    font-size: 0.9rem;
+    color: $dark-light;
+    line-height: 1.5;
+  }
+}
+
+// ---- How it works ----
+.how {
+  padding: $spacing-3xl 0;
+  background: $gray-light;
+}
+
+.steps {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: $spacing-lg;
+
+  @media (max-width: $tablet) {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.step {
+  flex: 1;
+  max-width: 260px;
+  text-align: center;
+}
+
+.step-number {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: $corail;
+  color: $white;
+  font-family: $font-family-display;
+  font-size: 1.4rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto $spacing-md;
+}
+
+.step-content {
+  h3 {
+    font-family: $font-family-display;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: $dark;
+    margin-bottom: $spacing-xs;
+  }
+
+  p {
+    font-size: 0.9rem;
+    color: $dark-light;
+    line-height: 1.5;
+  }
+}
+
+.step-arrow {
+  font-size: 1.5rem;
+  color: $gray;
+  padding-top: $spacing-md;
+
+  @media (max-width: $tablet) {
+    transform: rotate(90deg);
+    padding: 0;
+  }
+}
+
+// ---- Pricing ----
+.pricing {
+  padding: $spacing-3xl 0;
+  background: $white;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-xl;
+  max-width: 700px;
+  margin: 0 auto;
+
+  @media (max-width: $mobile) { grid-template-columns: 1fr; }
+}
+
+.pricing-card {
+  border: 2px solid $gray-medium;
+  border-radius: $radius-xl;
+  padding: $spacing-xl;
+  position: relative;
+  transition: all 0.2s;
+
+  &:hover { box-shadow: $shadow-md; }
+
+  &.popular {
+    border-color: $corail;
+    box-shadow: $shadow-lg;
+  }
+}
+
+.popular-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: $corail;
+  color: $white;
+  padding: $spacing-xs $spacing-md;
+  border-radius: $radius-full;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.pricing-header {
+  text-align: center;
+  margin-bottom: $spacing-lg;
+
+  h3 {
+    font-family: $font-family-display;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: $dark;
+    margin-bottom: $spacing-sm;
+  }
+}
+
+.pricing-price {
+  font-family: $font-family-display;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: $dark;
+
+  span {
+    font-size: 1rem;
+    font-weight: 500;
+    color: $gray;
+  }
+}
+
+.pricing-period {
+  font-size: 0.85rem;
+  color: $gray;
+  margin-top: $spacing-xs;
+}
+
+.pricing-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-xl;
+
+  li {
+    font-size: 0.9rem;
+    color: $dark-light;
+    padding-left: $spacing-lg;
+    position: relative;
+
+    &::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: $menthe;
+      font-weight: 700;
+    }
+  }
+}
+
+.pricing-btn {
+  width: 100%;
+  text-align: center;
+}
+
+// ---- CTA Final ----
+.cta-final {
+  padding: $spacing-3xl 0;
+  background: linear-gradient(135deg, $corail-light 0%, $menthe-light 100%);
+  text-align: center;
+
+  .cta-mascot {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: $spacing-md;
+  }
+
+  h2 {
+    font-family: $font-family-display;
+    font-size: 2rem;
+    font-weight: 700;
+    color: $dark;
+    margin-bottom: $spacing-sm;
+  }
+
+  p {
+    color: $dark-light;
+    font-size: 1.05rem;
+    margin-bottom: $spacing-xl;
+  }
+}
+
+// ---- Footer ----
+.footer {
+  padding: $spacing-2xl 0;
+  background: $dark;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: $spacing-lg;
+
+  @media (max-width: $tablet) {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+.footer-brand {
+  .footer-logo {
+    font-family: $font-family-display;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: $white;
+    display: block;
+    margin-bottom: $spacing-xs;
+  }
+
+  p { font-size: 0.85rem; }
+}
+
+.footer-links {
+  display: flex;
+  gap: $spacing-lg;
+
+  a {
+    font-size: 0.85rem;
+    transition: color 0.2s;
+    &:hover { color: $white; }
+  }
+}
+
+.footer-copy {
+  font-size: 0.8rem;
+}
