@@ -1,0 +1,98 @@
+@use '../../../styles/variables' as *;
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: $white;
+  border-bottom: 1px solid $gray-medium;
+  display: flex;
+  align-items: center;
+  padding: 0 $spacing-lg;
+  z-index: 100;
+  box-shadow: $shadow-sm;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  text-decoration: none;
+
+  &-icon {
+    font-size: 1.6rem;
+  }
+
+  &-text {
+    font-family: $font-family-display;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: $corail;
+  }
+}
+
+.nav {
+  display: flex;
+  gap: $spacing-xs;
+  margin-left: $spacing-2xl;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  padding: $spacing-sm $spacing-md;
+  border-radius: $radius-md;
+  color: $gray;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: $dark;
+    background: $gray-light;
+  }
+
+  &.active {
+    color: $corail;
+    background: $corail-light;
+  }
+
+  .nav-icon {
+    font-size: 1rem;
+  }
+}
+
+.user-menu {
+  margin-left: auto;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: $radius-full;
+  background: $menthe;
+  color: $white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+@media (max-width: $tablet) {
+  .nav {
+    margin-left: $spacing-md;
+  }
+
+  .nav-link {
+    font-size: 0;
+    padding: $spacing-sm;
+
+    .nav-icon {
+      font-size: 1.2rem;
+    }
+  }
+}

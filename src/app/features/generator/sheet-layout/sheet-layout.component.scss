@@ -1,0 +1,169 @@
+@use '../../../styles/variables' as *;
+
+.sheet {
+  width: 210mm;
+  min-height: 297mm;
+  background: $white;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-lg;
+  padding: 24mm 20mm;
+  display: flex;
+  flex-direction: column;
+
+  @media (max-width: $desktop) {
+    width: 100%;
+    min-height: auto;
+    padding: $spacing-lg;
+    border-radius: $radius-md;
+  }
+}
+
+.sheet-header {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-lg;
+  padding-bottom: $spacing-lg;
+  border-bottom: 3px solid $corail;
+  margin-bottom: $spacing-xl;
+}
+
+.sheet-header-left {
+  flex-shrink: 0;
+}
+
+.sheet-logo {
+  font-family: $font-family-display;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: $corail;
+}
+
+.sheet-header-right {
+  flex: 1;
+}
+
+.sheet-title {
+  font-family: $font-family-display;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: $dark;
+  margin-bottom: $spacing-sm;
+}
+
+.sheet-meta {
+  display: flex;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
+}
+
+.meta-badge {
+  padding: 2px $spacing-sm;
+  border-radius: $radius-full;
+  font-size: 0.8rem;
+  font-weight: 600;
+
+  &.level {
+    background: $menthe-light;
+    color: $menthe-dark;
+  }
+
+  &.subject {
+    background: $corail-light;
+    color: $corail-dark;
+  }
+
+  &.theme {
+    background: $gray-light;
+    color: $dark-light;
+  }
+}
+
+.sheet-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xl;
+}
+
+.exercise-block {
+  page-break-inside: avoid;
+}
+
+.exercise-header {
+  display: flex;
+  align-items: baseline;
+  gap: $spacing-md;
+  margin-bottom: $spacing-md;
+}
+
+.exercise-number {
+  font-family: $font-family-display;
+  font-weight: 700;
+  font-size: 1rem;
+  color: $menthe;
+  white-space: nowrap;
+}
+
+.exercise-instruction {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: $dark;
+}
+
+.questions {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  padding-left: $spacing-lg;
+}
+
+.question {
+  display: flex;
+  gap: $spacing-sm;
+  line-height: 1.8;
+  font-size: 0.95rem;
+}
+
+.question-number {
+  font-weight: 600;
+  color: $gray;
+  flex-shrink: 0;
+  width: 24px;
+}
+
+.question-text {
+  flex: 1;
+  color: $dark;
+}
+
+.question-answer {
+  font-weight: 700;
+  color: $menthe;
+  background: $menthe-light;
+  padding: 0 $spacing-sm;
+  border-radius: $radius-sm;
+  font-size: 0.85rem;
+  align-self: center;
+}
+
+.sheet-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: $spacing-lg;
+  border-top: 1px solid $gray-medium;
+  margin-top: auto;
+  padding-top: $spacing-xl;
+}
+
+.footer-brand {
+  font-family: $font-family-display;
+  font-weight: 600;
+  color: $corail;
+  font-size: 0.85rem;
+}
+
+.footer-date {
+  color: $gray;
+  font-size: 0.8rem;
+}

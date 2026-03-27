@@ -1,0 +1,97 @@
+@use '../../styles/variables' as *;
+
+.login-page {
+  min-height: calc(100vh - 72px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-lg;
+  background: linear-gradient(135deg, $corail-light 0%, $menthe-light 100%);
+}
+
+.login-card {
+  background: $white;
+  border-radius: $radius-xl;
+  padding: $spacing-2xl $spacing-xl;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  box-shadow: $shadow-lg;
+}
+
+.login-hero {
+  margin-bottom: $spacing-xl;
+}
+
+.mascot {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: $spacing-md;
+}
+
+.brand {
+  font-family: $font-family-display;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: $corail;
+  margin-bottom: $spacing-sm;
+}
+
+.tagline {
+  font-size: 1.1rem;
+  color: $gray;
+  line-height: 1.5;
+}
+
+.login-features {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  margin-bottom: $spacing-xl;
+  text-align: left;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  font-size: 0.95rem;
+  color: $dark-light;
+
+  &-icon {
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+}
+
+.btn-google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-md;
+  width: 100%;
+  padding: $spacing-md $spacing-lg;
+  background: $white;
+  border: 2px solid $gray-medium;
+  border-radius: $radius-md;
+  font-size: 1rem;
+  font-weight: 600;
+  color: $dark;
+  transition: all 0.2s ease;
+  margin-bottom: $spacing-md;
+
+  &:hover {
+    border-color: $dark;
+    box-shadow: $shadow-md;
+    transform: translateY(-1px);
+  }
+}
+
+.google-icon {
+  flex-shrink: 0;
+}
+
+.login-note {
+  font-size: 0.8rem;
+  color: $gray;
+}
