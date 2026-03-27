@@ -15,26 +15,31 @@ export const MOCK_SHEET_MATH: Sheet = {
         { text: '56 + 32 = ___', answer: '88' },
         { text: '145 + 230 = ___', answer: '375' },
         { text: '367 + 128 = ___', answer: '495' },
-        { text: 'Emma a 256 billes. Son ami lui en donne 189. Combien a-t-elle de billes en tout ? ___', answer: '445' },
       ],
     },
     {
-      instruction: 'Complète les additions à trous.',
+      instruction: 'Le Tricératops a pondu 12 œufs. Il doit les répartir dans 3 nids. Dessine les œufs dans les nids, puis complète.',
       questions: [
-        { text: '___ + 15 = 42', answer: '27' },
-        { text: '63 + ___ = 91', answer: '28' },
-        { text: '___ + 124 = 300', answer: '176' },
-        { text: '205 + ___ = 483', answer: '278' },
+        { text: 'Opération : 12 ÷ 3 = ___', answer: '4' },
+        { text: 'Chaque nid contient ___ œufs.', answer: '4' },
       ],
+      drawingZone: {
+        type: 'division',
+        funTheme: 'dinosaurs',
+        params: { total: 12, groups: 3 },
+      },
     },
     {
-      instruction: 'Résous les problèmes suivants.',
+      instruction: 'Emma l\'astronaute a trouvé 7 étoiles. Elle en trouve encore 5. Dessine les étoiles, puis calcule.',
       questions: [
-        { text: 'Emma va au marché avec 5 euros. Elle achète des pommes à 2 euros et du pain à 1 euro. Combien lui reste-t-il ? ___', answer: '2 euros' },
-        { text: 'Dans la classe, il y a 14 filles et 12 garçons. Combien y a-t-il d\'élèves en tout ? ___', answer: '26' },
-        { text: 'Un train part avec 234 passagers. Au premier arrêt, 87 personnes montent. Combien y a-t-il de passagers maintenant ? ___', answer: '321' },
-        { text: 'Emma lit 45 pages lundi et 67 pages mardi. Combien de pages a-t-elle lues en tout ? ___', answer: '112' },
+        { text: 'Opération : 7 + 5 = ___', answer: '12' },
+        { text: 'Emma a ___ étoiles en tout.', answer: '12' },
       ],
+      drawingZone: {
+        type: 'addition',
+        funTheme: 'space',
+        params: { existing: 7, target: 5 },
+      },
     },
   ],
 };

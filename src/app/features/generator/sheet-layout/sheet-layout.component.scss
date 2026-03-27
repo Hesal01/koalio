@@ -27,9 +27,7 @@
   margin-bottom: $spacing-xl;
 }
 
-.sheet-header-left {
-  flex-shrink: 0;
-}
+.sheet-header-left { flex-shrink: 0; }
 
 .sheet-logo {
   font-family: $font-family-display;
@@ -38,9 +36,7 @@
   color: $corail;
 }
 
-.sheet-header-right {
-  flex: 1;
-}
+.sheet-header-right { flex: 1; }
 
 .sheet-title {
   font-family: $font-family-display;
@@ -62,20 +58,9 @@
   font-size: 0.8rem;
   font-weight: 600;
 
-  &.level {
-    background: $menthe-light;
-    color: $menthe-dark;
-  }
-
-  &.subject {
-    background: $corail-light;
-    color: $corail-dark;
-  }
-
-  &.theme {
-    background: $gray-light;
-    color: $dark-light;
-  }
+  &.level { background: $menthe-light; color: $menthe-dark; }
+  &.subject { background: $corail-light; color: $corail-dark; }
+  &.theme { background: $gray-light; color: $dark-light; }
 }
 
 .sheet-body {
@@ -85,9 +70,7 @@
   gap: $spacing-xl;
 }
 
-.exercise-block {
-  page-break-inside: avoid;
-}
+.exercise-block { page-break-inside: avoid; }
 
 .exercise-header {
   display: flex;
@@ -131,10 +114,7 @@
   width: 24px;
 }
 
-.question-text {
-  flex: 1;
-  color: $dark;
-}
+.question-text { flex: 1; color: $dark; }
 
 .question-answer {
   font-weight: 700;
@@ -150,7 +130,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: $spacing-lg;
   border-top: 1px solid $gray-medium;
   margin-top: auto;
   padding-top: $spacing-xl;
@@ -163,7 +142,160 @@
   font-size: 0.85rem;
 }
 
-.footer-date {
-  color: $gray;
+.footer-date { color: $gray; font-size: 0.8rem; }
+
+// ---- Drawing Zones ----
+
+.drawing-zone {
+  margin: $spacing-md 0 $spacing-lg;
+  padding: $spacing-lg;
+  border-radius: $radius-lg;
+  border: 2px dashed $gray-medium;
+  background: $gray-light;
+  position: relative;
+
+  // Theme-specific border colors
+  &.dz-dinosaurs { border-color: #8BC34A; background: #F1F8E9; }
+  &.dz-pirates { border-color: #FF9800; background: #FFF3E0; }
+  &.dz-space { border-color: #7C4DFF; background: #EDE7F6; }
+  &.dz-animals { border-color: $menthe; background: $menthe-light; }
+}
+
+.dz-theme-label {
+  position: absolute;
+  top: -10px;
+  left: $spacing-md;
+  background: $white;
+  padding: 0 $spacing-sm;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: $dark-light;
+  letter-spacing: 0.02em;
+}
+
+// Items row (objects to distribute)
+.dz-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: $spacing-lg;
+  padding: $spacing-sm;
+}
+
+.dz-item {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+// Containers (nids, coffres...)
+.dz-containers {
+  display: flex;
+  gap: $spacing-lg;
+  justify-content: center;
+}
+
+.dz-container {
+  flex: 1;
+  max-width: 160px;
+  text-align: center;
+}
+
+.dz-container-label {
+  font-family: $font-family-display;
   font-size: 0.8rem;
+  font-weight: 600;
+  color: $dark-light;
+  margin-bottom: $spacing-xs;
+}
+
+.dz-container-space {
+  height: 80px;
+  border: 2px dashed rgba(0, 0, 0, 0.15);
+  border-radius: $radius-md;
+  background: rgba(255, 255, 255, 0.6);
+  position: relative;
+
+  &::after {
+    content: '✏️ dessine ici';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.7rem;
+    color: rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
+  }
+}
+
+// Addition layout
+.dz-addition {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.dz-add-group {}
+
+.dz-add-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: $dark-light;
+  margin-bottom: $spacing-xs;
+}
+
+.dz-draw-area {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: $spacing-md;
+  min-height: 60px;
+  border: 2px dashed rgba(0, 0, 0, 0.15);
+  border-radius: $radius-md;
+  background: rgba(255, 255, 255, 0.6);
+  align-items: center;
+  justify-content: center;
+}
+
+.dz-item-ghost {
+  font-size: 1.4rem;
+  line-height: 1;
+  opacity: 0.15;
+}
+
+// Fraction layout
+.dz-fraction {
+  display: flex;
+  justify-content: center;
+  padding: $spacing-md 0;
+}
+
+.dz-fraction-grid {
+  display: grid;
+  gap: 3px;
+  width: fit-content;
+}
+
+.dz-fraction-part {
+  width: 64px;
+  height: 64px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  border-radius: $radius-sm;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: rgba(0, 0, 0, 0.15);
+
+  &.dz-fraction-fill {
+    border-style: dashed;
+    background: rgba(255, 255, 255, 0.4);
+
+    &::after {
+      content: '🖍️';
+      font-size: 0.9rem;
+      opacity: 0.3;
+    }
+  }
 }
