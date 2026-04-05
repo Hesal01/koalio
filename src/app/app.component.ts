@@ -32,7 +32,7 @@ export class AppComponent {
       filter(e => e instanceof NavigationEnd),
       map((e: NavigationEnd) => e.urlAfterRedirects),
     ).subscribe(url => {
-      this.showHeader = !['/home', '/login'].includes(url);
+      this.showHeader = !['/home', '/login', '/dashboard', '/dashboard3'].includes(url);
     });
   }
 }
