@@ -35,6 +35,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/dashboard8/dashboard8.component').then(m => m.Dashboard8Component),
   },
   {
+    path: 'parent',
+    loadComponent: () => import('./features/dashboard-parent/dashboard-parent.component').then(m => m.DashboardParentComponent),
+  },
+  {
     path: 'login',
     loadComponent: () => import('./features/auth/login.component').then(m => m.LoginComponent),
   },

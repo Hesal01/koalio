@@ -1,0 +1,129 @@
+@use '../../styles/variables' as *;
+
+$bg: #F7F8FA;
+$surface: #FFFFFF;
+$border: #ECEEF1;
+$text: #1A1F2B;
+$muted: #5A6473;
+
+:host {
+  display: block;
+  background: $surface;
+  min-height: 100vh;
+  color: $text;
+  font-family: $font-family;
+}
+
+.layout {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 1px solid $border;
+  font-size: 13.5px;
+
+  .brand {
+    font-weight: 600;
+    font-size: 15px;
+    color: $text;
+    letter-spacing: -0.01em;
+  }
+
+  .account {
+    color: $muted;
+  }
+}
+
+.main {
+  padding: 40px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.hero {
+  padding: 8px 0 0;
+
+  .eyebrow {
+    font-size: 12.5px;
+    color: $muted;
+    margin: 0 0 8px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  h1 {
+    font-size: 32px;
+    font-weight: 600;
+    margin: 0 0 8px;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  .sub {
+    font-size: 15px;
+    color: $muted;
+    margin: 0;
+    line-height: 1.5;
+
+    strong {
+      color: $text;
+      font-weight: 600;
+    }
+  }
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stat {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 14px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-num {
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-label {
+  font-size: 12.5px;
+  color: $muted;
+}
+
+.cta {
+  background: $text;
+  color: $white;
+  padding: 16px 22px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  align-self: flex-start;
+  transition: background 0.15s;
+
+  &:hover {
+    background: #000;
+  }
+}
