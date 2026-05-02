@@ -44,7 +44,19 @@ export class GeneratorResultComponent {
   }
 
   downloadPdf() {
-    // Placeholder for PDF generation
-    alert('PDF download — sera connecté avec jsPDF + html2canvas');
+    // Set the document title so browsers use it as the default PDF filename
+    // when the user picks "Save as PDF" in the print dialog.
+    const previousTitle = document.title;
+    document.title = this.buildFilename().replace(/\.pdf$/, '');
+    window.print();
+    // Restore after the dialog closes (Safari is lazy — give it some breathing room).
+    setTimeout(() => { document.title = previousTitle; }, 500);
+  }
+
+  private buildFilename(): string {
+    const subject = this.sheet.subject === 'math' ? 'Maths' : 'Francais';
+    const date = new Date().toISOString().slice(0, 10);
+    const safeName = this.sheet.childName.replace(/[^\p{L}\p{N}-]+/gu, '-');
+    return `Koalio_${safeName}_${this.sheet.level}_${subject}_${date}.pdf`;
   }
 }

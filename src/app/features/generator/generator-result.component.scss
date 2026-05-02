@@ -42,3 +42,31 @@
     padding: 0 $spacing-md;
   }
 }
+
+// ─── Print ───────────────────────────────────────────────────
+// User clicks "Télécharger le PDF" → window.print() → "Save as PDF" in
+// the browser dialog produces a vector PDF of the sheet only.
+@media print {
+  :host {
+    display: block;
+    background: white;
+  }
+
+  .page {
+    padding: 0;
+  }
+
+  .container {
+    max-width: none;
+    padding: 0;
+  }
+
+  .result-header,
+  .actions-top {
+    display: none !important;
+  }
+
+  .sheet-wrapper {
+    display: block;
+  }
+}

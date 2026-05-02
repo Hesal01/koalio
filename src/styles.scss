@@ -85,3 +85,27 @@ input, select {
     transform: none;
   }
 }
+
+// ─── Print ───────────────────────────────────────────────────
+@page {
+  size: A4 portrait;
+  margin: 15mm 18mm;
+}
+
+@media print {
+  body {
+    background: white !important;
+    margin: 0 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  // Hide global app chrome — only the sheet should print
+  app-header {
+    display: none !important;
+  }
+
+  app-root main {
+    padding-top: 0 !important;
+  }
+}

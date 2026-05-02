@@ -338,3 +338,44 @@
     white-space: nowrap;
   }
 }
+
+// ─── Print ───────────────────────────────────────────────────
+@media print {
+  .sheet {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    width: auto !important;
+    min-height: auto !important;
+    padding: 0 !important;
+    display: block !important;
+  }
+
+  // Flex containers interfere with page-break-inside in some browsers.
+  // Switch to block flow in print and replicate the gap with margins.
+  .sheet-body {
+    display: block !important;
+    gap: 0 !important;
+  }
+
+  .sheet-header {
+    break-after: avoid;
+    page-break-after: avoid;
+    margin-bottom: 8mm !important;
+  }
+
+  .exercise-block {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    margin-bottom: 8mm;
+
+    &:last-child { margin-bottom: 0; }
+  }
+
+  // Force background colors of drawing zones to print (Chrome/Safari skip them by default).
+  .drawing-zone,
+  .meta-badge,
+  .question-answer {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
