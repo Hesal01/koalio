@@ -47,6 +47,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/generator/generator-form.component').then(m => m.GeneratorFormComponent),
   },
   {
+    path: 'generate2',
+    loadComponent: () => import('./features/generator2/generator-form.component').then(m => m.GeneratorForm2Component),
+  },
+  {
     path: 'result/:id',
     loadComponent: () => import('./features/generator/generator-result.component').then(m => m.GeneratorResultComponent),
   },
