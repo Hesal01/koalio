@@ -22,8 +22,7 @@
         { "text": "4 + 5", "correct": false },
         { "text": "6 + 4", "correct": true },
         { "text": "8 + 1", "correct": false },
-        { "text": "2 + 8", "correct": true },
-        { "text": "5 + 4", "correct": false }
+        { "text": "2 + 8", "correct": true }
       ]
     },
     {

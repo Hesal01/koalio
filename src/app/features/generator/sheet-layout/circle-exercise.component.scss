@@ -17,12 +17,15 @@
   padding: 0;
   margin: 0;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: $spacing-sm $spacing-md;
+  // 3 lignes, remplissage vertical (colonne par colonne)
+  grid-template-rows: repeat(3, auto);
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: $spacing-md $spacing-lg;
   counter-reset: c;
 
   @media (max-width: $mobile) {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(4, auto);
   }
 }
 
@@ -30,74 +33,78 @@
   counter-increment: c;
   font-size: 0.95rem;
   line-height: 1.6;
-  padding: 4px 14px;
-  text-align: center;
-  position: relative;
   font-variant-numeric: lining-nums;
-
-  // Item correct = entouré "à la main" (organique, pas pointillé) via pseudo
-  // pour ne pas affecter le texte. Forme et rotation alternent pour casser
-  // l'uniformité — effet plus hand-drawn.
-  &.is-correct::before {
-    content: '';
-    position: absolute;
-    inset: -2px -8px;
-    border: 2px solid $menthe-dark;
-    border-radius: 28px 16px 22px 18px / 18px 24px 14px 28px;
-    transform: rotate(-1.5deg);
-    pointer-events: none;
-    box-sizing: border-box;
-  }
-
-  &.is-correct:nth-child(even)::before {
-    border-radius: 18px 24px 28px 16px / 24px 18px 26px 14px;
-    transform: rotate(1.2deg);
-  }
-
-  &.is-correct:nth-child(3n)::before {
-    border-radius: 22px 30px 16px 24px / 28px 14px 22px 18px;
-    transform: rotate(-0.8deg);
-  }
-}
-
-// Style spécifique de l'exemple : fond menthe + italique (cohérent text-blank)
-.example-item {
-  background: $menthe-light;
-  border-radius: $radius-sm;
-  padding: 4px 14px;
-  font-style: italic;
-  color: $menthe-dark;
+  padding-left: 22px;
   position: relative;
 
-  // L'item correct dans l'exemple = entouré d'un cercle "à la main"
-  // (border-radius asymétrique + légère rotation via pseudo-élément).
-  // Le pseudo porte AUSSI le fond menthe pour couvrir la forme organique
-  // entièrement (sinon le blanc de la page dépasse aux coins).
-  &.is-correct {
-    background: transparent;
-    border-radius: 0;
-    padding: 6px 18px;
-
-    &::before {
-      content: '';
-      position: absolute;
-      inset: -2px -8px;
-      background: $menthe-light;
-      border: 2.5px solid $menthe-dark;
-      border-radius: 32px 18px 24px 20px / 20px 26px 16px 30px;
-      transform: rotate(-1.5deg);
-      pointer-events: none;
-      box-sizing: border-box;
-      z-index: 0;
-    }
-
-    .item-text {
-      position: relative;
-      z-index: 1;
-    }
+  // Numéro "N." à gauche, hors du cercle organique éventuel
+  &::before {
+    content: counter(c) '.';
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: $gray;
+    font-weight: 600;
   }
 }
 
 .item-text {
-  user-select: none;
+  display: inline-block;
+  position: relative;
+  padding: 2px 8px;
+  z-index: 0;
+}
+
+// Item correct = cercle organique autour du TEXTE seulement (pas le numéro)
+// 3 variantes de forme/rotation qui alternent pour casser l'uniformité.
+.items li.is-correct .item-text::before {
+  content: '';
+  position: absolute;
+  inset: -3px -8px;
+  border: 2px solid $menthe-dark;
+  border-radius: 28px 16px 22px 18px / 18px 24px 14px 28px;
+  transform: rotate(-1.5deg);
+  pointer-events: none;
+  z-index: -1;
+  box-sizing: border-box;
+}
+
+.items li.is-correct:nth-child(even) .item-text::before {
+  border-radius: 18px 24px 28px 16px / 24px 18px 26px 14px;
+  transform: rotate(1.2deg);
+}
+
+.items li.is-correct:nth-child(3n) .item-text::before {
+  border-radius: 22px 30px 16px 24px / 28px 14px 22px 18px;
+  transform: rotate(-0.8deg);
+}
+
+// Style spécifique de l'exemple : fond menthe + italique
+// Padding vertical aligné sur les items plain pour ne pas créer de ligne plus haute.
+.example-item .item-text {
+  background: $menthe-light;
+  border-radius: $radius-sm;
+  padding: 2px 14px;
+  font-style: italic;
+  color: $menthe-dark;
+}
+
+// L'exemple correct = cercle organique avec fond menthe (couvre toute la forme)
+// porté par le pseudo sur le span pour ne pas inclure le numéro.
+.example-item.is-correct .item-text {
+  background: transparent;
+  padding: 2px 18px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -3px -8px;
+    background: $menthe-light;
+    border: 2.5px solid $menthe-dark;
+    border-radius: 32px 18px 24px 20px / 20px 26px 16px 30px;
+    transform: rotate(-1.5deg);
+    pointer-events: none;
+    z-index: -1;
+    box-sizing: border-box;
+  }
 }
