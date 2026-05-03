@@ -221,28 +221,14 @@ $dotted-bg: #F0F9F5;
   font-weight: 500;
 }
 
-.blank {
-  display: inline-block;
-  min-width: 50px;
-  border-bottom: 1.5px solid $text;
-  margin: 0 3px;
-  height: 0;
-  position: relative;
-  bottom: 2px;
-  letter-spacing: -0.05em;
-  color: transparent;
-}
-
+// Blanks rendered as literal underscore chars that sit on the baseline.
+// Width controlled by the count of underscores in the template, not by CSS.
+.blank,
 .blank-sm {
-  display: inline-block;
-  min-width: 28px;
-  border-bottom: 1.5px solid $text;
-  margin: 0 3px;
-  height: 0;
-  position: relative;
-  bottom: 2px;
-  letter-spacing: -0.05em;
-  color: transparent;
+  user-select: none;
+  font-weight: 400;
+  letter-spacing: 0;
+  display: inline;
 }
 
 // ─── Dice (text-blank notation visuelle) ─────────────────────

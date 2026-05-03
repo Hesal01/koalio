@@ -31,12 +31,12 @@ import { CommonModule } from '@angular/common';
             <div class="exo">
               <p class="instr">Calcule.</p>
               <ol class="qlist">
-                <li>3 + 4 = <span class="blank">___</span></li>
-                <li>5 + 5 = <span class="blank">___</span></li>
-                <li>8 + 2 = <span class="blank">___</span></li>
-                <li>6 + 3 = <span class="blank">___</span></li>
-                <li>9 − 4 = <span class="blank">___</span></li>
-                <li>10 − 7 = <span class="blank">___</span></li>
+                <li>3 + 4 = <span class="blank">_____</span></li>
+                <li>5 + 5 = <span class="blank">_____</span></li>
+                <li>8 + 2 = <span class="blank">_____</span></li>
+                <li>6 + 3 = <span class="blank">_____</span></li>
+                <li>9 − 4 = <span class="blank">_____</span></li>
+                <li>10 − 7 = <span class="blank">_____</span></li>
               </ol>
             </div>
           </article>
@@ -46,10 +46,10 @@ import { CommonModule } from '@angular/common';
             <div class="exo">
               <p class="instr">Complète.</p>
               <ol class="qlist">
-                <li>7 + <span class="blank">___</span> = 10</li>
-                <li><span class="blank">___</span> + 5 = 9</li>
-                <li>4 + <span class="blank">___</span> = 10</li>
-                <li>12 − <span class="blank">___</span> = 8</li>
+                <li>7 + <span class="blank">_____</span> = 10</li>
+                <li><span class="blank">_____</span> + 5 = 9</li>
+                <li>4 + <span class="blank">_____</span> = 10</li>
+                <li>12 − <span class="blank">_____</span> = 8</li>
               </ol>
             </div>
           </article>
@@ -71,9 +71,9 @@ import { CommonModule } from '@angular/common';
             <div class="exo">
               <p class="instr">Continue la suite.</p>
               <ol class="qlist">
-                <li>2, 4, <span class="blank">___</span>, 8, <span class="blank">___</span></li>
-                <li>5, 10, <span class="blank">___</span>, <span class="blank">___</span>, 25</li>
-                <li>1, 3, 5, <span class="blank">___</span>, 9</li>
+                <li>2, 4, <span class="blank">_____</span>, 8, <span class="blank">_____</span></li>
+                <li>5, 10, <span class="blank">_____</span>, <span class="blank">_____</span>, 25</li>
+                <li>1, 3, 5, <span class="blank">_____</span>, 9</li>
               </ol>
             </div>
           </article>
@@ -95,7 +95,7 @@ import { CommonModule } from '@angular/common';
             <div class="exo">
               <p class="instr">Lis et résous.</p>
               <ol class="qlist">
-                <li>Léa a trouvé 6 œufs de dinosaure le matin. L'après-midi, elle en trouve 4 de plus. Combien d'œufs a-t-elle en tout ? <span class="blank">___</span></li>
+                <li>Léa a trouvé 6 œufs de dinosaure le matin. L'après-midi, elle en trouve 4 de plus. Combien d'œufs a-t-elle en tout ? <span class="blank">_____</span></li>
               </ol>
             </div>
           </article>
@@ -158,7 +158,7 @@ import { CommonModule } from '@angular/common';
                 <span class="item">🥚</span><span class="item">🥚</span><span class="item">🥚</span>
                 <span class="item">🥚</span>
                 <span class="item-arrow">→</span>
-                <span class="blank">___</span>
+                <span class="blank">_____</span>
               </div>
             </div>
           </article>
@@ -189,7 +189,7 @@ import { CommonModule } from '@angular/common';
                   <span class="item">🥚</span><span class="item">🥚</span><span class="item">🥚</span>
                 </div>
               </div>
-              <p class="qrow">Total : <span class="blank">___</span> œufs</p>
+              <p class="qrow">Total : <span class="blank">_____</span> œufs</p>
             </div>
           </article>
 
