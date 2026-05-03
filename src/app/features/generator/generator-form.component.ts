@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Subject, Theme } from '../../core/models/sheet.model';
+import { Level, Subject, Theme } from '../../core/models/exercise.model';
 import { THEMES_BY_SUBJECT, LEVELS } from '../../core/models/theme-config';
+import { CatalogService } from '../../core/services/catalog.service';
 
 @Component({
   selector: 'app-generator-form',
@@ -205,7 +206,8 @@ export class GeneratorFormComponent {
     }));
   }
 
-  constructor(private router: Router) {}
+  private router = inject(Router);
+  private catalog = inject(CatalogService);
 
   private nameOr(fallback: string): string {
     return fallback;
@@ -232,9 +234,20 @@ export class GeneratorFormComponent {
   generate() {
     if (!this.isFormValid()) return;
     this.loading = true;
-    setTimeout(() => {
+    try {
+      const sheet = this.catalog.generate({
+        childName: this.childName.trim(),
+        level: this.selectedLevel as Level,
+        subject: this.selectedSubject!,
+        theme: this.selectedTheme!,
+        funTheme: 'dinosaurs', // MVP : un seul univers visuel
+      });
+      this.router.navigate(['/result', sheet.id]);
+    } catch (e) {
       this.loading = false;
-      this.router.navigate(['/result', '1']);
-    }, 2500);
+      alert(
+        `Pas encore de fiche dans le catalogue pour cette combinaison.\nPour le MVP, choisis : P1 / Mathématiques / Additions.`,
+      );
+    }
   }
 }
