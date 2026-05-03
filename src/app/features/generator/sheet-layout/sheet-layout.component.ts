@@ -2,11 +2,13 @@ import { Component, Input } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Sheet } from '../../../core/models/exercise.model';
 import { TextBlankExerciseComponent } from './text-blank-exercise.component';
+import { CircleExerciseComponent } from './circle-exercise.component';
+import { DrawItemsExerciseComponent } from './draw-items-exercise.component';
 
 @Component({
   selector: 'app-sheet-layout',
   standalone: true,
-  imports: [DatePipe, TextBlankExerciseComponent],
+  imports: [DatePipe, TextBlankExerciseComponent, CircleExerciseComponent, DrawItemsExerciseComponent],
   template: `
     <div class="sheet" id="sheet-pdf">
       <div class="sheet-header">
@@ -35,6 +37,12 @@ import { TextBlankExerciseComponent } from './text-blank-exercise.component';
                   [exercise]="exercise"
                   [showAnswers]="showAnswers"
                 />
+              }
+              @case ('circle') {
+                <app-circle-exercise [exercise]="exercise" [showAnswers]="showAnswers" />
+              }
+              @case ('draw-items') {
+                <app-draw-items-exercise [exercise]="exercise" />
               }
             }
           </div>

@@ -14,12 +14,16 @@
       ]
     },
     {
-      "format": "text-blank",
-      "variant": "reverse",
-      "instruction": "Complète.",
-      "example": { "text": "5 + ___ = 10", "answers": ["5"] },
-      "questions": [
-        { "generate": "addition-reverse", "count": 5, "min": 1, "max": 9, "maxResult": 10, "position": "both" }
+      "format": "circle",
+      "instruction": "Entoure les additions qui font 10.",
+      "example": { "text": "5 + 5", "correct": true },
+      "items": [
+        { "text": "3 + 7", "correct": true },
+        { "text": "4 + 5", "correct": false },
+        { "text": "6 + 4", "correct": true },
+        { "text": "8 + 1", "correct": false },
+        { "text": "2 + 8", "correct": true },
+        { "text": "5 + 4", "correct": false }
       ]
     },
     {
@@ -32,13 +36,9 @@
       ]
     },
     {
-      "format": "text-blank",
-      "variant": "sequence",
-      "instruction": "Continue la suite.",
-      "example": { "text": "1, 2, ___, 4, 5", "answers": ["3"] },
-      "questions": [
-        { "generate": "sequence-step", "count": 3, "step": 2, "length": 5, "blanks": 2, "startMin": 0, "startMax": 4 }
-      ]
+      "format": "draw-items",
+      "instruction": "Dessine 7 œufs de dinosaure dans le cadre.",
+      "zoneSize": "md"
     },
     {
       "format": "text-blank",

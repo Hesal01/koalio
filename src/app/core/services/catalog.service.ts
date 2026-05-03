@@ -1,5 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import {
+  CircleExercise,
+  DrawItemsExercise,
   Exercise,
   ExerciseTemplate,
   FunTheme,
@@ -72,11 +74,32 @@ export class CatalogService {
   }
 
   private personalizeExercise(ex: ExerciseTemplate, childName: string): Exercise {
-    if (ex.format === 'text-blank') {
-      return this.personalizeTextBlank(ex, childName);
-    }
-    // Future formats: branches ici.
+    if (ex.format === 'text-blank') return this.personalizeTextBlank(ex, childName);
+    if (ex.format === 'circle') return this.personalizeCircle(ex, childName);
+    if (ex.format === 'draw-items') return this.personalizeDrawItems(ex, childName);
     return ex as unknown as Exercise;
+  }
+
+  private personalizeCircle(template: CircleExercise, childName: string): CircleExercise {
+    return {
+      format: 'circle',
+      instruction: this.replaceTokens(template.instruction, childName),
+      example: template.example
+        ? { ...template.example, text: this.replaceTokens(template.example.text, childName) }
+        : undefined,
+      items: template.items.map(it => ({
+        ...it,
+        text: this.replaceTokens(it.text, childName),
+      })),
+    };
+  }
+
+  private personalizeDrawItems(template: DrawItemsExercise, childName: string): DrawItemsExercise {
+    return {
+      format: 'draw-items',
+      instruction: this.replaceTokens(template.instruction, childName),
+      zoneSize: template.zoneSize,
+    };
   }
 
   private personalizeTextBlank(

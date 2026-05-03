@@ -1,0 +1,89 @@
+@use '../../../styles/variables' as *;
+
+:host {
+  display: block;
+  font-family: 'Georgia', serif;
+}
+
+.instruction {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: $dark;
+  margin: 0 0 $spacing-md;
+}
+
+.items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-sm $spacing-md;
+  counter-reset: c;
+
+  @media (max-width: $mobile) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.items li {
+  counter-increment: c;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  padding: 4px 14px;
+  text-align: center;
+  position: relative;
+  font-variant-numeric: lining-nums;
+
+  // Item correct = entouré "à la main" (organique, pas pointillé) via pseudo
+  // pour ne pas affecter le texte. Forme et rotation alternent pour casser
+  // l'uniformité — effet plus hand-drawn.
+  &.is-correct::before {
+    content: '';
+    position: absolute;
+    inset: -2px -8px;
+    border: 2px solid $corail;
+    border-radius: 28px 16px 22px 18px / 18px 24px 14px 28px;
+    transform: rotate(-1.5deg);
+    pointer-events: none;
+    box-sizing: border-box;
+  }
+
+  &.is-correct:nth-child(even)::before {
+    border-radius: 18px 24px 28px 16px / 24px 18px 26px 14px;
+    transform: rotate(1.2deg);
+  }
+
+  &.is-correct:nth-child(3n)::before {
+    border-radius: 22px 30px 16px 24px / 28px 14px 22px 18px;
+    transform: rotate(-0.8deg);
+  }
+}
+
+// Style spécifique de l'exemple : fond menthe + italique (cohérent text-blank)
+.example-item {
+  background: $menthe-light;
+  border-radius: $radius-sm;
+  padding: 4px 14px;
+  font-style: italic;
+  color: $menthe-dark;
+  position: relative;
+
+  // L'item correct dans l'exemple = entouré d'un cercle "à la main"
+  // (border-radius asymétrique + légère rotation via pseudo-élément, pour
+  // ne pas tilter le texte et garder un effet hand-drawn).
+  &.is-correct::before {
+    content: '';
+    position: absolute;
+    inset: -3px -10px;
+    border: 2.5px solid $corail;
+    border-radius: 32px 18px 24px 20px / 20px 26px 16px 30px;
+    transform: rotate(-2deg);
+    pointer-events: none;
+    box-sizing: border-box;
+  }
+}
+
+.item-text {
+  user-select: none;
+}

@@ -1,0 +1,33 @@
+@use '../../../styles/variables' as *;
+
+:host {
+  display: block;
+  font-family: 'Georgia', serif;
+}
+
+.instruction {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: $dark;
+  margin: 0 0 $spacing-md;
+}
+
+.draw-zone {
+  border: 2px dashed $menthe-light;
+  border-radius: $radius-md;
+  background: rgba($menthe-light, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &[data-size='sm'] { min-height: 60px; }
+  &[data-size='md'] { min-height: 100px; }
+  &[data-size='lg'] { min-height: 140px; }
+}
+
+.hint {
+  font-size: 0.8rem;
+  color: rgba(0, 0, 0, 0.18);
+  font-style: italic;
+  user-select: none;
+}

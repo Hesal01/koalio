@@ -121,9 +121,43 @@ export interface TextBlankExercise {
   questions: TextBlankQuestion[];
 }
 
+// ─── Format circle ───────────────────────────────────────────
+export interface CircleItem {
+  text: string;
+  /** true = item à entourer (réponse modèle imprimée). */
+  correct: boolean;
+}
+
+/**
+ * Format `circle` (entourer) : l'enfant entoure les items du set qui répondent
+ * à un critère donné dans la consigne. Pas d'écriture, juste sélection au crayon.
+ * Sur l'aperçu/imprimé, les bons items sont entourés en pointillé pour montrer
+ * la réponse modèle.
+ */
+export interface CircleExercise {
+  format: 'circle';
+  instruction: string;
+  /** Optionnel : un item résolu en exemple, affiché en début. */
+  example?: CircleItem;
+  items: CircleItem[];
+}
+
+// ─── Format draw-items ───────────────────────────────────────
+/**
+ * Format `draw-items` : zone pointillée vide où l'enfant dessine ce que la
+ * consigne demande (N items, une figure géométrique, etc.).
+ */
+export interface DrawItemsExercise {
+  format: 'draw-items';
+  instruction: string;
+  /** Hauteur de la zone à dessiner (sm = items rapides, lg = scène complète). */
+  zoneSize: 'sm' | 'md' | 'lg';
+}
+
 // ─── Discriminated union (s'élargira format par format) ──────
-export type ExerciseTemplate = TextBlankExerciseTemplate;
-export type Exercise = TextBlankExercise;
+// Templates et runtimes coïncident pour circle/draw-items (pas de générateurs).
+export type ExerciseTemplate = TextBlankExerciseTemplate | CircleExercise | DrawItemsExercise;
+export type Exercise = TextBlankExercise | CircleExercise | DrawItemsExercise;
 
 // ─── Sheet (template = JSON catalogue, instance = post-perso) ─
 /**
