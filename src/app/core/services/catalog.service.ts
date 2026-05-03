@@ -1,20 +1,25 @@
 import { Injectable, signal } from '@angular/core';
 import {
   Exercise,
+  ExerciseTemplate,
   FunTheme,
+  isGeneratorBlock,
   Level,
   Sheet,
   SheetTemplate,
   Subject,
   TextBlankExercise,
+  TextBlankExerciseTemplate,
+  TextBlankQuestion,
   Theme,
 } from '../models/exercise.model';
+import { expandGenerator } from './question-generators';
 import variant1 from '../../../assets/catalog/P1/math/additions/dinosaurs/variant-1.json';
 
 // Catalogue statique. Pour ajouter une fiche, drop un nouveau JSON
 // et ajoute-le ici. Quand le catalogue grandit, on basculera sur
 // import.meta.glob pour de l'auto-discovery.
-const CATALOG: SheetTemplate[] = [variant1 as SheetTemplate];
+const CATALOG: SheetTemplate[] = [variant1 as unknown as SheetTemplate];
 
 export interface GenerateInput {
   childName: string;
@@ -30,8 +35,9 @@ export class CatalogService {
   readonly currentSheet = signal<Sheet | null>(null);
 
   /**
-   * Pioche une fiche du catalogue matchant les critères, applique
-   * la personnalisation prénom, retourne le Sheet prêt à afficher.
+   * Pioche une fiche du catalogue matchant les critères, expanse les
+   * générateurs, applique la personnalisation prénom, retourne le Sheet
+   * prêt à afficher.
    */
   generate(input: GenerateInput): Sheet {
     const matching = CATALOG.filter(
@@ -65,19 +71,35 @@ export class CatalogService {
     };
   }
 
-  private personalizeExercise(ex: Exercise, childName: string): Exercise {
+  private personalizeExercise(ex: ExerciseTemplate, childName: string): Exercise {
     if (ex.format === 'text-blank') {
       return this.personalizeTextBlank(ex, childName);
     }
     // Future formats: branches ici.
-    return ex;
+    return ex as unknown as Exercise;
   }
 
-  private personalizeTextBlank(ex: TextBlankExercise, childName: string): TextBlankExercise {
+  private personalizeTextBlank(
+    template: TextBlankExerciseTemplate,
+    childName: string,
+  ): TextBlankExercise {
+    // 1. Expander les générateurs en questions statiques
+    const flatQuestions: TextBlankQuestion[] = [];
+    for (const item of template.questions) {
+      if (isGeneratorBlock(item)) {
+        flatQuestions.push(...expandGenerator(item));
+      } else {
+        flatQuestions.push(item);
+      }
+    }
+
+    // 2. Substituer {{prenom}} dans l'instruction et les questions
     return {
-      ...ex,
-      instruction: this.replaceTokens(ex.instruction, childName),
-      questions: ex.questions.map(q => ({
+      format: 'text-blank',
+      variant: template.variant,
+      instruction: this.replaceTokens(template.instruction, childName),
+      example: template.example,
+      questions: flatQuestions.map(q => ({
         ...q,
         text: this.replaceTokens(q.text, childName),
       })),
