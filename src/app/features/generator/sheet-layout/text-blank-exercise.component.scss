@@ -15,6 +15,7 @@
 .example-item {
   color: $menthe-dark !important;
   font-style: italic;
+  // L'exemple est l'exo n°1 (compté dans la suite) — il garde son numéro mais en menthe.
 
   &::before {
     color: $menthe-dark !important;
@@ -26,6 +27,15 @@
     border-radius: $radius-sm;
     margin-left: -10px;
   }
+
+  // La partie "déjà remplie" sort en teal très foncé (même famille que le
+  // fond menthe-light, beaucoup plus saturé) + bold.
+  // - On garde l'italique hérité du parent → pas de saut de baseline
+  // - ::ng-deep parce que le span est injecté via [innerHTML]
+  ::ng-deep .example-answer {
+    color: #0E4540 !important;
+    font-weight: 700 !important;
+  }
 }
 
 .questions {
@@ -36,6 +46,14 @@
   flex-direction: column;
   gap: $spacing-sm;
   counter-reset: q;
+
+  &.two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 20px;        // resserré (48 → 20) pour rétablir la hiérarchie
+    row-gap: $spacing-sm;
+    // L'exemple occupe une cellule normale du grid (en haut à gauche, exo n°1).
+  }
 }
 
 .questions li {

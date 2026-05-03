@@ -70,7 +70,11 @@
   gap: $spacing-xl;
 }
 
-.exercise-block { page-break-inside: avoid; }
+.exercise-block {
+  page-break-inside: avoid;
+  padding-left: 12px;
+  border-left: 3px solid $menthe-light;
+}
 
 .exercise-header {
   display: flex;
@@ -350,8 +354,8 @@
     display: block !important;
   }
 
-  // Flex containers interfere with page-break-inside in some browsers.
-  // Switch to block flow in print and replicate the gap with margins.
+  // 1 exercice par row, plein largeur. Le 2-col est géré à l'intérieur
+  // de chaque exercice via le composant (text-blank-exercise).
   .sheet-body {
     display: block !important;
     gap: 0 !important;

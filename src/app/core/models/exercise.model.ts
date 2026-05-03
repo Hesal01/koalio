@@ -106,7 +106,7 @@ export interface TextBlankExerciseTemplate {
   format: 'text-blank';
   variant: TextBlankVariant;
   instruction: string;
-  example?: string;
+  example?: TextBlankQuestion;
   questions: TextBlankItem[];
 }
 
@@ -117,7 +117,7 @@ export interface TextBlankExercise {
   format: 'text-blank';
   variant: TextBlankVariant;
   instruction: string;
-  example?: string;
+  example?: TextBlankQuestion;
   questions: TextBlankQuestion[];
 }
 

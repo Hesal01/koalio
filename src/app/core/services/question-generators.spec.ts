@@ -19,7 +19,7 @@ describe('question-generators', () => {
       maxResult: 10,
     };
 
-    it('produit `count` questions par expansion', () => {
+    it('produit exactement `count` questions par expansion', () => {
       for (let i = 0; i < ITERATIONS; i++) {
         const qs = expandGenerator(block);
         expect(qs.length).toBe(6);
