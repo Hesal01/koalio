@@ -42,7 +42,7 @@
     content: '';
     position: absolute;
     inset: -2px -8px;
-    border: 2px solid $corail;
+    border: 2px solid $menthe-dark;
     border-radius: 28px 16px 22px 18px / 18px 24px 14px 28px;
     transform: rotate(-1.5deg);
     pointer-events: none;
@@ -70,17 +70,31 @@
   position: relative;
 
   // L'item correct dans l'exemple = entouré d'un cercle "à la main"
-  // (border-radius asymétrique + légère rotation via pseudo-élément, pour
-  // ne pas tilter le texte et garder un effet hand-drawn).
-  &.is-correct::before {
-    content: '';
-    position: absolute;
-    inset: -3px -10px;
-    border: 2.5px solid $corail;
-    border-radius: 32px 18px 24px 20px / 20px 26px 16px 30px;
-    transform: rotate(-2deg);
-    pointer-events: none;
-    box-sizing: border-box;
+  // (border-radius asymétrique + légère rotation via pseudo-élément).
+  // Le pseudo porte AUSSI le fond menthe pour couvrir la forme organique
+  // entièrement (sinon le blanc de la page dépasse aux coins).
+  &.is-correct {
+    background: transparent;
+    border-radius: 0;
+    padding: 6px 18px;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -2px -8px;
+      background: $menthe-light;
+      border: 2.5px solid $menthe-dark;
+      border-radius: 32px 18px 24px 20px / 20px 26px 16px 30px;
+      transform: rotate(-1.5deg);
+      pointer-events: none;
+      box-sizing: border-box;
+      z-index: 0;
+    }
+
+    .item-text {
+      position: relative;
+      z-index: 1;
+    }
   }
 }
 
