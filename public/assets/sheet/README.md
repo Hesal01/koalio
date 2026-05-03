@@ -21,6 +21,8 @@ Ces icônes apparaissent en série dans les zones de dessin (compter, additionne
 - `items/space.png` — étoile
 - `items/animals.png` — feuille
 
+**Format recommandé** : PNG carré 256×256 px, fond transparent. Affiché à 40×40 px dans le rendu actuel. Si un PNG manque, le moteur fallback automatiquement sur une emoji équivalente — la fiche reste fonctionnelle.
+
 ### Icônes de thème (1 fichier par thème, 4 au total)
 Ces icônes apparaissent dans le bandeau "MONDE DES DINOSAURES / AVENTURE PIRATE / etc." en haut de chaque zone de dessin.
 

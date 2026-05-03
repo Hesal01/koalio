@@ -42,7 +42,10 @@ import { DrawItemsExerciseComponent } from './draw-items-exercise.component';
                 <app-circle-exercise [exercise]="exercise" [showAnswers]="showAnswers" />
               }
               @case ('draw-items') {
-                <app-draw-items-exercise [exercise]="exercise" />
+                <app-draw-items-exercise
+                  [exercise]="exercise"
+                  [funTheme]="sheet.funTheme"
+                />
               }
             }
           </div>

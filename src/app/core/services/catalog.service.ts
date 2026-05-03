@@ -99,6 +99,7 @@ export class CatalogService {
       format: 'draw-items',
       instruction: this.replaceTokens(template.instruction, childName),
       zoneSize: template.zoneSize,
+      prefilled: template.prefilled,
     };
   }
 

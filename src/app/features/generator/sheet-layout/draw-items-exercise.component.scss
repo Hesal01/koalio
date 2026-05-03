@@ -20,9 +20,43 @@
   align-items: center;
   justify-content: center;
 
-  &[data-size='sm'] { min-height: 60px; }
-  &[data-size='md'] { min-height: 100px; }
-  &[data-size='lg'] { min-height: 140px; }
+  &[data-size='sm'] { min-height: 90px; }
+  &[data-size='md'] { min-height: 140px; }
+  &[data-size='lg'] { min-height: 180px; }
+
+  // Quand il y a un exemple pré-dessiné, on aligne à gauche horizontalement
+  // (espace pour dessiner les autres à droite) mais centré verticalement.
+  &.has-prefilled {
+    align-items: center;
+    justify-content: flex-start;
+    padding: 12px 18px;
+    gap: 12px;
+  }
+}
+
+.prefilled-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  // Légère inclinaison pour un effet "dessiné à la main"
+  transform: rotate(-6deg);
+
+  img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    display: block;
+    // Le fond blanc du PNG (Midjourney ne sort pas en transparent natif) devient
+    // invisible sur fond coloré grâce au blend mode multiply.
+    // Pour un vrai PNG transparent, passer par remove.bg avant de dropper l'asset.
+    mix-blend-mode: multiply;
+  }
+
+  .emoji-fallback {
+    font-size: 3.5rem;
+    line-height: 1;
+  }
 }
 
 .hint {

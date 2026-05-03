@@ -38,7 +38,8 @@
     {
       "format": "draw-items",
       "instruction": "Dessine 7 œufs de dinosaure dans le cadre.",
-      "zoneSize": "md"
+      "zoneSize": "md",
+      "prefilled": 1
     },
     {
       "format": "text-blank",

@@ -152,6 +152,9 @@ export interface DrawItemsExercise {
   instruction: string;
   /** Hauteur de la zone à dessiner (sm = items rapides, lg = scène complète). */
   zoneSize: 'sm' | 'md' | 'lg';
+  /** Nombre d'items pré-dessinés en exemple, affichés en haut à gauche de la zone.
+   *  L'enfant complète avec les items manquants. Optionnel (0 par défaut). */
+  prefilled?: number;
 }
 
 // ─── Discriminated union (s'élargira format par format) ──────
