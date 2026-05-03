@@ -58,4 +58,8 @@ export const routes: Routes = [
     path: 'history',
     loadComponent: () => import('./features/history/history.component').then(m => m.HistoryComponent),
   },
+  {
+    path: 'formats-demo',
+    loadComponent: () => import('./features/formats-demo/formats-demo.component').then(m => m.FormatsDemoComponent),
+  },
 ];
