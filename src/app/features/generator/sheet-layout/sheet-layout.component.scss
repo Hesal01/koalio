@@ -72,8 +72,9 @@
 
 .exercise-block {
   page-break-inside: avoid;
-  padding-left: 12px;
-  border-left: 3px solid $menthe-light;
+  padding: 18px 22px;
+  border: 1px solid #E0E6E3;
+  border-radius: 12px;
 }
 
 .exercise-header {
