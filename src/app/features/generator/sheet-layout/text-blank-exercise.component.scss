@@ -28,13 +28,18 @@
     margin-left: -10px;
   }
 
-  // La partie "déjà remplie" sort en teal très foncé (même famille que le
-  // fond menthe-light, beaucoup plus saturé) + bold.
-  // - On garde l'italique hérité du parent → pas de saut de baseline
-  // - ::ng-deep parce que le span est injecté via [innerHTML]
-  ::ng-deep .example-answer {
-    color: #0E4540 !important;
-    font-weight: 700 !important;
+  // La partie "déjà remplie" sort en teal foncé saturé (même famille que le
+  // fond menthe-light, plus visible).
+  // - display: inline + vertical-align: baseline forcent l'alignement avec
+  //   le reste de la ligne (sinon le span semble flotter sous la baseline)
+  // - lining-nums force les chiffres modernes (sur la baseline) au cas où Georgia
+  //   passe en oldstyle (chiffres 3/4/5/9 descendent sous baseline en italic)
+  .example-answer {
+    color: #0F766E;
+    display: inline;
+    vertical-align: baseline;
+    line-height: inherit;
+    font-variant-numeric: lining-nums;
   }
 }
 

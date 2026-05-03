@@ -9,7 +9,15 @@ import { TextBlankExercise } from '../../../core/models/exercise.model';
     <ol class="questions" [class.two-col]="useTwoCol()">
       @if (exercise.example) {
         <li class="example-item">
-          <span class="q-text" [innerHTML]="renderExample(exercise.example)"></span>
+          <span class="q-text">
+            @for (seg of exampleSegments(exercise.example); track $index) {
+              @if (seg.kind === 'answer') {
+                <span class="example-answer">{{ seg.value }}</span>
+              } @else {
+                <span>{{ seg.value }}</span>
+              }
+            }
+          </span>
         </li>
       }
       @for (q of exercise.questions; track $index) {
@@ -34,14 +42,19 @@ export class TextBlankExerciseComponent {
     return this.escapeHtml(text);
   }
 
-  /** Rend l'exemple en remplaçant chaque `___` par la réponse correspondante,
-   *  enveloppée dans un span coloré pour visualiser la partie "déjà remplie". */
-  renderExample(example: { text: string; answers: string[] }): string {
-    let answerIdx = 0;
-    return this.escapeHtml(example.text).replace(/___/g, () => {
-      const value = this.escapeHtml(example.answers[answerIdx++] ?? '');
-      return `<span class="example-answer">${value}</span>`;
-    });
+  /** Découpe le texte de l'exemple en segments alternés texte / réponse,
+   *  pour permettre au template Angular de styler chaque réponse via un span
+   *  natif (vs innerHTML qui pose des soucis d'encapsulation des styles). */
+  exampleSegments(example: { text: string; answers: string[] }): Array<{ kind: 'text' | 'answer'; value: string }> {
+    const segments: Array<{ kind: 'text' | 'answer'; value: string }> = [];
+    const parts = example.text.split('___');
+    for (let i = 0; i < parts.length; i++) {
+      if (parts[i]) segments.push({ kind: 'text', value: parts[i] });
+      if (i < parts.length - 1) {
+        segments.push({ kind: 'answer', value: example.answers[i] ?? '' });
+      }
+    }
+    return segments;
   }
 
   private escapeHtml(s: string): string {
