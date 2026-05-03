@@ -157,9 +157,8 @@ import { CommonModule } from '@angular/common';
                 <span class="item">🥚</span><span class="item">🥚</span><span class="item">🥚</span>
                 <span class="item">🥚</span><span class="item">🥚</span><span class="item">🥚</span>
                 <span class="item">🥚</span>
-                <span class="item-arrow">→</span>
-                <span class="blank">_____</span>
               </div>
+              <p class="qrow"><span class="item-arrow">→</span> <span class="blank">_____</span></p>
             </div>
           </article>
 
@@ -306,19 +305,19 @@ import { CommonModule } from '@angular/common';
             <div class="exo">
               <p class="instr">Relie chaque chiffre à son nom.</p>
               <div class="match-pairs">
-                <div class="match-col">
+                <div class="match-col match-left">
                   <span class="match-item">3</span>
                   <span class="match-item">5</span>
                   <span class="match-item">7</span>
                   <span class="match-item">10</span>
                 </div>
                 <svg class="match-lines" viewBox="0 0 200 200" preserveAspectRatio="none">
-                  <line x1="0" y1="20" x2="200" y2="60" />
-                  <line x1="0" y1="80" x2="200" y2="160" />
-                  <line x1="0" y1="140" x2="200" y2="100" />
-                  <line x1="0" y1="200" x2="200" y2="20" />
+                  <line x1="21" y1="25" x2="179" y2="75" />
+                  <line x1="21" y1="75" x2="179" y2="175" />
+                  <line x1="21" y1="125" x2="179" y2="125" />
+                  <line x1="21" y1="175" x2="179" y2="25" />
                 </svg>
-                <div class="match-col">
+                <div class="match-col match-right">
                   <span class="match-item">dix</span>
                   <span class="match-item">trois</span>
                   <span class="match-item">sept</span>
@@ -333,17 +332,17 @@ import { CommonModule } from '@angular/common';
             <div class="exo">
               <p class="instr">Relie chaque set d'œufs à son nombre.</p>
               <div class="match-pairs">
-                <div class="match-col">
+                <div class="match-col match-left">
                   <span class="match-item">🥚🥚🥚</span>
                   <span class="match-item">🥚🥚🥚🥚🥚🥚</span>
                   <span class="match-item">🥚🥚🥚🥚</span>
                 </div>
                 <svg class="match-lines" viewBox="0 0 200 200" preserveAspectRatio="none">
-                  <line x1="0" y1="33" x2="200" y2="100" />
-                  <line x1="0" y1="100" x2="200" y2="167" />
-                  <line x1="0" y1="167" x2="200" y2="33" />
+                  <line x1="21" y1="33" x2="179" y2="100" />
+                  <line x1="21" y1="100" x2="179" y2="167" />
+                  <line x1="21" y1="167" x2="179" y2="33" />
                 </svg>
-                <div class="match-col">
+                <div class="match-col match-right">
                   <span class="match-item">4</span>
                   <span class="match-item">3</span>
                   <span class="match-item">6</span>
@@ -358,19 +357,19 @@ import { CommonModule } from '@angular/common';
             <div class="exo">
               <p class="instr">Relie chaque image au bon mot.</p>
               <div class="match-pairs">
-                <div class="match-col">
+                <div class="match-col match-left">
                   <span class="match-item">🐱</span>
                   <span class="match-item">🐶</span>
                   <span class="match-item">🐰</span>
                   <span class="match-item">🐦</span>
                 </div>
                 <svg class="match-lines" viewBox="0 0 200 200" preserveAspectRatio="none">
-                  <line x1="0" y1="25" x2="200" y2="125" />
-                  <line x1="0" y1="75" x2="200" y2="25" />
-                  <line x1="0" y1="125" x2="200" y2="175" />
-                  <line x1="0" y1="175" x2="200" y2="75" />
+                  <line x1="21" y1="25" x2="179" y2="125" />
+                  <line x1="21" y1="75" x2="179" y2="25" />
+                  <line x1="21" y1="125" x2="179" y2="175" />
+                  <line x1="21" y1="175" x2="179" y2="75" />
                 </svg>
-                <div class="match-col">
+                <div class="match-col match-right">
                   <span class="match-item">chien</span>
                   <span class="match-item">oiseau</span>
                   <span class="match-item">chat</span>
@@ -385,19 +384,19 @@ import { CommonModule } from '@angular/common';
             <div class="exo">
               <p class="instr">Relie chaque majuscule à sa minuscule.</p>
               <div class="match-pairs">
-                <div class="match-col">
+                <div class="match-col match-left">
                   <span class="match-item">A</span>
                   <span class="match-item">M</span>
                   <span class="match-item">B</span>
                   <span class="match-item">P</span>
                 </div>
                 <svg class="match-lines" viewBox="0 0 200 200" preserveAspectRatio="none">
-                  <line x1="0" y1="25" x2="200" y2="75" />
-                  <line x1="0" y1="75" x2="200" y2="175" />
-                  <line x1="0" y1="125" x2="200" y2="125" />
-                  <line x1="0" y1="175" x2="200" y2="25" />
+                  <line x1="21" y1="25" x2="179" y2="75" />
+                  <line x1="21" y1="75" x2="179" y2="175" />
+                  <line x1="21" y1="125" x2="179" y2="125" />
+                  <line x1="21" y1="175" x2="179" y2="25" />
                 </svg>
-                <div class="match-col">
+                <div class="match-col match-right">
                   <span class="match-item">p</span>
                   <span class="match-item">a</span>
                   <span class="match-item">b</span>

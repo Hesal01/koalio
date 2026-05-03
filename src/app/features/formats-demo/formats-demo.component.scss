@@ -108,6 +108,7 @@ $dotted-bg: #F0F9F5;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 16px;
+  align-items: start;
 
   @media (max-width: $mobile) {
     grid-template-columns: 1fr;
@@ -312,19 +313,19 @@ $dotted-bg: #F0F9F5;
 .items-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 14px;
   align-items: center;
-  font-size: 22px;
-  margin: 6px 0;
+  font-size: 26px;
+  margin: 8px 0;
 
   .item {
     display: inline-block;
   }
 
   .item-arrow {
-    font-size: 16px;
+    font-size: 18px;
     color: $muted;
-    margin: 0 6px;
+    margin: 0 8px;
   }
 }
 
@@ -337,12 +338,12 @@ $dotted-bg: #F0F9F5;
 
 .group-of-5 {
   display: flex;
-  gap: 4px;
-  padding: 6px 8px;
+  gap: 10px;
+  padding: 8px 12px;
   border: 1px dashed $dotted;
   border-radius: 8px;
   background: $dotted-bg;
-  font-size: 22px;
+  font-size: 26px;
 }
 
 .compare {
@@ -437,6 +438,29 @@ $dotted-bg: #F0F9F5;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+  }
+
+  // Anchor dots — left items have a dot on the right, right items on the left.
+  &.match-left .match-item::after,
+  &.match-right .match-item::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: $text;
+    z-index: 2;
+  }
+
+  &.match-left .match-item::after {
+    right: -14px;
+  }
+
+  &.match-right .match-item::before {
+    left: -14px;
   }
 }
 
