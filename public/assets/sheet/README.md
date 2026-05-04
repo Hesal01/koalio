@@ -23,13 +23,15 @@ Ces icônes apparaissent en série dans les zones de dessin (compter, additionne
 
 **Format recommandé** : PNG carré 256×256 px, fond transparent. Affiché à 40×40 px dans le rendu actuel. Si un PNG manque, le moteur fallback automatiquement sur une emoji équivalente — la fiche reste fonctionnelle.
 
-### Icônes de thème (1 fichier par thème, 4 au total)
-Ces icônes apparaissent dans le bandeau "MONDE DES DINOSAURES / AVENTURE PIRATE / etc." en haut de chaque zone de dessin.
+### Icônes/mascottes de thème (1 fichier par thème, 4 au total)
+Ces illustrations apparaissent **en haut à droite de chaque fiche** pour matérialiser visuellement le thème dès le premier coup d'œil.
 
-- `themes/dinosaurs.png` — un dinosaure (T-Rex / Tricératops / Diplodocus)
-- `themes/pirates.png` — un drapeau pirate ou un pirate
+- `themes/dinosaurs.png` — un dinosaure cartoon (T-Rex / Tricératops / Diplodocus)
+- `themes/pirates.png` — un drapeau pirate ou un pirate cartoon
 - `themes/space.png` — une fusée ou un astronaute
 - `themes/animals.png` — un koala (peut être différent du logo de marque)
+
+**Format recommandé** : PNG carré 512×512 px, fond transparent ou blanc (le moteur applique `mix-blend-mode: multiply` pour neutraliser le blanc). Affiché à 120×120 px dans le header. Fallback emoji automatique si le PNG manque.
 
 ## Total
 

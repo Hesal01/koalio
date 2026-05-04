@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { Sheet } from '../../../core/models/exercise.model';
+import { FunTheme, Sheet } from '../../../core/models/exercise.model';
 import { TextBlankExerciseComponent } from './text-blank-exercise.component';
 import { CircleExerciseComponent } from './circle-exercise.component';
 import { DrawItemsExerciseComponent } from './draw-items-exercise.component';
@@ -23,6 +23,17 @@ import { DrawItemsExerciseComponent } from './draw-items-exercise.component';
             <span class="meta-badge theme">{{ themeLabel }}</span>
           </div>
         </div>
+        <span class="theme-mascot">
+          @if (mascotFailed()) {
+            <span class="emoji-fallback">{{ mascotEmoji() }}</span>
+          } @else {
+            <img
+              [src]="mascotPath()"
+              [alt]="sheet.funTheme"
+              (error)="mascotFailed.set(true)"
+            />
+          }
+        </span>
       </div>
 
       <div class="sheet-body">
@@ -63,6 +74,23 @@ import { DrawItemsExerciseComponent } from './draw-items-exercise.component';
 export class SheetLayoutComponent {
   @Input({ required: true }) sheet!: Sheet;
   @Input() showAnswers = false;
+
+  /** Bascule sur l'emoji si le PNG du thème n'est pas dispo. */
+  readonly mascotFailed = signal(false);
+
+  mascotPath(): string {
+    return `/assets/sheet/themes/${this.sheet.funTheme}.png`;
+  }
+
+  mascotEmoji(): string {
+    const map: Record<FunTheme, string> = {
+      dinosaurs: '🦕',
+      pirates: '🏴‍☠️',
+      space: '🚀',
+      animals: '🐨',
+    };
+    return map[this.sheet.funTheme];
+  }
 
   get subjectLabel(): string {
     return this.sheet.subject === 'math' ? 'Mathématiques' : 'Français';
