@@ -1,19 +1,43 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {
+  CircleExercise,
+  DrawItemsExercise,
+  FunTheme,
+  TextBlankExercise,
+} from '../../core/models/exercise.model';
+import { CircleExerciseComponent } from '../generator/sheet-layout/circle-exercise.component';
+import { DrawItemsExerciseComponent } from '../generator/sheet-layout/draw-items-exercise.component';
+import { TextBlankExerciseComponent } from '../generator/sheet-layout/text-blank-exercise.component';
+
+interface DemoVariant<T> {
+  title: string;
+  note?: string;
+  wide?: boolean;
+  exercise: T;
+  showAnswers?: boolean;
+}
 
 @Component({
   selector: 'app-formats-demo',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    CircleExerciseComponent,
+    DrawItemsExerciseComponent,
+    TextBlankExerciseComponent,
+  ],
   template: `
     <div class="page">
       <header class="page-header">
         <p class="eyebrow">Catalogue interne · P1</p>
         <h1>Démo des formats d'exercices</h1>
         <p class="lede">
-          7 formats Koalio P1 avec leurs variants principaux. Aperçu visuel de ce que la
-          génération produira sur les fiches imprimables. Les illustrations sont des
-          placeholders (emojis) — seront remplacées par les illustrations Midjourney.
+          7 formats Koalio P1 avec leurs variants principaux. <strong>text-blank</strong>,
+          <strong>circle</strong> et <strong>draw-items</strong> utilisent les vrais
+          composants du moteur — toute évolution du renderer apparaît automatiquement
+          ici. Les autres sections (count-items, match, MCQ, order) restent des mockups
+          conceptuels en attendant l'implémentation des renderers et des assets Midjourney.
         </p>
       </header>
 
@@ -26,79 +50,18 @@ import { CommonModule } from '@angular/common';
         </header>
 
         <div class="variants">
-          <article class="variant">
-            <h3>Compute — calcul direct</h3>
-            <div class="exo">
-              <p class="instr">Calcule.</p>
-              <ol class="qlist">
-                <li>3 + 4 = <span class="blank">_____</span></li>
-                <li>5 + 5 = <span class="blank">_____</span></li>
-                <li>8 + 2 = <span class="blank">_____</span></li>
-                <li>6 + 3 = <span class="blank">_____</span></li>
-                <li>9 − 4 = <span class="blank">_____</span></li>
-                <li>10 − 7 = <span class="blank">_____</span></li>
-              </ol>
-            </div>
-          </article>
-
-          <article class="variant">
-            <h3>Reverse — opérande manquant</h3>
-            <div class="exo">
-              <p class="instr">Complète.</p>
-              <ol class="qlist">
-                <li>7 + <span class="blank">_____</span> = 10</li>
-                <li><span class="blank">_____</span> + 5 = 9</li>
-                <li>4 + <span class="blank">_____</span> = 10</li>
-                <li>12 − <span class="blank">_____</span> = 8</li>
-              </ol>
-            </div>
-          </article>
-
-          <article class="variant">
-            <h3>Decompose — dizaines + unités</h3>
-            <div class="exo">
-              <p class="instr">Décompose.</p>
-              <ol class="qlist">
-                <li>17 = <span class="blank-sm">___</span> D + <span class="blank-sm">___</span> U</li>
-                <li>13 = <span class="blank-sm">___</span> D + <span class="blank-sm">___</span> U</li>
-                <li>9 = <span class="blank-sm">___</span> D + <span class="blank-sm">___</span> U</li>
-              </ol>
-            </div>
-          </article>
-
-          <article class="variant">
-            <h3>Sequence — suite à compléter</h3>
-            <div class="exo">
-              <p class="instr">Continue la suite.</p>
-              <ol class="qlist">
-                <li>2, 4, <span class="blank">_____</span>, 8, <span class="blank">_____</span></li>
-                <li>5, 10, <span class="blank">_____</span>, <span class="blank">_____</span>, 25</li>
-                <li>1, 3, 5, <span class="blank">_____</span>, 9</li>
-              </ol>
-            </div>
-          </article>
-
-          <article class="variant">
-            <h3>Compare — comparer deux nombres</h3>
-            <div class="exo">
-              <p class="instr">Complète avec <code>&lt;</code>, <code>&gt;</code> ou <code>=</code>.</p>
-              <ol class="qlist">
-                <li>5 <span class="blank-sm">___</span> 8</li>
-                <li>12 <span class="blank-sm">___</span> 12</li>
-                <li>15 <span class="blank-sm">___</span> 9</li>
-              </ol>
-            </div>
-          </article>
-
-          <article class="variant">
-            <h3>Word problem — problème personnalisé</h3>
-            <div class="exo">
-              <p class="instr">Lis et résous.</p>
-              <ol class="qlist">
-                <li>Léa a trouvé 6 œufs de dinosaure le matin. L'après-midi, elle en trouve 4 de plus. Combien d'œufs a-t-elle en tout ? <span class="blank">_____</span></li>
-              </ol>
-            </div>
-          </article>
+          @for (v of textBlankVariants; track $index) {
+            <article class="variant" [class.variant-wide]="v.wide">
+              <h3>{{ v.title }}</h3>
+              @if (v.note) { <p class="variant-note">{{ v.note }}</p> }
+              <div class="exo">
+                <app-text-blank-exercise
+                  [exercise]="v.exercise"
+                  [showAnswers]="!!v.showAnswers"
+                />
+              </div>
+            </article>
+          }
 
           <article class="variant variant-wide">
             <h3>Notation visuelle — opérandes en dés</h3>
@@ -222,72 +185,22 @@ import { CommonModule } from '@angular/common';
         <header class="format-header">
           <span class="stars">⭐⭐⭐</span>
           <h2>circle (entourer)</h2>
-          <p>Sélectionner par discrimination dans un set d'items, sans écriture. Format dominant du français P1 (~5 s/item).</p>
+          <p>Sélectionner par discrimination dans un set d'items, sans écriture. Format dominant du français P1 (~5 s/item). Les bons items sont entourés d'un cercle organique en mode correction (showAnswers).</p>
         </header>
 
         <div class="variants">
-          <article class="variant">
-            <h3>Par attribut — entoure les disques</h3>
-            <div class="exo">
-              <p class="instr">Entoure tous les disques.</p>
-              <div class="shapes-row">
-                <span class="shape circle-mark">●</span>
-                <span class="shape">▲</span>
-                <span class="shape circle-mark">●</span>
-                <span class="shape">■</span>
-                <span class="shape circle-mark">●</span>
-                <span class="shape">▲</span>
-                <span class="shape circle-mark">●</span>
+          @for (v of circleVariants; track $index) {
+            <article class="variant">
+              <h3>{{ v.title }}</h3>
+              @if (v.note) { <p class="variant-note">{{ v.note }}</p> }
+              <div class="exo">
+                <app-circle-exercise
+                  [exercise]="v.exercise"
+                  [showAnswers]="!!v.showAnswers"
+                />
               </div>
-              <p class="hint">Démo : 4 disques entourés (réponse correcte affichée en pointillé).</p>
-            </div>
-          </article>
-
-          <article class="variant">
-            <h3>Par valeur — nombres ≤ 10</h3>
-            <div class="exo">
-              <p class="instr">Entoure tous les nombres ≤ 10.</p>
-              <div class="num-row">
-                <span class="num-item circle-mark">3</span>
-                <span class="num-item">14</span>
-                <span class="num-item circle-mark">7</span>
-                <span class="num-item">19</span>
-                <span class="num-item circle-mark">10</span>
-                <span class="num-item">15</span>
-                <span class="num-item circle-mark">2</span>
-              </div>
-            </div>
-          </article>
-
-          <article class="variant">
-            <h3>Par opération — additions qui font 10</h3>
-            <div class="exo">
-              <p class="instr">Entoure les additions qui font 10.</p>
-              <div class="ops-row">
-                <span class="op-item circle-mark">3+7</span>
-                <span class="op-item">4+5</span>
-                <span class="op-item circle-mark">6+4</span>
-                <span class="op-item">8+1</span>
-                <span class="op-item circle-mark">2+8</span>
-                <span class="op-item">5+4</span>
-              </div>
-            </div>
-          </article>
-
-          <article class="variant">
-            <h3>Par son — phonologie français</h3>
-            <div class="exo">
-              <p class="instr">Entoure les mots qui contiennent le son <strong>/a/</strong>.</p>
-              <div class="words-row">
-                <span class="word circle-mark">chat</span>
-                <span class="word">lit</span>
-                <span class="word circle-mark">bateau</span>
-                <span class="word">bol</span>
-                <span class="word circle-mark">papa</span>
-                <span class="word">vélo</span>
-              </div>
-            </div>
-          </article>
+            </article>
+          }
         </div>
       </section>
 
@@ -573,19 +486,22 @@ import { CommonModule } from '@angular/common';
         </header>
 
         <div class="variants">
-          <article class="variant">
-            <h3>Dessiner N items</h3>
-            <div class="exo">
-              <p class="instr">Dessine 5 cœurs dans le cadre.</p>
-              <div class="draw-zone draw-zone-md">
-                <span class="draw-hint">✏️ dessine ici</span>
+          @for (v of drawItemsVariants; track $index) {
+            <article class="variant">
+              <h3>{{ v.title }}</h3>
+              @if (v.note) { <p class="variant-note">{{ v.note }}</p> }
+              <div class="exo">
+                <app-draw-items-exercise
+                  [exercise]="v.exercise"
+                  [funTheme]="funTheme"
+                />
               </div>
-            </div>
-          </article>
+            </article>
+          }
 
-          <article class="variant">
-            <h3>Dessiner pour compléter — addition visuelle</h3>
-            <p class="variant-note">L'enfant voit 6 œufs déjà placés et doit en dessiner 4 de plus pour atteindre 10.</p>
+          <article class="variant variant-wide">
+            <h3>Dessiner pour compléter — addition visuelle <span class="badge-soon">concept</span></h3>
+            <p class="variant-note">Variant non encore implémenté dans le moteur — mockup conceptuel : l'enfant voit N œufs déjà placés et doit en dessiner M de plus.</p>
             <div class="exo">
               <p class="instr">Maman dinosaure veut 10 œufs dans son nid. Dessine ceux qui manquent.</p>
               <div class="draw-existing">
@@ -607,9 +523,9 @@ import { CommonModule } from '@angular/common';
             </div>
           </article>
 
-          <article class="variant">
-            <h3>Dessiner pour partager — division</h3>
-            <p class="variant-note">10 œufs, 2 nids — l'enfant dessine la répartition équitable.</p>
+          <article class="variant variant-wide">
+            <h3>Dessiner pour partager — division <span class="badge-soon">concept</span></h3>
+            <p class="variant-note">Variant non encore implémenté — mockup conceptuel : N items, M containers.</p>
             <div class="exo">
               <p class="instr">Le Diplodocus a 10 œufs à partager dans 2 nids. Dessine-les.</p>
               <div class="items-row" style="margin-bottom: 16px;">
@@ -630,27 +546,6 @@ import { CommonModule } from '@angular/common';
               </div>
             </div>
           </article>
-
-          <article class="variant">
-            <h3>Tracer une figure géométrique</h3>
-            <div class="exo">
-              <p class="instr">Trace un triangle à la latte.</p>
-              <div class="draw-zone draw-zone-md">
-                <span class="draw-hint">✏️ trace ici</span>
-              </div>
-            </div>
-          </article>
-
-          <article class="variant">
-            <h3>Dessiner selon une consigne spatiale</h3>
-            <p class="variant-note">Travaille le vocabulaire de l'espace (sous, sur, à côté, entre).</p>
-            <div class="exo">
-              <p class="instr">Dessine un chien <strong>sous</strong> l'arbre et un oiseau <strong>sur</strong> l'arbre.</p>
-              <div class="draw-zone draw-zone-lg">
-                <span class="draw-hint draw-hint-tree">🌳</span>
-              </div>
-            </div>
-          </article>
         </div>
       </section>
 
@@ -661,4 +556,195 @@ import { CommonModule } from '@angular/common';
   `,
   styleUrl: './formats-demo.component.scss',
 })
-export class FormatsDemoComponent {}
+export class FormatsDemoComponent {
+  readonly funTheme: FunTheme = 'dinosaurs';
+
+  // ─── text-blank variants ─────────────────────────────────────
+  readonly textBlankVariants: DemoVariant<TextBlankExercise>[] = [
+    {
+      title: 'Compute — calcul direct',
+      exercise: {
+        format: 'text-blank',
+        variant: 'compute',
+        instruction: 'Calcule.',
+        example: { text: '2 + 1 = ___', answers: ['3'] },
+        questions: [
+          { text: '3 + 4 = ___', answers: ['7'] },
+          { text: '5 + 5 = ___', answers: ['10'] },
+          { text: '8 + 2 = ___', answers: ['10'] },
+          { text: '6 + 3 = ___', answers: ['9'] },
+          { text: '9 − 4 = ___', answers: ['5'] },
+        ],
+      },
+    },
+    {
+      title: 'Reverse — opérande manquant',
+      exercise: {
+        format: 'text-blank',
+        variant: 'reverse',
+        instruction: 'Complète.',
+        example: { text: '5 + ___ = 10', answers: ['5'] },
+        questions: [
+          { text: '7 + ___ = 10', answers: ['3'] },
+          { text: '___ + 5 = 9', answers: ['4'] },
+          { text: '4 + ___ = 10', answers: ['6'] },
+        ],
+      },
+    },
+    {
+      title: 'Decompose — dizaines + unités',
+      exercise: {
+        format: 'text-blank',
+        variant: 'decompose',
+        instruction: 'Décompose en dizaines (D) et unités (U).',
+        example: { text: '14 = ___ D + ___ U', answers: ['1', '4'] },
+        questions: [
+          { text: '17 = ___ D + ___ U', answers: ['1', '7'] },
+          { text: '13 = ___ D + ___ U', answers: ['1', '3'] },
+          { text: '9 = ___ D + ___ U', answers: ['0', '9'] },
+        ],
+      },
+    },
+    {
+      title: 'Sequence — suite à compléter',
+      exercise: {
+        format: 'text-blank',
+        variant: 'sequence',
+        instruction: 'Continue la suite.',
+        example: { text: '1, 2, ___, 4, 5', answers: ['3'] },
+        questions: [
+          { text: '2, 4, ___, 8, ___', answers: ['6', '10'] },
+          { text: '5, 10, ___, ___, 25', answers: ['15', '20'] },
+          { text: '1, 3, 5, ___, 9', answers: ['7'] },
+        ],
+      },
+    },
+    {
+      title: 'Compare — comparer deux nombres',
+      exercise: {
+        format: 'text-blank',
+        variant: 'compare',
+        instruction: 'Complète avec <, > ou =.',
+        example: { text: '3 ___ 7', answers: ['<'] },
+        questions: [
+          { text: '5 ___ 8', answers: ['<'] },
+          { text: '12 ___ 12', answers: ['='] },
+          { text: '15 ___ 9', answers: ['>'] },
+        ],
+      },
+    },
+    {
+      title: 'Word problem — problème personnalisé',
+      exercise: {
+        format: 'text-blank',
+        variant: 'word-problem',
+        instruction: 'Lis et résous.',
+        questions: [
+          {
+            text: "Léa a trouvé 6 œufs de dinosaure le matin. L'après-midi, elle en trouve 4 de plus. Combien d'œufs a-t-elle en tout ? ___",
+            answers: ['10'],
+          },
+        ],
+      },
+    },
+  ];
+
+  // ─── circle variants ─────────────────────────────────────────
+  readonly circleVariants: DemoVariant<CircleExercise>[] = [
+    {
+      title: 'Par valeur — nombres ≤ 10',
+      showAnswers: true,
+      exercise: {
+        format: 'circle',
+        instruction: 'Entoure tous les nombres ≤ 10.',
+        example: { text: '6', correct: true },
+        items: [
+          { text: '14', correct: false },
+          { text: '7', correct: true },
+          { text: '19', correct: false },
+          { text: '10', correct: true },
+          { text: '15', correct: false },
+        ],
+      },
+    },
+    {
+      title: 'Par opération — additions qui font 10',
+      showAnswers: true,
+      exercise: {
+        format: 'circle',
+        instruction: 'Entoure les additions qui font 10.',
+        example: { text: '5 + 5', correct: true },
+        items: [
+          { text: '3 + 7', correct: true },
+          { text: '4 + 5', correct: false },
+          { text: '6 + 4', correct: true },
+          { text: '8 + 1', correct: false },
+          { text: '2 + 8', correct: true },
+        ],
+      },
+    },
+    {
+      title: 'Par son — phonologie français',
+      showAnswers: true,
+      exercise: {
+        format: 'circle',
+        instruction: "Entoure les mots qui contiennent le son /a/.",
+        example: { text: 'papa', correct: true },
+        items: [
+          { text: 'chat', correct: true },
+          { text: 'lit', correct: false },
+          { text: 'bateau', correct: true },
+          { text: 'bol', correct: false },
+          { text: 'sac', correct: true },
+        ],
+      },
+    },
+    {
+      title: 'Par attribut — entoure les disques',
+      showAnswers: true,
+      exercise: {
+        format: 'circle',
+        instruction: 'Entoure tous les disques.',
+        example: { text: '●', correct: true },
+        items: [
+          { text: '●', correct: true },
+          { text: '▲', correct: false },
+          { text: '●', correct: true },
+          { text: '■', correct: false },
+          { text: '●', correct: true },
+        ],
+      },
+    },
+  ];
+
+  // ─── draw-items variants ─────────────────────────────────────
+  readonly drawItemsVariants: DemoVariant<DrawItemsExercise>[] = [
+    {
+      title: 'Dessiner N items (avec exemple)',
+      note: 'Le premier item est dessiné comme modèle, l\'enfant complète.',
+      exercise: {
+        format: 'draw-items',
+        instruction: 'Dessine 7 œufs de dinosaure dans le cadre.',
+        zoneSize: 'md',
+        prefilled: 1,
+      },
+    },
+    {
+      title: 'Tracer une figure géométrique',
+      exercise: {
+        format: 'draw-items',
+        instruction: 'Trace un triangle à la latte.',
+        zoneSize: 'md',
+      },
+    },
+    {
+      title: 'Dessiner une scène spatiale',
+      note: 'Zone large pour permettre une composition libre.',
+      exercise: {
+        format: 'draw-items',
+        instruction: 'Dessine un chien sous l\'arbre et un oiseau sur l\'arbre.',
+        zoneSize: 'lg',
+      },
+    },
+  ];
+}
