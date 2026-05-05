@@ -15,7 +15,8 @@ export type ExerciseFormat =
   | 'match'
   | 'multiple-choice'
   | 'order'
-  | 'draw-items';
+  | 'draw-items'
+  | 'image-addition';
 
 // ─── Format text-blank ───────────────────────────────────────
 export type TextBlankVariant =
@@ -157,10 +158,59 @@ export interface DrawItemsExercise {
   prefilled?: number;
 }
 
+// ─── Format image-addition ───────────────────────────────────
+/**
+ * Question image-addition : N items à gauche + M items à droite, équation N + M = ___.
+ * Pédagogie P1 : support visuel pré-abstrait pour additionner par comptage d'icônes.
+ */
+export interface ImageAdditionQuestion {
+  left: number;
+  right: number;
+}
+
+/**
+ * Bloc générateur image-addition : produit `count` paires (left, right)
+ * uniques avec left + right ∈ [2, sumMax].
+ */
+export interface ImageAdditionPairGen {
+  generate: 'image-addition-pair';
+  count: number;
+  /** Somme max (défaut 10). */
+  sumMax?: number;
+}
+
+export type ImageAdditionItem = ImageAdditionQuestion | ImageAdditionPairGen;
+
+export function isImageAdditionGenerator(item: ImageAdditionItem): item is ImageAdditionPairGen {
+  return (item as ImageAdditionPairGen).generate !== undefined;
+}
+
+export interface ImageAdditionExerciseTemplate {
+  format: 'image-addition';
+  instruction: string;
+  example?: ImageAdditionQuestion;
+  questions: ImageAdditionItem[];
+}
+
+export interface ImageAdditionExercise {
+  format: 'image-addition';
+  instruction: string;
+  example?: ImageAdditionQuestion;
+  questions: ImageAdditionQuestion[];
+}
+
 // ─── Discriminated union (s'élargira format par format) ──────
 // Templates et runtimes coïncident pour circle/draw-items (pas de générateurs).
-export type ExerciseTemplate = TextBlankExerciseTemplate | CircleExercise | DrawItemsExercise;
-export type Exercise = TextBlankExercise | CircleExercise | DrawItemsExercise;
+export type ExerciseTemplate =
+  | TextBlankExerciseTemplate
+  | CircleExercise
+  | DrawItemsExercise
+  | ImageAdditionExerciseTemplate;
+export type Exercise =
+  | TextBlankExercise
+  | CircleExercise
+  | DrawItemsExercise
+  | ImageAdditionExercise;
 
 // ─── Sheet (template = JSON catalogue, instance = post-perso) ─
 /**

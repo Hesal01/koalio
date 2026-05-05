@@ -2,6 +2,8 @@ import {
   AdditionComputeGen,
   AdditionReverseGen,
   DecomposeDuGen,
+  ImageAdditionPairGen,
+  ImageAdditionQuestion,
   SequenceStepGen,
   SubtractionComputeGen,
   TextBlankGenerator,
@@ -188,4 +190,27 @@ function shuffle<T>(arr: T[]): T[] {
     [copy[i], copy[j]] = [copy[j], copy[i]];
   }
   return copy;
+}
+
+// ─── Dispatcher image-addition ───────────────────────────────
+export function expandImageAdditionGenerator(
+  block: ImageAdditionPairGen,
+): ImageAdditionQuestion[] {
+  return genImageAdditionPair(block);
+}
+
+// ─── image-addition-pair : (left, right) avec left+right ≤ sumMax ──
+function genImageAdditionPair(g: ImageAdditionPairGen): ImageAdditionQuestion[] {
+  const sumMax = g.sumMax ?? 10;
+
+  return pickUnique(
+    g.count,
+    () => {
+      const sum = randomInt(2, sumMax);
+      const left = randomInt(1, sum - 1);
+      const right = sum - left;
+      return { left, right };
+    },
+    ({ left, right }) => `${left}+${right}`,
+  );
 }

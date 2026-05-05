@@ -5,7 +5,11 @@ import {
   Exercise,
   ExerciseTemplate,
   FunTheme,
+  ImageAdditionExercise,
+  ImageAdditionExerciseTemplate,
+  ImageAdditionQuestion,
   isGeneratorBlock,
+  isImageAdditionGenerator,
   Level,
   Sheet,
   SheetTemplate,
@@ -15,7 +19,7 @@ import {
   TextBlankQuestion,
   Theme,
 } from '../models/exercise.model';
-import { expandGenerator } from './question-generators';
+import { expandGenerator, expandImageAdditionGenerator } from './question-generators';
 import variant1 from '../../../assets/catalog/P1/math/additions/dinosaurs/variant-1.json';
 
 // Catalogue statique. Pour ajouter une fiche, drop un nouveau JSON
@@ -77,7 +81,28 @@ export class CatalogService {
     if (ex.format === 'text-blank') return this.personalizeTextBlank(ex, childName);
     if (ex.format === 'circle') return this.personalizeCircle(ex, childName);
     if (ex.format === 'draw-items') return this.personalizeDrawItems(ex, childName);
+    if (ex.format === 'image-addition') return this.personalizeImageAddition(ex, childName);
     return ex as unknown as Exercise;
+  }
+
+  private personalizeImageAddition(
+    template: ImageAdditionExerciseTemplate,
+    childName: string,
+  ): ImageAdditionExercise {
+    const flatQuestions: ImageAdditionQuestion[] = [];
+    for (const item of template.questions) {
+      if (isImageAdditionGenerator(item)) {
+        flatQuestions.push(...expandImageAdditionGenerator(item));
+      } else {
+        flatQuestions.push(item);
+      }
+    }
+    return {
+      format: 'image-addition',
+      instruction: this.replaceTokens(template.instruction, childName),
+      example: template.example,
+      questions: flatQuestions,
+    };
   }
 
   private personalizeCircle(template: CircleExercise, childName: string): CircleExercise {

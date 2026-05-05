@@ -1,0 +1,148 @@
+@use '../../../styles/variables' as *;
+
+:host {
+  display: block;
+}
+
+.instruction {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: $dark;
+  margin: 0 0 $spacing-md 0;
+  text-align: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px 14px; // gap vertical pour laisser respirer la pill équation
+}
+
+// ─── Carte ─────────────────────────────────────────────────────
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 4px 6px;
+  border: 1.5px solid $gray-medium;
+  border-radius: 6px;
+  background: $white;
+  min-height: 115px;
+
+  // Trait vertical au centre, sur quasi-toute la hauteur
+  // (passe derrière la pill équation grâce au z-index naturel)
+  &::before {
+    content: '';
+    position: absolute;
+    top: 6px;
+    bottom: 6px;
+    left: 50%;
+    width: 1.5px;
+    background: $dark-light;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  &.example {
+    background: $menthe-light;
+    border-color: $menthe;
+    .equation { background: $menthe-light; border-color: $menthe; }
+    .equation .answer { color: $menthe-dark; font-weight: 700; }
+  }
+}
+
+.letter {
+  font-family: $font-family-display;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: $dark-light;
+  font-style: italic;
+}
+
+// ─── Zones gauche/droite ───────────────────────────────────────
+.zones {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  flex: 1;
+  margin-top: 2px;
+}
+
+.zone {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  padding: 2px 4px;
+}
+
+// ─── Items ─────────────────────────────────────────────────────
+.item-wrap {
+  display: inline-flex;
+  width: 58px;
+  height: 58px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+    display: block;
+  }
+  .emoji-fallback {
+    font-size: 2rem;
+    line-height: 1;
+  }
+}
+
+// Légères rotations naturelles pour casser le côté "grille parfaite"
+.zone .item-wrap:nth-child(odd) { transform: rotate(-7deg); }
+.zone .item-wrap:nth-child(even) { transform: rotate(5deg); }
+.zone .item-wrap:nth-child(3n) { transform: rotate(-3deg); }
+
+// ─── Pill équation flottante en bas du cadre ───────────────────
+.equation {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 4px 16px;
+  background: $white;
+  border: 1.5px solid $gray-medium;
+  border-radius: 6px;
+  font-family: $font-family-display;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: $dark;
+  white-space: nowrap;
+  font-variant-numeric: lining-nums;
+  z-index: 1; // au-dessus du trait vertical
+}
+
+.equation .blank {
+  display: inline-block;
+  width: 56px;
+  border-bottom: 1.5px solid $dark;
+  height: 0;
+}
+
+.equation .answer {
+  font-weight: 700;
+}
+
+// ─── Print : forcer fonds + bordures ───────────────────────────
+@media print {
+  .card,
+  .card.example,
+  .equation {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

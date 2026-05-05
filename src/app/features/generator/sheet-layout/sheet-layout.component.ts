@@ -4,11 +4,18 @@ import { FunTheme, Sheet } from '../../../core/models/exercise.model';
 import { TextBlankExerciseComponent } from './text-blank-exercise.component';
 import { CircleExerciseComponent } from './circle-exercise.component';
 import { DrawItemsExerciseComponent } from './draw-items-exercise.component';
+import { ImageAdditionExerciseComponent } from './image-addition-exercise.component';
 
 @Component({
   selector: 'app-sheet-layout',
   standalone: true,
-  imports: [DatePipe, TextBlankExerciseComponent, CircleExerciseComponent, DrawItemsExerciseComponent],
+  imports: [
+    DatePipe,
+    TextBlankExerciseComponent,
+    CircleExerciseComponent,
+    DrawItemsExerciseComponent,
+    ImageAdditionExerciseComponent,
+  ],
   template: `
     <div class="sheet sheet-{{ sheet.funTheme }}" id="sheet-pdf">
       <div class="sheet-header">
@@ -58,6 +65,13 @@ import { DrawItemsExerciseComponent } from './draw-items-exercise.component';
                 <app-draw-items-exercise
                   [exercise]="exercise"
                   [funTheme]="sheet.funTheme"
+                />
+              }
+              @case ('image-addition') {
+                <app-image-addition-exercise
+                  [exercise]="exercise"
+                  [funTheme]="sheet.funTheme"
+                  [showAnswers]="showAnswers"
                 />
               }
             }
