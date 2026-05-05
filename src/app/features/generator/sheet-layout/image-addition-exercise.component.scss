@@ -9,7 +9,6 @@
   font-size: 0.95rem;
   color: $dark;
   margin: 0 0 $spacing-md 0;
-  text-align: center;
 }
 
 .grid {
@@ -23,11 +22,13 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 4px 6px;
+  // padding-bottom plus grand : la pill équation déborde d'environ 14px
+  // au-dessus de la bordure → on laisse cette zone libre pour les items
+  padding: 4px 6px 22px;
   border: 1.5px solid $gray-medium;
   border-radius: 6px;
   background: $white;
-  min-height: 115px;
+  min-height: 100px;
 
   // Trait vertical au centre, sur quasi-toute la hauteur
   // (passe derrière la pill équation grâce au z-index naturel)
@@ -68,20 +69,24 @@
 }
 
 .zone {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
+  // Grille 2 rangées qui se remplit colonne par colonne (1→haut, 2→bas, 3→haut, 4→bas…)
+  // → stagger naturel, items en 2 rangées au lieu d'une seule longue → cards moins hautes
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-auto-flow: column;
+  gap: 2px 3px;
   align-items: center;
-  align-content: center;
-  justify-content: center;
+  justify-items: center;
   padding: 2px 4px;
+  min-height: 70px;
+  overflow: hidden; // garde-fou : si vraiment trop d'items, on clippe au lieu de déborder sur la ligne du milieu
 }
 
 // ─── Items ─────────────────────────────────────────────────────
 .item-wrap {
   display: inline-flex;
-  width: 58px;
-  height: 58px;
+  width: 32px;
+  height: 32px;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
@@ -94,15 +99,16 @@
     display: block;
   }
   .emoji-fallback {
-    font-size: 2rem;
+    font-size: 1.3rem;
     line-height: 1;
   }
 }
 
-// Légères rotations naturelles pour casser le côté "grille parfaite"
-.zone .item-wrap:nth-child(odd) { transform: rotate(-7deg); }
-.zone .item-wrap:nth-child(even) { transform: rotate(5deg); }
-.zone .item-wrap:nth-child(3n) { transform: rotate(-3deg); }
+// Rotations + petits offsets verticaux pour un effet "posé naturellement"
+// (alterne entre items pour casser l'alignement strict de la grille)
+.zone .item-wrap:nth-child(odd) { transform: rotate(-7deg) translateY(-1px); }
+.zone .item-wrap:nth-child(even) { transform: rotate(5deg) translateY(1px); }
+.zone .item-wrap:nth-child(3n) { transform: rotate(-3deg) translateY(0); }
 
 // ─── Pill équation flottante en bas du cadre ───────────────────
 .equation {

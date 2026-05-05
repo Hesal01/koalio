@@ -9,7 +9,7 @@
       "instruction": "Trouve la somme de chaque addition.",
       "example": { "left": 1, "right": 2 },
       "questions": [
-        { "generate": "image-addition-pair", "count": 5, "sumMax": 10 }
+        { "generate": "image-addition-pair", "count": 3, "sumMax": 7 }
       ]
     },
     {
