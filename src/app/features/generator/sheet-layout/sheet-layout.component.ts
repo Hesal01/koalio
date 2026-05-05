@@ -10,7 +10,7 @@ import { DrawItemsExerciseComponent } from './draw-items-exercise.component';
   standalone: true,
   imports: [DatePipe, TextBlankExerciseComponent, CircleExerciseComponent, DrawItemsExerciseComponent],
   template: `
-    <div class="sheet" id="sheet-pdf">
+    <div class="sheet sheet-{{ sheet.funTheme }}" id="sheet-pdf">
       <div class="sheet-header">
         <div class="sheet-header-left">
           <span class="sheet-logo">🐨 Koalio</span>
@@ -38,7 +38,9 @@ import { DrawItemsExerciseComponent } from './draw-items-exercise.component';
 
       <div class="sheet-body">
         @for (exercise of sheet.exercises; track $index) {
-          <div class="exercise-block">
+          <div class="exercise-block"
+               [class.has-illustration]="exerciseHasIllustration(exercise)"
+               [class.has-side-illustration]="isNarrowExercise(exercise)">
             <div class="exercise-header">
               <span class="exercise-number">Exercice {{ $index + 1 }}</span>
             </div>
@@ -90,6 +92,17 @@ export class SheetLayoutComponent {
       animals: '🐨',
     };
     return map[this.sheet.funTheme];
+  }
+
+  /** True si l'exo affiche déjà sa propre illustration (pour ne pas y ajouter une déco coin redondante). */
+  exerciseHasIllustration(exercise: Sheet['exercises'][number]): boolean {
+    return exercise.format === 'draw-items';
+  }
+
+  /** True si l'exo n'a qu'une colonne de contenu (laisse de la place pour une grande illu à droite). */
+  isNarrowExercise(exercise: Sheet['exercises'][number]): boolean {
+    if (exercise.format !== 'text-blank') return false;
+    return exercise.variant === 'decompose';
   }
 
   get subjectLabel(): string {

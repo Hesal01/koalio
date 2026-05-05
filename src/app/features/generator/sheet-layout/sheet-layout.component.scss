@@ -9,6 +9,7 @@
   padding: 24mm 20mm;
   display: flex;
   flex-direction: column;
+  position: relative;
 
   @media (max-width: $desktop) {
     width: 100%;
@@ -25,6 +26,7 @@
   padding-bottom: $spacing-lg;
   border-bottom: 3px solid $corail;
   margin-bottom: $spacing-xl;
+  position: relative;
 }
 
 .sheet-header-left { flex-shrink: 0; }
@@ -39,15 +41,18 @@
 .sheet-header-right { flex: 1; }
 
 .theme-mascot {
+  // Sortie du flex flow → la mascotte peut être plus grande que l'entête
+  // sans le pousser. Elle déborde dans la marge supérieure (sheet padding-top : 24mm)
+  position: absolute;
+  bottom: 0;
+  right: 0;
   display: inline-flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  margin-left: auto;
 
   img {
-    width: 120px;
-    height: 120px;
+    width: 170px;
+    height: 170px;
     object-fit: contain;
     display: block;
     // Cohérent avec l'œuf : neutralise le fond blanc du PNG Midjourney sur fond clair
@@ -55,7 +60,7 @@
   }
 
   .emoji-fallback {
-    font-size: 5rem;
+    font-size: 6.5rem;
     line-height: 1;
   }
 }
@@ -93,10 +98,79 @@
 }
 
 .exercise-block {
+  position: relative;
   page-break-inside: avoid;
   padding: 18px 22px;
   border: 1px solid #E0E6E3;
   border-radius: 12px;
+}
+
+// Petit accent dans le coin haut-droit de chaque exo (thèmes seulement)
+.sheet-dinosaurs .exercise-block::before {
+  content: '';
+  position: absolute;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  mix-blend-mode: multiply;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+// Pas de déco coin sur les exos qui ont déjà leur propre illustration
+// (intégrée à l'exo ou grande illu latérale)
+.sheet-dinosaurs .exercise-block.has-illustration::before,
+.sheet-dinosaurs .exercise-block.has-side-illustration::before {
+  content: none;
+}
+
+// Toutes les décos coin sont en haut-droit pour éviter de :
+// - cacher du contenu en bas-gauche (le user n'aime pas)
+// - se chevaucher avec la déco du cadre suivant (collision dans le gap)
+// L'image varie sur un cycle de 3 pour casser la monotonie.
+.sheet-dinosaurs .exercise-block:nth-child(3n+1)::before {
+  background-image: url('/assets/sheet/decorations/dinosaurs-plant.png');
+  width: 120px;
+  height: 120px;
+  top: -45px;
+  right: 18px;
+  transform: rotate(18deg);
+}
+.sheet-dinosaurs .exercise-block:nth-child(3n+2)::before {
+  background-image: url('/assets/sheet/decorations/dinosaurs-frond.png');
+  width: 90px;
+  height: 150px;
+  top: -55px;
+  right: 18px;
+  transform: rotate(-8deg);
+}
+.sheet-dinosaurs .exercise-block:nth-child(3n)::before {
+  background-image: url('/assets/sheet/decorations/dinosaurs-footprint.png');
+  width: 95px;
+  height: 95px;
+  top: -32px;
+  right: 24px;
+  transform: rotate(22deg);
+}
+
+// Layout split pour exos à 1 colonne : contenu à gauche, grande illu à droite
+.sheet-dinosaurs .exercise-block.has-side-illustration {
+  padding-right: 240px;
+}
+.sheet-dinosaurs .exercise-block.has-side-illustration::after {
+  content: '';
+  position: absolute;
+  top: 12px;
+  bottom: 12px;
+  right: 16px;
+  width: 220px;
+  background-image: url('/assets/sheet/decorations/dinosaurs-frond.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  mix-blend-mode: multiply;
+  opacity: 0.85;
+  pointer-events: none;
 }
 
 .exercise-header {
@@ -398,10 +472,12 @@
     &:last-child { margin-bottom: 0; }
   }
 
-  // Force background colors of drawing zones to print (Chrome/Safari skip them by default).
+  // Force background colors and images to print (Chrome/Safari skip them by default).
   .drawing-zone,
   .meta-badge,
-  .question-answer {
+  .question-answer,
+  .sheet-dinosaurs .exercise-block::before,
+  .sheet-dinosaurs .exercise-block::after {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
