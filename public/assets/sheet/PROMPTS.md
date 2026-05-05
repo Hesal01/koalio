@@ -39,6 +39,31 @@ Empreinte vue du dessus, 4 doigts pointus, coussinet brun avec un cœur orange-c
 
 > flat 2D cartoon illustration of a single dinosaur footprint viewed from above, four toe pads with pointed claws, soft warm brown color, coral-orange central pad, painterly hand-drawn texture, soft pastel palette, white background, kids book illustration style, no text, centered composition --ar 1:1 --v 7
 
+### Bonus — assets décoratifs supplémentaires
+
+Générés avec le même prompt template, intégrés au cycle de 10 décos coin sur les exercices.
+
+#### `dinosaurs-trex.png` — petit T-Rex bipède
+> flat 2D cartoon illustration of a small cute bipedal T-Rex dinosaur, teal and orange spotted body, tiny arms, gentle expression, side view, painterly hand-drawn texture, soft pastel palette, white background, kids book illustration style, no text, centered composition --ar 1:1 --v 7
+
+#### `dinosaurs-ammonite.png` — ammonite fossile
+> flat 2D cartoon illustration of a single ammonite fossil, spiral shell with warm beige and rust tones, painterly hand-drawn texture, soft pastel palette, white background, kids book illustration style, no text, centered composition --ar 1:1 --v 7
+
+#### `dinosaurs-bone.png` — os de dinosaure
+> flat 2D cartoon illustration of a single dinosaur fossil bone, weathered cream and beige tones with subtle cracks, painterly hand-drawn texture, soft pastel palette, white background, kids book illustration style, no text, centered composition --ar 1:1 --v 7
+
+#### `dinosaurs-pterodactyl.png` — ptérodactyle en vol
+> flat 2D cartoon illustration of a single small flying pterodactyl, wings spread, side view, soft warm brown and beige tones, painterly hand-drawn texture, soft pastel palette, white background, kids book illustration style, no text, centered composition --ar 1:1 --v 7
+
+#### `dinosaurs-volcano.png` — volcan stylisé
+> flat 2D cartoon illustration of a single small stylized volcano with gentle smoke plume on top, warm grey rock with hints of orange at the crater, painterly hand-drawn texture, soft pastel palette, white background, kids book illustration style, no text, centered composition --ar 1:1 --v 7
+
+#### `dinosaurs-hatchling.png` — bébé qui éclot d'un œuf
+> flat 2D cartoon illustration of a tiny baby dinosaur emerging from a cracked egg, big eyes, orange and beige tones, painterly hand-drawn texture, soft pastel palette, white background, kids book illustration style, no text, centered composition --ar 1:1 --v 7
+
+#### `dinosaurs-dragonfly.png` — libellule géante (Meganeura)
+> flat 2D cartoon illustration of a single prehistoric giant dragonfly meganeura, translucent wings, soft teal and amber body, top-down view, painterly hand-drawn texture, soft pastel palette, white background, kids book illustration style, no text, centered composition --ar 1:1 --v 7
+
 ## Pipeline d'intégration
 
 1. Générer le PNG dans Midjourney (Discord ou web app)

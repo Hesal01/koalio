@@ -109,7 +109,7 @@
 .sheet-dinosaurs .exercise-block::before {
   content: '';
   position: absolute;
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   mix-blend-mode: multiply;
@@ -124,33 +124,69 @@
   content: none;
 }
 
-// Toutes les décos coin sont en haut-droit pour éviter de :
-// - cacher du contenu en bas-gauche (le user n'aime pas)
-// - se chevaucher avec la déco du cadre suivant (collision dans le gap)
-// L'image varie sur un cycle de 3 pour casser la monotonie.
-.sheet-dinosaurs .exercise-block:nth-child(3n+1)::before {
+// Cycle de 10 — chaque déco apparaît une seule fois par fiche typique.
+// Toutes en haut-droit (le user n'aime pas le bas-gauche, et au top les
+// décos consécutives sont dans des gaps différents → pas de collision).
+// Tailles de boîte adaptées à l'aspect du sujet (fougère étroite, os large…).
+.sheet-dinosaurs .exercise-block:nth-child(10n+1)::before {
   background-image: url('/assets/sheet/decorations/dinosaurs-plant.png');
-  width: 120px;
-  height: 120px;
-  top: -45px;
-  right: 18px;
+  width: 120px; height: 120px;
+  top: -45px; right: 18px;
   transform: rotate(18deg);
 }
-.sheet-dinosaurs .exercise-block:nth-child(3n+2)::before {
+.sheet-dinosaurs .exercise-block:nth-child(10n+2)::before {
   background-image: url('/assets/sheet/decorations/dinosaurs-frond.png');
-  width: 90px;
-  height: 150px;
-  top: -55px;
-  right: 18px;
+  width: 80px; height: 150px;
+  top: -55px; right: 18px;
   transform: rotate(-8deg);
 }
-.sheet-dinosaurs .exercise-block:nth-child(3n)::before {
+.sheet-dinosaurs .exercise-block:nth-child(10n+3)::before {
   background-image: url('/assets/sheet/decorations/dinosaurs-footprint.png');
-  width: 95px;
-  height: 95px;
-  top: -32px;
-  right: 24px;
+  width: 95px; height: 95px;
+  top: -32px; right: 24px;
   transform: rotate(22deg);
+}
+.sheet-dinosaurs .exercise-block:nth-child(10n+4)::before {
+  background-image: url('/assets/sheet/decorations/dinosaurs-trex.png');
+  width: 115px; height: 130px;
+  top: -50px; right: 18px;
+  transform: rotate(-12deg);
+}
+.sheet-dinosaurs .exercise-block:nth-child(10n+5)::before {
+  background-image: url('/assets/sheet/decorations/dinosaurs-ammonite.png');
+  width: 115px; height: 110px;
+  top: -40px; right: 20px;
+  transform: rotate(15deg);
+}
+.sheet-dinosaurs .exercise-block:nth-child(10n+6)::before {
+  background-image: url('/assets/sheet/decorations/dinosaurs-bone.png');
+  width: 150px; height: 90px;
+  top: -22px; right: 16px;
+  transform: rotate(-10deg);
+}
+.sheet-dinosaurs .exercise-block:nth-child(10n+7)::before {
+  background-image: url('/assets/sheet/decorations/dinosaurs-pterodactyl.png');
+  width: 140px; height: 105px;
+  top: -42px; right: 14px;
+  transform: rotate(8deg);
+}
+.sheet-dinosaurs .exercise-block:nth-child(10n+8)::before {
+  background-image: url('/assets/sheet/decorations/dinosaurs-volcano.png');
+  width: 140px; height: 120px;
+  top: -50px; right: 14px;
+  transform: rotate(-5deg);
+}
+.sheet-dinosaurs .exercise-block:nth-child(10n+9)::before {
+  background-image: url('/assets/sheet/decorations/dinosaurs-hatchling.png');
+  width: 110px; height: 115px;
+  top: -42px; right: 20px;
+  transform: rotate(12deg);
+}
+.sheet-dinosaurs .exercise-block:nth-child(10n)::before {
+  background-image: url('/assets/sheet/decorations/dinosaurs-dragonfly.png');
+  width: 140px; height: 105px;
+  top: -42px; right: 14px;
+  transform: rotate(-15deg);
 }
 
 // Layout split pour exos à 1 colonne : contenu à gauche, grande illu à droite
