@@ -105,8 +105,18 @@
   border-radius: 12px;
 }
 
-// Petit accent dans le coin haut-droit de chaque exo (thèmes seulement)
-.sheet-dinosaurs .exercise-block::before {
+// ═══ DÉCORATIONS : 5 modes togglables ═══════════════════════════
+// Le mode courant est posé via la classe `.deco-{mode}` sur `.sheet`.
+// Default : .deco-stamps. Les autres : banner, margins, split, footer.
+// Conteneurs banner et margins-decos sont toujours dans le DOM mais
+// hidden par défaut, affichés uniquement dans leur mode.
+
+// ─── Conteneurs Banner + Margins (cachés par défaut) ─────────────
+.sheet-banner { display: none; }
+.sheet-margins-decos { display: none; }
+
+// ─── MODE STAMPS — corner stamps en haut-droit, cycle de 9 ───────
+.sheet-dinosaurs.deco-stamps .exercise-block::before {
   content: '';
   position: absolute;
   background-size: cover;
@@ -115,86 +125,215 @@
   mix-blend-mode: multiply;
   pointer-events: none;
 }
-
-// Pas de déco coin sur les exos qui ont déjà leur propre illustration
-// (intégrée à l'exo ou grande illu latérale)
-.sheet-dinosaurs .exercise-block.has-illustration::before,
-.sheet-dinosaurs .exercise-block.has-side-illustration::before {
+.sheet-dinosaurs.deco-stamps .exercise-block.has-illustration::before,
+.sheet-dinosaurs.deco-stamps .exercise-block.has-side-illustration::before {
   content: none;
 }
-
-// Cycle de 9 — chaque déco apparaît une seule fois par fiche typique.
-// Toutes en haut-droit (le user n'aime pas le bas-gauche, et au top les
-// décos consécutives sont dans des gaps différents → pas de collision).
-// La fougère (`dinosaurs-frond.png`) est exclue du cycle : elle est réservée
-// à l'illustration latérale des exos étroits (`.has-side-illustration::after`).
-.sheet-dinosaurs .exercise-block:nth-child(9n+1)::before {
+.sheet-dinosaurs.deco-stamps .exercise-block:nth-child(9n+1)::before {
   background-image: url('/assets/sheet/decorations/dinosaurs-plant.png');
-  width: 120px; height: 120px;
-  top: -45px; right: 18px;
+  width: 120px; height: 120px; top: -45px; right: 18px;
   transform: rotate(18deg);
 }
-.sheet-dinosaurs .exercise-block:nth-child(9n+2)::before {
+.sheet-dinosaurs.deco-stamps .exercise-block:nth-child(9n+2)::before {
   background-image: url('/assets/sheet/decorations/dinosaurs-footprint.png');
-  width: 95px; height: 95px;
-  top: -32px; right: 24px;
+  width: 95px; height: 95px; top: -32px; right: 24px;
   transform: rotate(22deg);
 }
-.sheet-dinosaurs .exercise-block:nth-child(9n+3)::before {
+.sheet-dinosaurs.deco-stamps .exercise-block:nth-child(9n+3)::before {
   background-image: url('/assets/sheet/decorations/dinosaurs-trex.png');
-  width: 115px; height: 130px;
-  top: -50px; right: 18px;
+  width: 115px; height: 130px; top: -50px; right: 18px;
   transform: rotate(-12deg);
 }
-.sheet-dinosaurs .exercise-block:nth-child(9n+4)::before {
+.sheet-dinosaurs.deco-stamps .exercise-block:nth-child(9n+4)::before {
   background-image: url('/assets/sheet/decorations/dinosaurs-ammonite.png');
-  width: 115px; height: 110px;
-  top: -40px; right: 20px;
+  width: 115px; height: 110px; top: -40px; right: 20px;
   transform: rotate(15deg);
 }
-.sheet-dinosaurs .exercise-block:nth-child(9n+5)::before {
+.sheet-dinosaurs.deco-stamps .exercise-block:nth-child(9n+5)::before {
   background-image: url('/assets/sheet/decorations/dinosaurs-bone.png');
-  width: 150px; height: 90px;
-  top: -22px; right: 16px;
+  width: 150px; height: 90px; top: -22px; right: 16px;
   transform: rotate(-10deg);
 }
-.sheet-dinosaurs .exercise-block:nth-child(9n+6)::before {
+.sheet-dinosaurs.deco-stamps .exercise-block:nth-child(9n+6)::before {
   background-image: url('/assets/sheet/decorations/dinosaurs-pterodactyl.png');
-  width: 140px; height: 105px;
-  top: -42px; right: 14px;
+  width: 140px; height: 105px; top: -42px; right: 14px;
   transform: rotate(8deg);
 }
-.sheet-dinosaurs .exercise-block:nth-child(9n+7)::before {
+.sheet-dinosaurs.deco-stamps .exercise-block:nth-child(9n+7)::before {
   background-image: url('/assets/sheet/decorations/dinosaurs-volcano.png');
-  width: 140px; height: 120px;
-  top: -50px; right: 14px;
+  width: 140px; height: 120px; top: -50px; right: 14px;
   transform: rotate(-5deg);
 }
-.sheet-dinosaurs .exercise-block:nth-child(9n+8)::before {
+.sheet-dinosaurs.deco-stamps .exercise-block:nth-child(9n+8)::before {
   background-image: url('/assets/sheet/decorations/dinosaurs-hatchling.png');
-  width: 110px; height: 115px;
-  top: -42px; right: 20px;
+  width: 110px; height: 115px; top: -42px; right: 20px;
   transform: rotate(12deg);
 }
-.sheet-dinosaurs .exercise-block:nth-child(9n)::before {
+.sheet-dinosaurs.deco-stamps .exercise-block:nth-child(9n)::before {
   background-image: url('/assets/sheet/decorations/dinosaurs-dragonfly.png');
-  width: 140px; height: 105px;
-  top: -42px; right: 14px;
+  width: 140px; height: 105px; top: -42px; right: 14px;
   transform: rotate(-15deg);
 }
 
-// Layout split pour exos à 1 colonne : contenu à gauche, grande illu à droite
-.sheet-dinosaurs .exercise-block.has-side-illustration {
+// ─── SIDE-ILLU exos étroits (decompose) — actif sauf en mode split ─
+// Source de l'image = CSS var `--vertical-bg` (set sur `.sheet` côté TS via
+// le manifest data-driven, premier asset de size 'vertical' du thème).
+.sheet-dinosaurs:not(.deco-split) .exercise-block.has-side-illustration {
   padding-right: 240px;
 }
-.sheet-dinosaurs .exercise-block.has-side-illustration::after {
+.sheet-dinosaurs:not(.deco-split) .exercise-block.has-side-illustration::after {
   content: '';
   position: absolute;
-  top: 12px;
-  bottom: 12px;
-  right: 16px;
+  top: 12px; bottom: 12px; right: 16px;
   width: 220px;
-  background-image: url('/assets/sheet/decorations/dinosaurs-frond.png');
+  background-image: var(--vertical-bg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+// ─── MODE BANNER — scène horizontale au-dessus des exos ──────────
+// Slots de position génériques (pos-0..3) consommés par les 4 premiers
+// 'big' chars du thème (cf. `bannerScene` côté TS).
+//   pos-0 : ground gauche  · pos-1 : ground centre
+//   pos-2 : ground droite  · pos-3 : air (flottant — idéalement créature volante)
+.sheet-dinosaurs.deco-banner .sheet-banner {
+  display: block;
+  position: relative;
+  height: 130px;
+  margin-bottom: $spacing-lg;
+  overflow: visible;
+
+  img.banner-figure {
+    position: absolute;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+
+    &.pos-0 { left: 6%; bottom: 0; height: 120px; transform: rotate(-3deg); }
+    &.pos-1 { left: 50%; bottom: -10px; height: 100px; transform: translateX(-50%) rotate(2deg); }
+    &.pos-2 { right: 6%; bottom: 0; height: 130px; transform: rotate(2deg); }
+    &.pos-3 { top: 4px; left: 28%; height: 56px; transform: rotate(8deg); }
+  }
+}
+
+// ─── MODE MARGINS (& RICH) — décos scattered dans les marges du sheet ─────
+// Slots génériques (mr-pos-0..4) consommés par les 'small' decos du thème
+// dans l'ordre du manifest. Si un thème en a moins de 5, les slots manquants
+// restent vides (no-op). Plus de 5 → on ne rend que les 5 premiers.
+.sheet-dinosaurs:where(.deco-margins, .deco-rich) .sheet-margins-decos {
+  display: block;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+
+  img.margin-deco {
+    position: absolute;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+
+    &.mr-pos-0 { top: 6mm; right: 4mm; width: 80px; height: 80px; transform: rotate(15deg); }
+    &.mr-pos-1 { top: 42%; left: 2mm; width: 95px; height: 75px; transform: rotate(-10deg); }
+    &.mr-pos-2 { bottom: 8mm; left: 4mm; width: 70px; height: 70px; transform: rotate(8deg); }
+    &.mr-pos-3 { top: 22%; right: 2mm; width: 80px; height: 80px; transform: rotate(-8deg); }
+    &.mr-pos-4 { bottom: 4mm; right: 4mm; width: 110px; height: 70px; transform: rotate(-12deg); }
+  }
+}
+
+// ─── MODE SPLIT — chaque exo en split content+illu ──────────────
+// Image source = CSS var `--split-bg` set par exo (cycle sur tous les
+// non-vertical du thème côté TS).
+.sheet-dinosaurs.deco-split .exercise-block:not(.has-illustration) {
+  padding-right: 200px;
+}
+.sheet-dinosaurs.deco-split .exercise-block:not(.has-illustration)::after {
+  content: '';
+  position: absolute;
+  top: 12px; bottom: 12px; right: 14px;
+  width: 180px;
+  background-image: var(--split-bg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+// ─── MODE FOOTER — stamps repositionnés en bas-droit ─────────────
+.sheet-dinosaurs.deco-footer .exercise-block::before {
+  content: '';
+  position: absolute;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+.sheet-dinosaurs.deco-footer .exercise-block.has-illustration::before,
+.sheet-dinosaurs.deco-footer .exercise-block.has-side-illustration::before {
+  content: none;
+}
+.sheet-dinosaurs.deco-footer .exercise-block:nth-child(9n+1)::before {
+  background-image: url('/assets/sheet/decorations/dinosaurs-plant.png');
+  width: 100px; height: 100px; bottom: -40px; right: 18px;
+  transform: rotate(-12deg);
+}
+.sheet-dinosaurs.deco-footer .exercise-block:nth-child(9n+2)::before {
+  background-image: url('/assets/sheet/decorations/dinosaurs-footprint.png');
+  width: 80px; height: 80px; bottom: -28px; right: 24px;
+  transform: rotate(-22deg);
+}
+.sheet-dinosaurs.deco-footer .exercise-block:nth-child(9n+3)::before {
+  background-image: url('/assets/sheet/decorations/dinosaurs-trex.png');
+  width: 100px; height: 110px; bottom: -45px; right: 18px;
+  transform: rotate(8deg);
+}
+.sheet-dinosaurs.deco-footer .exercise-block:nth-child(9n+4)::before {
+  background-image: url('/assets/sheet/decorations/dinosaurs-ammonite.png');
+  width: 95px; height: 90px; bottom: -32px; right: 20px;
+  transform: rotate(-15deg);
+}
+.sheet-dinosaurs.deco-footer .exercise-block:nth-child(9n+5)::before {
+  background-image: url('/assets/sheet/decorations/dinosaurs-bone.png');
+  width: 130px; height: 80px; bottom: -22px; right: 16px;
+  transform: rotate(8deg);
+}
+.sheet-dinosaurs.deco-footer .exercise-block:nth-child(9n+6)::before {
+  background-image: url('/assets/sheet/decorations/dinosaurs-pterodactyl.png');
+  width: 120px; height: 90px; bottom: -32px; right: 14px;
+  transform: rotate(-8deg);
+}
+.sheet-dinosaurs.deco-footer .exercise-block:nth-child(9n+7)::before {
+  background-image: url('/assets/sheet/decorations/dinosaurs-volcano.png');
+  width: 120px; height: 100px; bottom: -38px; right: 14px;
+  transform: rotate(5deg);
+}
+.sheet-dinosaurs.deco-footer .exercise-block:nth-child(9n+8)::before {
+  background-image: url('/assets/sheet/decorations/dinosaurs-hatchling.png');
+  width: 95px; height: 100px; bottom: -36px; right: 20px;
+  transform: rotate(-12deg);
+}
+.sheet-dinosaurs.deco-footer .exercise-block:nth-child(9n)::before {
+  background-image: url('/assets/sheet/decorations/dinosaurs-dragonfly.png');
+  width: 120px; height: 90px; bottom: -32px; right: 14px;
+  transform: rotate(15deg);
+}
+
+// ─── MODE RICH — margins (petits) + side-illu (gros chars) sur exos non-étroits/non-illustrés
+// Image source = CSS var `--big-deco-bg` set par exo (cycle sur les 'big' du thème).
+// La side-illu narrow (vertical asset) reste active via la règle `:not(.deco-split)` plus haut.
+.sheet-dinosaurs.deco-rich .exercise-block:not(.has-illustration):not(.has-side-illustration) {
+  padding-right: 180px;
+}
+.sheet-dinosaurs.deco-rich .exercise-block:not(.has-illustration):not(.has-side-illustration)::after {
+  content: '';
+  position: absolute;
+  top: 10px; bottom: 10px; right: 12px;
+  width: 160px;
+  background-image: var(--big-deco-bg);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
