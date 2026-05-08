@@ -1,6 +1,9 @@
 @use '../../../styles/variables' as *;
 
 .sheet {
+  // Dimensions A4 fixes partout (desktop + mobile). Sur mobile, le wrapper
+  // applique un transform: scale() pour faire rentrer la fiche dans le viewport
+  // sans déformer le layout (cf. generator-result.component.scss).
   width: 210mm;
   min-height: 297mm;
   background: $white;
@@ -10,13 +13,6 @@
   display: flex;
   flex-direction: column;
   position: relative;
-
-  @media (max-width: $desktop) {
-    width: 100%;
-    min-height: auto;
-    padding: $spacing-lg;
-    border-radius: $radius-md;
-  }
 }
 
 .sheet-header {
