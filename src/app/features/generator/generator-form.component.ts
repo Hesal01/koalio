@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Level, Subject, Theme } from '../../core/models/exercise.model';
+import { FunTheme, Level, Subject, Theme } from '../../core/models/exercise.model';
 import { THEMES_BY_SUBJECT, LEVELS } from '../../core/models/theme-config';
 import { CatalogService } from '../../core/services/catalog.service';
 
@@ -88,6 +88,27 @@ import { CatalogService } from '../../core/services/catalog.service';
                   }
                 </div>
               </div>
+
+              <div class="form-group">
+                <label>Univers visuel</label>
+                <div class="fun-theme-grid">
+                  @for (ft of funThemes; track ft.value) {
+                    <button
+                      class="fun-theme-btn"
+                      [class.active]="selectedFunTheme === ft.value"
+                      [class.disabled]="!ft.enabled"
+                      [disabled]="!ft.enabled"
+                      (click)="ft.enabled && (selectedFunTheme = ft.value)"
+                    >
+                      <span class="fun-theme-icon">{{ ft.icon }}</span>
+                      <span class="fun-theme-label">{{ ft.label }}</span>
+                      @if (!ft.enabled) {
+                        <span class="fun-theme-soon">bientôt</span>
+                      }
+                    </button>
+                  }
+                </div>
+              </div>
             }
 
             <button
@@ -161,8 +182,16 @@ export class GeneratorFormComponent {
   selectedLevel = '';
   selectedSubject: Subject | null = null;
   selectedTheme: Theme | null = null;
+  selectedFunTheme: FunTheme = 'dinosaurs';
   loading = false;
   today = new Date().toLocaleDateString('fr-BE');
+
+  funThemes: { value: FunTheme; label: string; icon: string; enabled: boolean }[] = [
+    { value: 'dinosaurs', label: 'Dinosaures', icon: '🦕', enabled: true },
+    { value: 'pirates',   label: 'Pirates',    icon: '🏴‍☠️', enabled: false },
+    { value: 'space',     label: 'Espace',     icon: '🚀', enabled: false },
+    { value: 'animals',   label: 'Animaux',    icon: '🐨', enabled: false },
+  ];
 
   private previewData: Record<string, { instruction: string; questions: string[] }[]> = {
     additions: [
@@ -240,7 +269,7 @@ export class GeneratorFormComponent {
         level: this.selectedLevel as Level,
         subject: this.selectedSubject!,
         theme: this.selectedTheme!,
-        funTheme: 'dinosaurs', // MVP : un seul univers visuel
+        funTheme: this.selectedFunTheme,
       });
       this.router.navigate(['/result', sheet.id]);
     } catch (e) {
