@@ -115,6 +115,34 @@
 .sheet-banner { display: none; }
 .sheet-margins-decos { display: none; }
 
+// ─── Couche ambient (always-on, trail d'empreintes en marge gauche) ─
+// 6 footprints en colonne descendante, alternant gauche/droite d'un axe
+// virtuel pour simuler une vraie démarche, légères rotations pour suggérer
+// la direction du pas.
+.sheet-ambient {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+
+  img.ambient-deco {
+    position: absolute;
+    opacity: 0.12;
+    object-fit: contain;
+    width: 45px;
+    height: 45px;
+
+    // Trail de pas : alternance left 1mm ↔ 7mm, espacés ~14% verticalement
+    &.amb-pos-0 { top: 4%;  left: 7mm; transform: rotate(8deg); }
+    &.amb-pos-1 { top: 18%; left: 1mm; transform: rotate(-10deg); }
+    &.amb-pos-2 { top: 32%; left: 7mm; transform: rotate(6deg); }
+    &.amb-pos-3 { top: 47%; left: 1mm; transform: rotate(-8deg); }
+    &.amb-pos-4 { top: 62%; left: 7mm; transform: rotate(10deg); }
+    &.amb-pos-5 { top: 78%; left: 1mm; transform: rotate(-6deg); }
+  }
+}
+
 // ─── MODE STAMPS — corner stamps en haut-droit, cycle de 9 ───────
 .sheet-dinosaurs.deco-stamps .exercise-block::before {
   content: '';

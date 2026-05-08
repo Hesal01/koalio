@@ -2,11 +2,12 @@ import { FunTheme } from './exercise.model';
 
 /**
  * Catégorie de taille d'une décoration. Détermine où elle est utilisée :
- * - `small` : éléments d'ambiance scattered dans les marges du sheet
- * - `big` : characters showcase utilisés en side-illu (mode rich) ou banner
- * - `vertical` : illustration tall et étroite réservée au side-illu des exos étroits (decompose, etc.)
+ * - `small` : éléments d'ambiance colorés scattered dans les marges (mode margins/rich)
+ * - `big` : characters showcase pour side-illu (mode rich) ou banner
+ * - `vertical` : illustration tall réservée au side-illu des exos étroits (decompose)
+ * - `silhouette` : silhouettes/patterns noirs en background (couche `sheet-ambient` always-on)
  */
-export type DecorationSize = 'small' | 'big' | 'vertical';
+export type DecorationSize = 'small' | 'big' | 'vertical' | 'silhouette';
 
 export interface Decoration {
   theme: FunTheme;
@@ -35,5 +36,9 @@ export const DECORATIONS: readonly Decoration[] = [
   { theme: 'dinosaurs', name: 'hatchling', size: 'big' },
   { theme: 'dinosaurs', name: 'pterodactyl', size: 'big' },
   { theme: 'dinosaurs', name: 'frond', size: 'vertical' },
+
+  // ─── Silhouettes (couche ambient noire en fond, opacité ~10%) ─
+  { theme: 'dinosaurs', name: 'silh-footprint', size: 'silhouette' },
+
   // ─── Pirates / Space / Animals : à venir ─────────────────────
 ];

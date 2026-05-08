@@ -29,6 +29,14 @@ import { ImageAdditionExerciseComponent } from './image-addition-exercise.compon
         }
       </div>
 
+      <!-- Couche ambient (silhouettes noires en background, always-on quel que soit le mode).
+           Cycle sur les 'silhouette' du thème pour remplir 6 slots scattered. -->
+      <div class="sheet-ambient" aria-hidden="true">
+        @for (deco of ambientDecos; track $index; let i = $index) {
+          <img [src]="decoSrc(deco)" class="ambient-deco amb-pos-{{ i }}" alt="" />
+        }
+      </div>
+
       <div class="sheet-header">
         <div class="sheet-header-left">
           <span class="sheet-logo">🐨 Koalio</span>
@@ -122,6 +130,19 @@ export class SheetLayoutComponent {
   /** 'small' decos pour le mode margins / rich (scattered en marges). */
   get smallDecos(): Decoration[] {
     return this.decoCatalog.bySize(this.sheet.funTheme, 'small');
+  }
+
+  /**
+   * Couche ambient : trail d'empreintes (le même asset répété 6× pour
+   * simuler des pas qui se suivent dans la marge gauche).
+   * Quand d'autres silhouettes arriveront (fougère, os, patterns), on ajoutera
+   * une 2e couche scattered ailleurs (le trail garde uniquement les footprints).
+   */
+  get ambientDecos(): Decoration[] {
+    const footprint = this.decoCatalog
+      .bySize(this.sheet.funTheme, 'silhouette')
+      .find(d => d.name.includes('footprint'));
+    return footprint ? Array(6).fill(footprint) : [];
   }
 
   /** 4 premiers 'big' chars pour la scène du mode banner. */
