@@ -42,10 +42,15 @@ import { CatalogService } from '../../core/services/catalog.service';
                   <button
                     class="level-btn"
                     [class.active]="selectedLevel === level.value"
+                    [class.disabled]="!isLevelEnabled(level.value)"
+                    [disabled]="!isLevelEnabled(level.value)"
                     (click)="selectedLevel = level.value"
                   >
                     <span class="level-value">{{ level.value }}</span>
                     <span class="level-label">{{ level.label.split('—')[1] }}</span>
+                    @if (!isLevelEnabled(level.value)) {
+                      <span class="soon-badge">bientôt</span>
+                    }
                   </button>
                 }
               </div>
@@ -65,10 +70,13 @@ import { CatalogService } from '../../core/services/catalog.service';
                 <button
                   class="subject-btn"
                   [class.active]="selectedSubject === 'french'"
+                  [class.disabled]="!isSubjectEnabled('french')"
+                  [disabled]="!isSubjectEnabled('french')"
                   (click)="selectSubject('french')"
                 >
                   <span class="subject-icon">📖</span>
                   Français
+                  <span class="soon-badge">bientôt</span>
                 </button>
               </div>
             </div>
@@ -81,9 +89,14 @@ import { CatalogService } from '../../core/services/catalog.service';
                     <button
                       class="theme-btn"
                       [class.active]="selectedTheme === theme.value"
+                      [class.disabled]="!isThemeEnabled(theme.value)"
+                      [disabled]="!isThemeEnabled(theme.value)"
                       (click)="selectedTheme = theme.value"
                     >
                       {{ theme.label }}
+                      @if (!isThemeEnabled(theme.value)) {
+                        <span class="soon-badge">bientôt</span>
+                      }
                     </button>
                   }
                 </div>
@@ -179,12 +192,17 @@ import { CatalogService } from '../../core/services/catalog.service';
 export class GeneratorFormComponent {
   levels = LEVELS;
   childName = '';
-  selectedLevel = '';
-  selectedSubject: Subject | null = null;
-  selectedTheme: Theme | null = null;
+  // MVP : seul P1 / math / additions / dinosaures est dispo → on pre-select.
+  selectedLevel = 'P1';
+  selectedSubject: Subject = 'math';
+  selectedTheme: Theme = 'additions';
   selectedFunTheme: FunTheme = 'dinosaurs';
   loading = false;
   today = new Date().toLocaleDateString('fr-BE');
+
+  isLevelEnabled = (level: string) => level === 'P1';
+  isSubjectEnabled = (s: Subject) => s === 'math';
+  isThemeEnabled = (t: Theme) => t === 'additions';
 
   funThemes: { value: FunTheme; label: string; icon: string; enabled: boolean }[] = [
     { value: 'dinosaurs', label: 'Dinosaures', icon: '🦕', enabled: true },
