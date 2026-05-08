@@ -270,8 +270,11 @@ export class GeneratorFormComponent {
   }
 
   selectSubject(subject: Subject) {
+    if (this.selectedSubject === subject) return;
     this.selectedSubject = subject;
-    this.selectedTheme = null;
+    // Reset au 1er thème dispo de la nouvelle matière
+    const themes = this.availableThemes;
+    if (themes.length > 0) this.selectedTheme = themes[0].value;
   }
 
   isFormValid(): boolean {
