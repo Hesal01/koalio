@@ -130,16 +130,21 @@
     position: absolute;
     opacity: 0.12;
     object-fit: contain;
-    width: 45px;
-    height: 45px;
+    width: 42px;
+    height: 42px;
 
-    // Trail de pas : alternance left 1mm ↔ 7mm, espacés ~14% verticalement
-    &.amb-pos-0 { top: 4%;  left: 7mm; transform: rotate(8deg); }
-    &.amb-pos-1 { top: 18%; left: 1mm; transform: rotate(-10deg); }
-    &.amb-pos-2 { top: 32%; left: 7mm; transform: rotate(6deg); }
-    &.amb-pos-3 { top: 47%; left: 1mm; transform: rotate(-8deg); }
-    &.amb-pos-4 { top: 62%; left: 7mm; transform: rotate(10deg); }
-    &.amb-pos-5 { top: 78%; left: 1mm; transform: rotate(-6deg); }
+    // Trail de pas : alternance left 1mm ↔ 7mm, espacés ~8% verticalement
+    // (10 empreintes pour couvrir toute la hauteur de la marge gauche)
+    &.amb-pos-0 { top: 3%;  left: 7mm; transform: rotate(8deg); }
+    &.amb-pos-1 { top: 11%; left: 1mm; transform: rotate(-10deg); }
+    &.amb-pos-2 { top: 19%; left: 7mm; transform: rotate(6deg); }
+    &.amb-pos-3 { top: 27%; left: 1mm; transform: rotate(-8deg); }
+    &.amb-pos-4 { top: 35%; left: 7mm; transform: rotate(10deg); }
+    &.amb-pos-5 { top: 43%; left: 1mm; transform: rotate(-6deg); }
+    &.amb-pos-6 { top: 51%; left: 7mm; transform: rotate(9deg); }
+    &.amb-pos-7 { top: 59%; left: 1mm; transform: rotate(-9deg); }
+    &.amb-pos-8 { top: 67%; left: 7mm; transform: rotate(7deg); }
+    &.amb-pos-9 { top: 75%; left: 1mm; transform: rotate(-7deg); }
   }
 }
 

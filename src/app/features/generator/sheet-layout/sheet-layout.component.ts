@@ -133,7 +133,7 @@ export class SheetLayoutComponent {
   }
 
   /**
-   * Couche ambient : trail d'empreintes (le même asset répété 6× pour
+   * Couche ambient : trail d'empreintes (le même asset répété 10× pour
    * simuler des pas qui se suivent dans la marge gauche).
    * Quand d'autres silhouettes arriveront (fougère, os, patterns), on ajoutera
    * une 2e couche scattered ailleurs (le trail garde uniquement les footprints).
@@ -142,7 +142,7 @@ export class SheetLayoutComponent {
     const footprint = this.decoCatalog
       .bySize(this.sheet.funTheme, 'silhouette')
       .find(d => d.name.includes('footprint'));
-    return footprint ? Array(6).fill(footprint) : [];
+    return footprint ? Array(10).fill(footprint) : [];
   }
 
   /** 4 premiers 'big' chars pour la scène du mode banner. */
