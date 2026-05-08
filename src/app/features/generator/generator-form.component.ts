@@ -44,13 +44,10 @@ import { CatalogService } from '../../core/services/catalog.service';
                     [class.active]="selectedLevel === level.value"
                     [class.disabled]="!isLevelEnabled(level.value)"
                     [disabled]="!isLevelEnabled(level.value)"
-                    (click)="selectedLevel = level.value"
+                    (click)="isLevelEnabled(level.value) && (selectedLevel = level.value)"
                   >
                     <span class="level-value">{{ level.value }}</span>
                     <span class="level-label">{{ level.label.split('—')[1] }}</span>
-                    @if (!isLevelEnabled(level.value)) {
-                      <span class="soon-badge">bientôt</span>
-                    }
                   </button>
                 }
               </div>
@@ -62,7 +59,9 @@ import { CatalogService } from '../../core/services/catalog.service';
                 <button
                   class="subject-btn"
                   [class.active]="selectedSubject === 'math'"
-                  (click)="selectSubject('math')"
+                  [class.disabled]="!isSubjectEnabled('math')"
+                  [disabled]="!isSubjectEnabled('math')"
+                  (click)="isSubjectEnabled('math') && selectSubject('math')"
                 >
                   <span class="subject-icon">🔢</span>
                   Mathématiques
@@ -72,11 +71,10 @@ import { CatalogService } from '../../core/services/catalog.service';
                   [class.active]="selectedSubject === 'french'"
                   [class.disabled]="!isSubjectEnabled('french')"
                   [disabled]="!isSubjectEnabled('french')"
-                  (click)="selectSubject('french')"
+                  (click)="isSubjectEnabled('french') && selectSubject('french')"
                 >
                   <span class="subject-icon">📖</span>
                   Français
-                  <span class="soon-badge">bientôt</span>
                 </button>
               </div>
             </div>
@@ -91,12 +89,9 @@ import { CatalogService } from '../../core/services/catalog.service';
                       [class.active]="selectedTheme === theme.value"
                       [class.disabled]="!isThemeEnabled(theme.value)"
                       [disabled]="!isThemeEnabled(theme.value)"
-                      (click)="selectedTheme = theme.value"
+                      (click)="isThemeEnabled(theme.value) && (selectedTheme = theme.value)"
                     >
                       {{ theme.label }}
-                      @if (!isThemeEnabled(theme.value)) {
-                        <span class="soon-badge">bientôt</span>
-                      }
                     </button>
                   }
                 </div>
@@ -192,17 +187,22 @@ import { CatalogService } from '../../core/services/catalog.service';
 export class GeneratorFormComponent {
   levels = LEVELS;
   childName = '';
-  // MVP : seul P1 / math / additions / dinosaures est dispo → on pre-select.
-  selectedLevel = 'P1';
-  selectedSubject: Subject = 'math';
-  selectedTheme: Theme = 'additions';
+  selectedLevel = '';
+  selectedSubject: Subject | null = null;
+  selectedTheme: Theme | null = null;
   selectedFunTheme: FunTheme = 'dinosaurs';
   loading = false;
   today = new Date().toLocaleDateString('fr-BE');
 
-  isLevelEnabled = (level: string) => level === 'P1';
-  isSubjectEnabled = (s: Subject) => s === 'math';
-  isThemeEnabled = (t: Theme) => t === 'additions';
+  // MVP : seules ces combinaisons ont du contenu dans le catalogue. Les autres
+  // sont grisées dans le form. Quand un nouveau pack arrive, on étend ces listes.
+  private readonly AVAILABLE_LEVELS: ReadonlyArray<string> = ['P1'];
+  private readonly AVAILABLE_SUBJECTS: ReadonlyArray<string> = ['math'];
+  private readonly AVAILABLE_THEMES: ReadonlyArray<string> = ['additions'];
+
+  isLevelEnabled(level: string): boolean { return this.AVAILABLE_LEVELS.includes(level); }
+  isSubjectEnabled(subject: string): boolean { return this.AVAILABLE_SUBJECTS.includes(subject); }
+  isThemeEnabled(theme: string): boolean { return this.AVAILABLE_THEMES.includes(theme); }
 
   funThemes: { value: FunTheme; label: string; icon: string; enabled: boolean }[] = [
     { value: 'dinosaurs', label: 'Dinosaures', icon: '🦕', enabled: true },
@@ -270,11 +270,8 @@ export class GeneratorFormComponent {
   }
 
   selectSubject(subject: Subject) {
-    if (this.selectedSubject === subject) return;
     this.selectedSubject = subject;
-    // Reset au 1er thème dispo de la nouvelle matière
-    const themes = this.availableThemes;
-    if (themes.length > 0) this.selectedTheme = themes[0].value;
+    this.selectedTheme = null;
   }
 
   isFormValid(): boolean {

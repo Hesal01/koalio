@@ -114,8 +114,13 @@
   border-radius: $radius-md;
   transition: all 0.2s ease;
 
-  &:hover { border-color: $corail-light; }
+  &:hover:not(.disabled) { border-color: $corail-light; }
   &.active { background: $corail-light; border-color: $corail; }
+  &.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    .level-value, .level-label { color: $gray; }
+  }
 
   .level-value { font-weight: 700; font-size: 1.1rem; color: $dark; }
   .level-label { font-size: 0.75rem; color: $gray; }
@@ -140,8 +145,14 @@
   font-size: 0.95rem;
   transition: all 0.2s ease;
 
-  &:hover { border-color: $menthe-light; }
+  &:hover:not(.disabled) { border-color: $menthe-light; }
   &.active { background: $menthe-light; border-color: $menthe; color: $menthe-dark; }
+  &.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    color: $gray;
+    .subject-icon { filter: grayscale(0.7); }
+  }
   .subject-icon { font-size: 1.3rem; }
 }
 
@@ -152,7 +163,6 @@
 }
 
 .theme-btn {
-  position: relative;
   padding: $spacing-sm $spacing-md;
   background: $gray-light;
   border: 2px solid transparent;
@@ -163,49 +173,11 @@
 
   &:hover:not(.disabled) { border-color: $corail-light; }
   &.active { background: $corail-light; border-color: $corail; color: $corail-dark; }
-
   &.disabled {
-    opacity: 0.45;
+    opacity: 0.4;
     cursor: not-allowed;
     color: $gray;
   }
-}
-
-// État disabled partagé pour level-btn, subject-btn (le badge reste à droite/haut)
-.level-btn,
-.subject-btn {
-  position: relative;
-
-  &.disabled {
-    opacity: 0.45;
-    cursor: not-allowed;
-    color: $gray;
-
-    &:hover { border-color: $gray-medium; background: inherit; }
-  }
-}
-
-// Badge "bientôt" — partagé level/subject/theme
-.soon-badge {
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  font-size: 0.6rem;
-  font-weight: 600;
-  color: $corail;
-  background: $corail-light;
-  padding: 2px 6px;
-  border-radius: $radius-sm;
-  text-transform: lowercase;
-  letter-spacing: 0.02em;
-  line-height: 1;
-}
-
-// Sur les .theme-btn (pill), positionner le badge à l'extérieur via inline-flex
-.theme-btn .soon-badge {
-  position: static;
-  margin-left: $spacing-xs;
-  display: inline-block;
 }
 
 // ─── Univers visuel (fun theme) ────────────────────────────────
