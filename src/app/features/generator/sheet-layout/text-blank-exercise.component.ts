@@ -22,7 +22,15 @@ import { TextBlankExercise } from '../../../core/models/exercise.model';
       }
       @for (q of exercise.questions; track $index) {
         <li>
-          <span class="q-text" [innerHTML]="renderText(q.text, $index)"></span>
+          @if (exercise.variant === 'word-problem') {
+            @let parts = wordProblemParts(q.text);
+            @if (parts.narrative) {
+              <span class="wp-narrative">{{ parts.narrative }}</span>
+            }
+            <span class="q-text wp-question" [innerHTML]="renderText(parts.question, $index)"></span>
+          } @else {
+            <span class="q-text" [innerHTML]="renderText(q.text, $index)"></span>
+          }
           @if (showAnswers) {
             <span class="answer">→ {{ formatAnswer(q.answers) }}</span>
           }
@@ -66,6 +74,28 @@ export class TextBlankExerciseComponent {
 
   formatAnswer(answers: string[]): string {
     return answers.join(' / ');
+  }
+
+  /** Pour un word-problem, sépare la narration (les phrases déclaratives
+   *  d'introduction) de la phrase interrogative finale + son blank.
+   *  Heuristique : on prend la dernière phrase se terminant par "?" comme
+   *  question, tout ce qui précède devient la narration. */
+  wordProblemParts(text: string): { narrative: string; question: string } {
+    const lastQ = text.lastIndexOf('?');
+    if (lastQ === -1) return { narrative: '', question: text };
+    // remonte jusqu'à la fin de la phrase précédente (., !, ?)
+    let cut = -1;
+    for (let i = lastQ - 1; i >= 0; i--) {
+      if (text[i] === '.' || text[i] === '!') {
+        cut = i + 1;
+        break;
+      }
+    }
+    if (cut === -1) return { narrative: '', question: text };
+    return {
+      narrative: text.slice(0, cut).trim(),
+      question: text.slice(cut).trim(),
+    };
   }
 
   /** Compute et reverse ont des questions courtes → 2 colonnes pour densifier.

@@ -88,3 +88,17 @@
   font-weight: 600;
   font-size: 0.85rem;
 }
+
+// Word problem : énoncé en bloc (poids/couleur uniforme façon manuel scolaire),
+// la question finale revient à la ligne et passe en italique pour la repérer.
+.wp-narrative {
+  display: block;
+  color: $dark;
+  margin-bottom: 0.5em;
+}
+
+.wp-question {
+  display: block;
+  font-style: italic;
+  color: $dark;
+}
