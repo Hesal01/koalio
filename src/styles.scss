@@ -89,12 +89,10 @@ input, select {
 // ─── Print ───────────────────────────────────────────────────
 @page {
   size: A4 portrait;
-  // Marge minimale par page — sert surtout aux sauts de page internes (haut de
-  // la page 2+, bas avant un saut). La vraie marge de contenu (côtés + bords
-  // externes) est portée par le padding de `.sheet` en print, pour rester
-  // robuste même si l'utilisateur choisit « Marges : Aucune » dans le dialogue
-  // (qui annulerait toute marge @page).
-  margin: 10mm 0;
+  // 0 : chaque `.sheet-page` porte sa propre marge (padding 16mm) et force son
+  // saut de page (break-after). La marge reste donc identique quel que soit le
+  // réglage du dialogue (« Défaut » comme « Aucune »), sans double marge.
+  margin: 0;
 }
 
 @media print {

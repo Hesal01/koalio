@@ -54,8 +54,8 @@ const DECO_LABELS: Record<DecoMode, string> = {
             }
           </aside>
 
-          <div class="sheet-wrapper">
-            <app-sheet-layout [sheet]="s" [showAnswers]="showAnswers" [decoMode]="currentMode()" />
+          <div class="sheet-wrapper" [style.--page-count]="sl.displayPages().length">
+            <app-sheet-layout #sl [sheet]="s" [showAnswers]="showAnswers" [decoMode]="currentMode()" [paginate]="true" />
           </div>
         } @else {
           <div class="empty">

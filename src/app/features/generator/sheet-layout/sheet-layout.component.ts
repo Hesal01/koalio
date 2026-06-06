@@ -1,5 +1,16 @@
-import { Component, Input, inject, signal } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import {
+  Component,
+  Input,
+  inject,
+  signal,
+  computed,
+  afterNextRender,
+  viewChild,
+  ElementRef,
+  DestroyRef,
+  NgZone,
+} from '@angular/core';
+import { DatePipe, NgTemplateOutlet } from '@angular/common';
 import { FunTheme, Sheet } from '../../../core/models/exercise.model';
 import { Decoration } from '../../../core/models/decoration.model';
 import { DecorationCatalogService } from '../../../core/services/decoration-catalog.service';
@@ -13,33 +24,99 @@ import { ImageAdditionExerciseComponent } from './image-addition-exercise.compon
   standalone: true,
   imports: [
     DatePipe,
+    NgTemplateOutlet,
     TextBlankExerciseComponent,
     CircleExerciseComponent,
     DrawItemsExerciseComponent,
     ImageAdditionExerciseComponent,
   ],
   template: `
-    <div class="sheet sheet-{{ sheet.funTheme }} deco-{{ decoMode }}" id="sheet-pdf"
-         [style.--vertical-bg]="verticalBg">
-      <!-- Décorations en marges (visibles en modes 'margins' et 'rich').
-           Mix de squares (mr-pos-0/2/3) et landscapes (mr-pos-1/4) selon la
-           position du slot (cf. layout SCSS). -->
+    @if (paginate) {
+      <!-- ═══ Conteneur de MESURE (hors écran) ═══════════════════════════
+           Contient TOUS les exercices à la largeur exacte du corps d'une page
+           A4 (210 − 2×16mm). On y mesure header+exos+footer via offsetHeight
+           (immunisé contre le transform:scale mobile) pour calculer les pages. -->
+      <div class="sheet-measure sheet-{{ sheet.funTheme }} deco-{{ decoMode }}"
+           #measureRef aria-hidden="true">
+        <ng-container [ngTemplateOutlet]="chromeTpl" />
+        <div class="sheet-body">
+          @for (exercise of sheet.exercises; track $index) {
+            <ng-container
+              [ngTemplateOutlet]="exoTpl"
+              [ngTemplateOutletContext]="{ $implicit: exercise, index: $index }" />
+          }
+        </div>
+        <div class="sheet-footer">
+          <span class="footer-brand">koalio.be</span>
+          <span class="footer-page">Page 1 / 1</span>
+        </div>
+      </div>
+
+      <!-- ═══ Pages A4 réelles (écran + impression) ═══════════════════════ -->
+      <div class="sheet-pages">
+        @for (page of displayPages(); track $index; let pageIdx = $index, isFirst = $first) {
+          <div class="sheet sheet-page sheet-{{ sheet.funTheme }} deco-{{ decoMode }}"
+               [style.--vertical-bg]="verticalBg">
+            <ng-container [ngTemplateOutlet]="decosTpl" />
+            @if (isFirst) {
+              <ng-container [ngTemplateOutlet]="chromeTpl" />
+            }
+            <div class="sheet-body">
+              @for (gi of page; track gi) {
+                <ng-container
+                  [ngTemplateOutlet]="exoTpl"
+                  [ngTemplateOutletContext]="{ $implicit: sheet.exercises[gi], index: gi }" />
+              }
+            </div>
+            <div class="sheet-footer">
+              <span class="footer-brand">koalio.be</span>
+              <span class="footer-page">Page {{ pageIdx + 1 }} / {{ displayPages().length }}</span>
+            </div>
+          </div>
+        }
+      </div>
+    } @else {
+      <!-- ═══ Fiche unique non paginée (démo formats) ═════════════════════ -->
+      <div class="sheet sheet-{{ sheet.funTheme }} deco-{{ decoMode }}" id="sheet-pdf"
+           [style.--vertical-bg]="verticalBg">
+        <ng-container [ngTemplateOutlet]="decosTpl" />
+        <ng-container [ngTemplateOutlet]="chromeTpl" />
+        <div class="sheet-body">
+          @for (exercise of sheet.exercises; track $index) {
+            <ng-container
+              [ngTemplateOutlet]="exoTpl"
+              [ngTemplateOutletContext]="{ $implicit: exercise, index: $index }" />
+          }
+        </div>
+        <div class="sheet-footer">
+          <span class="footer-brand">koalio.be</span>
+          <span class="footer-date">{{ sheet.createdAt | date:'dd/MM/yyyy' }}</span>
+        </div>
+      </div>
+    }
+
+    <!-- ═══ Templates réutilisables ═══════════════════════════════════════ -->
+
+    <!-- Décorations de fond (marges + ambient) — répétées sur chaque page. -->
+    <ng-template #decosTpl>
+      <!-- Décorations en marges (visibles en modes 'margins', 'rich', 'custom'). -->
       <div class="sheet-margins-decos" aria-hidden="true">
         @for (deco of marginDecos; track $index; let i = $index) {
           <img [src]="decoSrc(deco)" class="margin-deco mr-pos-{{ i }}" alt="" />
         }
       </div>
-
-      <!-- Couche ambient (silhouettes noires en background, always-on quel que soit le mode).
-           Cycle sur les 'silhouette' du thème pour remplir 6 slots scattered. -->
+      <!-- Couche ambient (silhouettes en background, always-on). -->
       <div class="sheet-ambient" aria-hidden="true">
         @for (deco of ambientDecos; track $index; let i = $index) {
           <img [src]="decoSrc(deco)" class="ambient-deco amb-pos-{{ i }}" alt="" />
         }
       </div>
+    </ng-template>
 
-      <!-- Bandeau panorama plein-largeur (mode banner uniquement). Posé
-           AVANT le header pour qu'il s'étale d'un bord à l'autre de la fiche. -->
+    <!-- En-tête de fiche (logo, eyebrow, mascotte, ligne d'identité, banner).
+         Uniquement sur la 1re page. -->
+    <ng-template #chromeTpl>
+      <!-- Bandeau panorama plein-largeur (mode banner uniquement). -->
       <div class="sheet-banner-strip" aria-hidden="true"></div>
 
       <div class="sheet-header">
@@ -68,8 +145,7 @@ import { ImageAdditionExerciseComponent } from './image-addition-exercise.compon
         </span>
       </div>
 
-      <!-- Strip d'identification Nom / Prénom / Date — pleine largeur sous
-           le header, façon vraie fiche imprimable. Présente dans tous les modes. -->
+      <!-- Strip d'identification Nom / Prénom / Date. -->
       <div class="sheet-id-row">
         <span class="sheet-field">
           <span class="sheet-field-label">Nom :</span>
@@ -85,56 +161,44 @@ import { ImageAdditionExerciseComponent } from './image-addition-exercise.compon
         </span>
       </div>
 
-      <!-- Bandeau scénique (visible en mode 'banner' uniquement) — cycle sur les 4 premiers big chars. -->
+      <!-- Bandeau scénique (mode 'banner' sans panorama). -->
       <div class="sheet-banner" aria-hidden="true">
         @for (deco of bannerScene; track deco.name; let i = $index) {
           <img [src]="decoSrc(deco)" class="banner-figure pos-{{ i }}" alt="" />
         }
       </div>
+    </ng-template>
 
-      <div class="sheet-body">
-        @for (exercise of sheet.exercises; track $index) {
-          <div class="exercise-block"
-               [class.has-illustration]="exerciseHasIllustration(exercise)"
-               [class.has-side-illustration]="isNarrowExercise(exercise)"
-               [style.--big-deco-bg]="bigDecoBgForIndex($index)"
-               [style.--split-bg]="splitDecoBgForIndex($index)">
-            <div class="exercise-header">
-              <span class="exercise-number">Exercice {{ $index + 1 }}</span>
-            </div>
-            @switch (exercise.format) {
-              @case ('text-blank') {
-                <app-text-blank-exercise
-                  [exercise]="exercise"
-                  [showAnswers]="showAnswers"
-                />
-              }
-              @case ('circle') {
-                <app-circle-exercise [exercise]="exercise" [showAnswers]="showAnswers" />
-              }
-              @case ('draw-items') {
-                <app-draw-items-exercise
-                  [exercise]="exercise"
-                  [funTheme]="sheet.funTheme"
-                />
-              }
-              @case ('image-addition') {
-                <app-image-addition-exercise
-                  [exercise]="exercise"
-                  [funTheme]="sheet.funTheme"
-                  [showAnswers]="showAnswers"
-                />
-              }
-            }
-          </div>
+    <!-- Un bloc exercice. index = index GLOBAL (pour le numéro + le cycle déco). -->
+    <ng-template #exoTpl let-exercise let-i="index">
+      <div class="exercise-block"
+           [class.has-illustration]="exerciseHasIllustration(exercise)"
+           [class.has-side-illustration]="isNarrowExercise(exercise)"
+           [style.--big-deco-bg]="bigDecoBgForIndex(i)"
+           [style.--split-bg]="splitDecoBgForIndex(i)">
+        <div class="exercise-header">
+          <span class="exercise-number">Exercice {{ i + 1 }}</span>
+        </div>
+        @switch (exercise.format) {
+          @case ('text-blank') {
+            <app-text-blank-exercise [exercise]="exercise" [showAnswers]="showAnswers" />
+          }
+          @case ('circle') {
+            <app-circle-exercise [exercise]="exercise" [showAnswers]="showAnswers" />
+          }
+          @case ('draw-items') {
+            <app-draw-items-exercise [exercise]="exercise" [funTheme]="sheet.funTheme" />
+          }
+          @case ('image-addition') {
+            <app-image-addition-exercise
+              [exercise]="exercise"
+              [funTheme]="sheet.funTheme"
+              [showAnswers]="showAnswers"
+            />
+          }
         }
       </div>
-
-      <div class="sheet-footer">
-        <span class="footer-brand">koalio.be</span>
-        <span class="footer-date">{{ sheet.createdAt | date:'dd/MM/yyyy' }}</span>
-      </div>
-    </div>
+    </ng-template>
   `,
   styleUrl: './sheet-layout.component.scss',
 })
@@ -143,11 +207,101 @@ export class SheetLayoutComponent {
   @Input() showAnswers = false;
   /** Mode de disposition des illustrations sur la fiche. Toggle en preview, persisté via ?deco= */
   @Input() decoMode: 'stamps' | 'banner' | 'margins' | 'split' | 'footer' | 'rich' | 'custom' = 'stamps';
+  /** Si true : découpe les exercices en vraies pages A4 (mêmes coupures écran + impression). */
+  @Input() paginate = false;
 
   private decoCatalog = inject(DecorationCatalogService);
+  private measureRef = viewChild<ElementRef<HTMLElement>>('measureRef');
 
   /** Bascule sur l'emoji si le PNG du thème n'est pas dispo. */
   readonly mascotFailed = signal(false);
+
+  /** Indices d'exercices regroupés par page A4 (calculé par mesure du DOM). */
+  readonly pages = signal<number[][]>([]);
+
+  /**
+   * Pages à afficher : le résultat de la mesure, ou — tant que le 1er calcul
+   * n'a pas tourné — un fallback « tout sur une page » pour ne jamais afficher
+   * de vide (ça se re-découpe dès la mesure).
+   */
+  readonly displayPages = computed(() => {
+    const p = this.pages();
+    if (p.length) return p;
+    // Fallback robuste : `sheet` peut être lu (via #sl côté parent) avant que
+    // l'input soit défini → on ne déréférence jamais un sheet undefined.
+    const exercises = this.sheet?.exercises ?? [];
+    return exercises.length ? [exercises.map((_, i) => i)] : [];
+  });
+
+  private resizeObserver?: ResizeObserver;
+
+  constructor() {
+    const destroyRef = inject(DestroyRef);
+    const zone = inject(NgZone);
+    // En mode paginé : on observe le conteneur de mesure et on recalcule les
+    // pages à chaque changement de taille (génération, réponses, mode déco…).
+    // Le callback du ResizeObserver (et afterNextRender) tourne hors zone Angular
+    // → on repasse dans la zone pour que la maj du signal déclenche le rendu.
+    afterNextRender(() => {
+      const el = this.measureRef()?.nativeElement;
+      if (!el) return;
+      this.resizeObserver = new ResizeObserver(() => zone.run(() => this.recomputePages()));
+      this.resizeObserver.observe(el);
+      zone.run(() => this.recomputePages()); // 1er calcul immédiat (évite un flash vide)
+    });
+    destroyRef.onDestroy(() => this.resizeObserver?.disconnect());
+  }
+
+  /**
+   * Répartit les exercices en pages A4 en mesurant leur hauteur réelle dans le
+   * conteneur caché. Aucun exercice n'est coupé en deux : on remplit chaque page
+   * jusqu'à ce que l'exercice suivant déborde, puis on passe à la page suivante.
+   * Mesures via offsetHeight/offsetTop → insensibles au transform:scale mobile.
+   */
+  private recomputePages(): void {
+    const root = this.measureRef()?.nativeElement;
+    if (!root) return;
+    const body = root.querySelector('.sheet-body') as HTMLElement | null;
+    const footer = root.querySelector('.sheet-footer') as HTMLElement | null;
+    if (!body) return;
+    const blocks = Array.from(body.children) as HTMLElement[];
+
+    const MM = 96 / 25.4; // 1mm en px CSS de référence
+    const pageH = 297 * MM;
+    const pad = 16 * MM; // padding vertical d'une page (cf. .sheet-page : 16mm)
+    const safety = 6 * MM; // marge anti-débordement (arrondis de mesure)
+    const gap = parseFloat(getComputedStyle(body).rowGap || '0') || 0;
+    const chromeH = body.offsetTop; // header + id-row + banner (page 1 uniquement)
+    const footerH = footer ? footer.offsetHeight : 0;
+
+    const firstBudget = pageH - 2 * pad - footerH - chromeH - safety;
+    const otherBudget = pageH - 2 * pad - footerH - safety;
+    const heights = blocks.map((b) => b.offsetHeight);
+
+    const result: number[][] = [];
+    let cur: number[] = [];
+    let curH = 0;
+    for (let i = 0; i < heights.length; i++) {
+      const budget = result.length === 0 ? firstBudget : otherBudget;
+      const need = curH + (cur.length ? gap : 0) + heights[i];
+      if (cur.length && need > budget) {
+        result.push(cur);
+        cur = [i];
+        curH = heights[i];
+      } else {
+        cur.push(i);
+        curH = need;
+      }
+    }
+    if (cur.length) result.push(cur);
+
+    // Évite une mise à jour inutile (et donc un re-render superflu).
+    const prev = this.pages();
+    const same =
+      prev.length === result.length &&
+      prev.every((p, i) => p.length === result[i].length && p.every((v, j) => v === result[i][j]));
+    if (!same) this.pages.set(result);
+  }
 
   // ─── Décorations data-driven (cf. decoration.model.ts) ──────────
   /**

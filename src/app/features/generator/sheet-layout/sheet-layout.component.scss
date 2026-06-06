@@ -15,6 +15,34 @@
   position: relative;
 }
 
+// ─── Pagination : exercices découpés en vraies pages A4 ─────────────
+// Conteneur des pages empilées (écran). À l'impression chaque .sheet-page
+// devient une feuille via break-after:page (cf. @media print plus bas).
+.sheet-pages {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-lg; // écart gris entre les pages à l'écran
+}
+
+// Une page = la fiche `.sheet` avec le padding aligné sur l'impression (16mm)
+// pour que les coupures mesurées à l'écran soient identiques à l'impression.
+.sheet-page {
+  padding: 16mm;
+}
+
+// Conteneur de mesure hors écran : largeur = corps d'une page A4 (210 − 2×16mm).
+// On y mesure les hauteurs réelles (offsetHeight, insensible au scale) pour
+// calculer la répartition des exercices en pages.
+.sheet-measure {
+  position: absolute;
+  left: -100000px;
+  top: 0;
+  width: 178mm;
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .sheet-header {
   display: flex;
   align-items: flex-start;
@@ -542,6 +570,7 @@
 }
 
 .footer-date { color: $gray; font-size: 0.8rem; }
+.footer-page { color: $gray; font-size: 0.8rem; }
 
 // ---- Drawing Zones ----
 
@@ -789,5 +818,19 @@
   .sheet-dinosaurs .exercise-block::after {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+  }
+
+  // ── Pages pré-paginées : 1 .sheet-page = 1 feuille A4 ──────────────
+  // Les exercices sont déjà répartis par page (mesure JS) → on force un saut
+  // de page après chaque page et on garde l'espacement écran (gap) pour que
+  // les coupures restent identiques à l'aperçu.
+  .sheet-measure { display: none !important; }
+  .sheet-pages { display: block !important; }
+  .sheet-page {
+    break-after: page;
+    &:last-child { break-after: auto; }
+
+    .sheet-body { display: flex !important; gap: $spacing-xl !important; }
+    .exercise-block { margin-bottom: 0 !important; }
   }
 }

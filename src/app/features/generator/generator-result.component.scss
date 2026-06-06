@@ -85,7 +85,10 @@
   @media screen and (max-width: 820px) {
     overflow: hidden;
     --sheet-scale: clamp(0.4, calc((100vw - 32px) / 800px), 1);
-    height: calc(297mm * var(--sheet-scale));
+    // Hauteur réservée = toutes les pages scalées (le transform ne réduit pas
+    // la place occupée dans le flux → sinon grand vide sous l'aperçu paginé).
+    // --page-count est fourni par le composant (sl.pages().length).
+    height: calc((var(--page-count, 1) * 297mm + (var(--page-count, 1) - 1) * #{$spacing-lg}) * var(--sheet-scale));
 
     app-sheet-layout {
       display: block;
