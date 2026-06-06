@@ -745,8 +745,19 @@
     border-radius: 0 !important;
     width: auto !important;
     min-height: auto !important;
-    padding: 0 !important;
+    // Marges de contenu portées par la fiche elle-même (et non par @page) pour
+    // rester robustes même en « Marges : Aucune » : côtés, bas et bords externes
+    // ne sont plus jamais rognés. Le haut (16mm) laisse aussi la place à la
+    // mascotte qui déborde vers le haut.
+    padding: 16mm !important;
     display: block !important;
+  }
+
+  // Mascotte plus compacte à l'impression : la version écran (170px) dépasse
+  // trop haut et se fait trancher. ~90px tient dans l'espace réservé au-dessus.
+  .theme-mascot img {
+    width: 90px !important;
+    height: 90px !important;
   }
 
   // 1 exercice par row, plein largeur. Le 2-col est géré à l'intérieur
