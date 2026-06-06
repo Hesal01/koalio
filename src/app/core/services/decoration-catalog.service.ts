@@ -5,7 +5,8 @@ import { DECORATIONS, Decoration, DecorationSize } from '../models/decoration.mo
 /**
  * Service d'accès au catalogue des décorations thématiques.
  * Le composant `sheet-layout` consomme ce service pour récupérer les décos
- * du thème courant, segmentées par size (small/big/vertical) selon l'usage.
+ * du thème courant, segmentées par catégorie de format (square, portrait,
+ * tall, landscape, banner, silhouette) selon la zone d'usage.
  */
 @Injectable({ providedIn: 'root' })
 export class DecorationCatalogService {
@@ -14,14 +15,14 @@ export class DecorationCatalogService {
     return DECORATIONS.filter(d => d.theme === theme);
   }
 
-  /** Décos filtrées par size pour un thème donné. */
+  /** Décos filtrées par catégorie de format pour un thème donné. */
   bySize(theme: FunTheme, size: DecorationSize): Decoration[] {
     return DECORATIONS.filter(d => d.theme === theme && d.size === size);
   }
 
-  /** Le 1er asset vertical du thème (un seul attendu — la "vedette" pour side-illu narrow). */
-  vertical(theme: FunTheme): Decoration | undefined {
-    return DECORATIONS.find(d => d.theme === theme && d.size === 'vertical');
+  /** Le 1er asset tall du thème (un seul attendu — la "vedette" pour side-illu narrow). */
+  tall(theme: FunTheme): Decoration | undefined {
+    return DECORATIONS.find(d => d.theme === theme && d.size === 'tall');
   }
 
   /** Path absolu vers le PNG d'une décoration. */

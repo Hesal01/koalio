@@ -668,6 +668,393 @@ $dotted-bg: #F0F9F5;
   }
 }
 
+// ─── Templates — compositions complètes (sketch) ───────────────
+// Chaque template = mini-fiche A4 sketchée combinant plusieurs zones
+// d'illustration (bandeau, mascotte, marge, watermark, stamps, etc.)
+// pour comparer les compositions d'un coup d'œil. Volontairement
+// schématique — pas le rendu final.
+.tpl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 28px;
+}
+
+.tpl {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  figcaption {
+    font-size: 12px;
+    color: $muted;
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    strong {
+      color: $text;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .tpl-zones {
+      color: $menthe-dark;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .tpl-mood {
+      color: $muted-soft;
+      font-style: italic;
+      font-size: 11.5px;
+    }
+  }
+}
+
+// Mini-fiche format A4 portrait (ratio ≈ √2). Padding inside reflète les
+// 24mm × 20mm de marge de la vraie fiche.
+.tpl-sheet {
+  position: relative;
+  aspect-ratio: 1 / 1.414;
+  background: $white;
+  border: 1px solid $border;
+  border-radius: 6px;
+  box-shadow: $shadow-sm;
+  padding: 14px 10px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  overflow: hidden;
+
+  // Watermark : pattern subtil sur toute la fiche (simule les traces de dino)
+  &.tpl-sheet-watermark {
+    background-image: radial-gradient($menthe-light 1.2px, transparent 1.2px);
+    background-size: 14px 14px;
+  }
+}
+
+// ── Header : logo · titre + badges · mascotte (souligné corail) ────
+.tpl-header {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding-bottom: 5px;
+  border-bottom: 1.5px solid $corail;
+  margin-bottom: 4px;
+  min-height: 24px;
+}
+
+.tpl-logo {
+  width: 28px;
+  height: 8px;
+  background: $corail;
+  border-radius: 2px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.tpl-titlebar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-right: 30px; // laisse la place pour la mascotte
+}
+
+.tpl-title-line {
+  height: 6px;
+  width: 70%;
+  background: $gray-medium;
+  border-radius: 2px;
+}
+
+.tpl-badges {
+  display: flex;
+  gap: 3px;
+
+  span {
+    width: 14px;
+    height: 5px;
+    border-radius: 999px;
+    background: $menthe-light;
+
+    &:nth-child(2) { background: $corail-light; }
+    &:nth-child(3) { background: $gray-light; border: 1px solid $border; }
+  }
+}
+
+// Mascotte 170×170 dans la vraie fiche → déborde du header dans le padding-top.
+// Ici on simule : grosse pastille corail, position absolute top-right.
+.tpl-mascot {
+  position: absolute;
+  top: -4px;
+  right: -2px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: $corail-light;
+  color: $corail-dark;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  border: 1.5px solid $corail;
+}
+
+// ── Footer : brand à gauche + date à droite ────────────────────
+.tpl-footer-bar {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 4px;
+  border-top: 1px solid $border;
+  margin-top: 4px;
+
+  span {
+    height: 4px;
+    background: $gray-medium;
+    border-radius: 2px;
+
+    &:first-child { width: 28px; }
+    &:last-child { width: 22px; }
+  }
+}
+
+// ── Zones d'illustration thématique ────────────────────────────
+// Bandeau / diorama (4 perso en haut)
+.tpl-banner {
+  position: relative;
+  width: 100%;
+  height: 22%;
+  background: $menthe-light;
+  border-radius: 4px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.tpl-char {
+  position: absolute;
+  background: $menthe-dark;
+  border-radius: 50%;
+  opacity: 0.55;
+
+  &.tpl-char-1 { bottom: 4px; left: 8%; width: 18px; height: 22px; }
+  &.tpl-char-2 { bottom: 4px; left: 45%; width: 16px; height: 18px; }
+  &.tpl-char-3 { bottom: 4px; right: 8%; width: 18px; height: 24px; }
+  &.tpl-char-air { top: 4px; left: 65%; width: 10px; height: 10px; }
+}
+
+// Spots dispersés en marge (5 positions)
+.tpl-spot {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: $menthe-light;
+  border: 1px solid $menthe;
+  border-radius: 50%;
+  z-index: 1;
+
+  &.tpl-spot-1 { top: 30%; left: 4px; }
+  &.tpl-spot-2 { top: 55%; right: 4px; }
+  &.tpl-spot-3 { top: 75%; left: 6px; width: 12px; height: 12px; }
+  &.tpl-spot-4 { bottom: 30px; right: 8px; }
+  &.tpl-spot-5 { bottom: 8px; left: 30%; width: 10px; height: 10px; }
+}
+
+// ── Bloc d'exercices (placeholders pour le contenu) ────────────
+// Les exos remplissent toute la hauteur dispo de la fiche — chacun s'étend
+// en flex: 1 pour qu'il n'y ait pas de vide en bas.
+.tpl-exos {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  flex: 1;
+  min-height: 0;
+}
+
+.tpl-exo {
+  position: relative;
+  background: $white;
+  border: 1px solid $border;
+  border-radius: 4px;
+  padding: 5px 6px 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-height: 22px;
+
+  // Narrow (decompose) : contenu à gauche + illus verticale à droite
+  &.tpl-exo-narrow {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 5px;
+    padding: 5px;
+  }
+
+  // Stamp coin haut-droit (style "stamps" mode)
+  &.tpl-exo-stamp::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 14px;
+    height: 14px;
+    background: $menthe-light;
+    border: 1px solid $menthe;
+    border-radius: 50%;
+    transform: rotate(12deg);
+  }
+
+  // Mode "split" : contenu à gauche + illus colonne droite
+  &.tpl-exo-split {
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+  }
+}
+
+.tpl-exo-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+// Petite étiquette "Exercice N" en haut de chaque exo (titre)
+.tpl-exo-num {
+  height: 4px;
+  width: 18px;
+  background: $menthe-dark;
+  border-radius: 2px;
+  margin-bottom: 1px;
+  opacity: 0.7;
+}
+
+// Colonne illus à droite (mode split / rich) — alignée avec le texte
+.tpl-exo-right {
+  width: 42%;
+  align-self: stretch;
+  background: $menthe-light;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+// Illustration verticale vis-à-vis d'un exo étroit (variant decompose).
+// Reflète le `.has-side-illustration::after` du sheet réel.
+.tpl-vertical-illus {
+  width: 38%;
+  align-self: stretch;
+  background: $menthe-light;
+  border: 1px dashed $menthe;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.tpl-line {
+  height: 3px;
+  background: $gray-medium;
+  border-radius: 2px;
+  width: 100%;
+
+  &.short {
+    width: 55%;
+  }
+}
+
+// ─── Templates — vrais rendus (sheet-layout scaled) ────────────
+// Une vraie fiche A4 par deco mode, scaled-down via transform:scale.
+// Le wrapper a les dimensions finales (W×H × scale), le scaler garde la
+// vraie taille A4 (210×297mm) et applique scale + origin top-left.
+$tpl-preview-scale: 0.62;
+
+.tpl-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(440px, 1fr));
+  gap: 72px 56px;
+}
+
+.tpl-preview {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  figcaption {
+    font-size: 12px;
+    color: $muted;
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    strong {
+      color: $text;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .tpl-mode-tag {
+      color: $menthe-dark;
+      font-size: 11px;
+      font-weight: 500;
+
+      code {
+        font-family: 'Menlo', 'Monaco', monospace;
+        font-size: 10.5px;
+        background: $surface;
+        padding: 1px 5px;
+        border-radius: 3px;
+        border: 1px solid $border;
+      }
+    }
+
+    .tpl-mood {
+      color: $muted-soft;
+      font-style: italic;
+      font-size: 11.5px;
+    }
+  }
+}
+
+// Frame = boîte qui définit la taille finale (210mm × 297mm × scale)
+// avec overflow hidden pour clipper ce qui dépasse de la scale.
+.tpl-preview-frame {
+  width: calc(210mm * #{$tpl-preview-scale});
+  height: calc(297mm * #{$tpl-preview-scale});
+  overflow: hidden;
+  border-radius: 6px;
+  box-shadow: $shadow-md;
+  background: $white;
+}
+
+// Scaler = wrapper interne qui contient la fiche à sa vraie taille A4 et
+// la rétrécit via transform:scale depuis le coin haut-gauche.
+.tpl-preview-scaler {
+  transform: scale($tpl-preview-scale);
+  transform-origin: top left;
+  width: 210mm;
+  height: 297mm;
+
+  // La fiche elle-même perd son box-shadow et son border-radius pour
+  // ne pas doubler ceux du frame.
+  ::ng-deep .sheet {
+    box-shadow: none;
+    border-radius: 0;
+  }
+}
+
+.tpl-preview-empty {
+  font-size: 13px;
+  color: $muted;
+  font-style: italic;
+}
+
 // ─── Page footer ──────────────────────────────────────────────
 .page-footer {
   margin-top: 64px;

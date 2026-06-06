@@ -61,6 +61,83 @@
   }
 }
 
+// Eyebrow éditorial "P1 · MATHÉMATIQUES · ADDITIONS" — petite ligne sobre
+// au-dessus de l'identification, remplace les pills colorées de l'ancien
+// header (trop UI pour la fiche imprimée).
+.sheet-eyebrow {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: $gray;
+  margin-bottom: 6px;
+
+  .sep {
+    color: $gray;
+    opacity: 0.5;
+  }
+}
+
+// Strip d'identification façon vraie fiche d'exercices imprimable :
+// cadre arrondi pointillé qui regroupe Nom / Prénom / Date, chaque valeur
+// repose sur une vraie ligne (sous-ligne pleine) façon "remplir le blanc".
+// Le Nom reste vide pour que l'enfant l'écrive, Prénom et Date sont
+// pré-remplis par le générateur.
+.sheet-id-row {
+  display: flex;
+  gap: $spacing-xl;
+  align-items: baseline;
+  flex-wrap: wrap;
+  padding: 12px 24px;
+  border: 1.5px dashed $gray;
+  border-radius: 999px;
+  // Pleine largeur du sheet body, centrée sous le header.
+  width: 100%;
+  margin: 0 0 $spacing-xl;
+  font-size: 1rem;
+  color: $dark;
+  background: $white;
+}
+
+.sheet-field {
+  display: inline-flex;
+  align-items: baseline;
+  gap: $spacing-sm;
+  flex: 1;
+  min-width: 0;
+}
+
+.sheet-field-label {
+  font-weight: 600;
+  color: $dark;
+  flex-shrink: 0;
+}
+
+.sheet-field-value {
+  flex: 1;
+  min-width: 80px;
+  border-bottom: 1.5px solid $dark;
+  padding: 0 4px 2px;
+  font-family: 'Georgia', serif;
+  font-style: italic;
+  color: $dark-light;
+  line-height: 1.2;
+
+  // Slot vide (pour Nom) : la ligne s'affiche même sans valeur
+  &.sheet-field-blank {
+    min-height: 1.2em;
+    display: inline-block;
+  }
+}
+
+// Bandeau panorama plein-largeur (mode banner uniquement, masqué par défaut)
+.sheet-banner-strip {
+  display: none;
+}
+
 .sheet-title {
   font-family: $font-family-display;
   font-size: 1.5rem;
@@ -228,36 +305,41 @@
 // 'big' chars du thème (cf. `bannerScene` côté TS).
 //   pos-0 : ground gauche  · pos-1 : ground centre
 //   pos-2 : ground droite  · pos-3 : air (flottant — idéalement créature volante)
-.sheet-dinosaurs.deco-banner .sheet-banner {
-  display: block;
-  position: relative;
-  height: 130px;
-  margin-bottom: $spacing-lg;
-  overflow: visible;
+// Mode banner + thème dinos : panorama scénique plein-largeur en haut de
+// la fiche, façon couverture de livre. La strip Prénom/Date sit dessous
+// dans le header standard. Mascotte du header masquée (le panorama suffit).
+.sheet-dinosaurs.deco-banner {
+  .sheet-banner { display: none; }
+  .sheet-header .theme-mascot { display: none; }
 
-  img.banner-figure {
-    position: absolute;
-    object-fit: contain;
-    mix-blend-mode: multiply;
-
-    &.pos-0 { left: 6%; bottom: 0; height: 120px; transform: rotate(-3deg); }
-    &.pos-1 { left: 50%; bottom: -10px; height: 100px; transform: translateX(-50%) rotate(2deg); }
-    &.pos-2 { right: 6%; bottom: 0; height: 130px; transform: rotate(2deg); }
-    &.pos-3 { top: 4px; left: 28%; height: 56px; transform: rotate(8deg); }
+  // Le panorama déborde du padding horizontal de la fiche (20mm) pour
+  // toucher les bords du papier — effet "bandeau couverture".
+  .sheet-banner-strip {
+    display: block;
+    height: 100px;
+    margin: -24mm -20mm $spacing-lg; // remonte dans le padding-top (24mm) et déborde aux deux côtés
+    background-image: url('/assets/sheet/decorations/dinosaurs-banner-backdrop.png');
+    background-size: cover;
+    background-position: center 60%;
+    background-repeat: no-repeat;
+    border-radius: $radius-lg $radius-lg 0 0; // suit la rondeur du papier en haut
   }
 }
+
 
 // ─── MODE MARGINS (& RICH) — décos scattered dans les marges du sheet ─────
 // Slots génériques (mr-pos-0..4) consommés par les 'small' decos du thème
 // dans l'ordre du manifest. Si un thème en a moins de 5, les slots manquants
 // restent vides (no-op). Plus de 5 → on ne rend que les 5 premiers.
-.sheet-dinosaurs:where(.deco-margins, .deco-rich) .sheet-margins-decos {
+.sheet-dinosaurs:where(.deco-margins, .deco-rich, .deco-custom) .sheet-margins-decos {
   display: block;
   position: absolute;
   inset: 0;
   pointer-events: none;
   overflow: hidden;
-  z-index: 0;
+  // Au-dessus des .exercise-block (position:relative, z-index auto) pour que les
+  // images se posent SUR le trait de bordure des cartes, pas en dessous.
+  z-index: 5;
 
   img.margin-deco {
     position: absolute;
@@ -269,6 +351,25 @@
     &.mr-pos-2 { bottom: 8mm; left: 4mm; width: 70px; height: 70px; transform: rotate(8deg); }
     &.mr-pos-3 { top: 22%; right: 2mm; width: 80px; height: 80px; transform: rotate(-8deg); }
     &.mr-pos-4 { bottom: 4mm; right: 4mm; width: 110px; height: 70px; transform: rotate(-12deg); }
+  }
+}
+
+// Mode custom : 4 créatures volantes (dragonfly + pterodactyl) scattered
+// dans les marges latérales du body, alternance stricte droite / gauche.
+// On force EXPLICITEMENT les 4 positions (top/right/bottom/left) par slot
+// pour overrider les valeurs `bottom`/`left` héritées de la règle de base
+// (qui collerait certains slots dans les coins).
+.sheet-dinosaurs.deco-custom .sheet-margins-decos {
+  inset: 85mm 0 0 0;
+
+  img.margin-deco {
+    width: 58px; height: 58px;
+
+    // 4 slots ~50mm verticalement, alternance D-G-D-G
+    &.mr-pos-0 { top: 10mm; right: 6mm;  left: auto; bottom: auto; transform: rotate(12deg); }
+    &.mr-pos-1 { top: 60mm; left: 6mm;   right: auto; bottom: auto; transform: rotate(-10deg); }
+    &.mr-pos-2 { top: 110mm; right: 6mm; left: auto; bottom: auto; transform: rotate(8deg); }
+    &.mr-pos-3 { top: 160mm; left: 6mm;  right: auto; bottom: auto; transform: rotate(-14deg); }
   }
 }
 

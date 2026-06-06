@@ -1,14 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   CircleExercise,
   DrawItemsExercise,
   FunTheme,
+  Sheet,
   TextBlankExercise,
 } from '../../core/models/exercise.model';
+import { CatalogService } from '../../core/services/catalog.service';
 import { CircleExerciseComponent } from '../generator/sheet-layout/circle-exercise.component';
 import { DrawItemsExerciseComponent } from '../generator/sheet-layout/draw-items-exercise.component';
+import { SheetLayoutComponent } from '../generator/sheet-layout/sheet-layout.component';
 import { TextBlankExerciseComponent } from '../generator/sheet-layout/text-blank-exercise.component';
+
+type DecoMode = 'stamps' | 'banner' | 'margins' | 'split' | 'footer' | 'rich' | 'custom';
+interface TemplatePreview {
+  mode: DecoMode;
+  name: string;
+  blurb: string;
+}
 
 interface DemoVariant<T> {
   title: string;
@@ -25,6 +35,7 @@ interface DemoVariant<T> {
     CommonModule,
     CircleExerciseComponent,
     DrawItemsExerciseComponent,
+    SheetLayoutComponent,
     TextBlankExerciseComponent,
   ],
   template: `
@@ -549,6 +560,323 @@ interface DemoVariant<T> {
         </div>
       </section>
 
+      <!-- ═══ TEMPLATES — zones d'illustration ════════════════════ -->
+      <section class="format-section">
+        <header class="format-header">
+          <span class="stars">🎨</span>
+          <h2>Templates — zones d'illustration</h2>
+          <p>
+            Quand l'enfant choisit un thème (dinos, pirates, espace…), où atterrissent les illustrations sur la fiche ? Sketch comparatif de 4 zones contrastées. Les blocs gris symbolisent les exos, les zones menthe l'illustration thématique.
+          </p>
+        </header>
+
+        <div class="tpl-grid">
+
+          <!-- 1. Festival : bandeau diorama + header complet + watermark -->
+          <figure class="tpl">
+            <div class="tpl-sheet tpl-sheet-watermark">
+              <div class="tpl-header">
+                <div class="tpl-logo"></div>
+                <div class="tpl-titlebar">
+                  <div class="tpl-title-line"></div>
+                  <div class="tpl-badges">
+                    <span></span><span></span><span></span>
+                  </div>
+                </div>
+                <div class="tpl-mascot">M</div>
+              </div>
+              <div class="tpl-banner">
+                <span class="tpl-char tpl-char-1"></span>
+                <span class="tpl-char tpl-char-2"></span>
+                <span class="tpl-char tpl-char-3"></span>
+                <span class="tpl-char tpl-char-air"></span>
+              </div>
+              <div class="tpl-exos">
+                <div class="tpl-exo">
+                  <div class="tpl-exo-num"></div>
+                  <div class="tpl-line"></div><div class="tpl-line short"></div>
+                </div>
+                <div class="tpl-exo">
+                  <div class="tpl-exo-num"></div>
+                  <div class="tpl-line"></div><div class="tpl-line"></div>
+                </div>
+                <div class="tpl-exo">
+                  <div class="tpl-exo-num"></div>
+                  <div class="tpl-line"></div><div class="tpl-line short"></div>
+                </div>
+              </div>
+              <div class="tpl-footer-bar">
+                <span></span><span></span>
+              </div>
+            </div>
+            <figcaption>
+              <strong>Festival</strong>
+              <span class="tpl-zones">bandeau diorama · header · watermark</span>
+              <span class="tpl-mood">Wow visuel en haut, fond doux. Idéal couverture / 1<sup>re</sup> page.</span>
+            </figcaption>
+          </figure>
+
+          <!-- 2. Galerie : narrow exos en vis-à-vis d'une illus verticale -->
+          <figure class="tpl">
+            <div class="tpl-sheet tpl-sheet-watermark">
+              <div class="tpl-header">
+                <div class="tpl-logo"></div>
+                <div class="tpl-titlebar">
+                  <div class="tpl-title-line"></div>
+                  <div class="tpl-badges">
+                    <span></span><span></span><span></span>
+                  </div>
+                </div>
+                <div class="tpl-mascot">M</div>
+              </div>
+              <div class="tpl-exos">
+                <div class="tpl-exo tpl-exo-narrow">
+                  <div class="tpl-exo-content">
+                    <div class="tpl-exo-num"></div>
+                    <div class="tpl-line"></div><div class="tpl-line short"></div>
+                  </div>
+                  <div class="tpl-vertical-illus"></div>
+                </div>
+                <div class="tpl-exo">
+                  <div class="tpl-exo-num"></div>
+                  <div class="tpl-line"></div><div class="tpl-line short"></div>
+                </div>
+                <div class="tpl-exo tpl-exo-narrow">
+                  <div class="tpl-exo-content">
+                    <div class="tpl-exo-num"></div>
+                    <div class="tpl-line"></div>
+                  </div>
+                  <div class="tpl-vertical-illus"></div>
+                </div>
+                <div class="tpl-exo">
+                  <div class="tpl-exo-num"></div>
+                  <div class="tpl-line"></div><div class="tpl-line short"></div>
+                </div>
+              </div>
+              <div class="tpl-footer-bar">
+                <span></span><span></span>
+              </div>
+            </div>
+            <figcaption>
+              <strong>Galerie</strong>
+              <span class="tpl-zones">illus verticale en vis-à-vis des exos étroits · watermark</span>
+              <span class="tpl-mood">Tire parti des exos narrow (decompose) — pas de gâchis d'espace.</span>
+            </figcaption>
+          </figure>
+
+          <!-- 3. Stamps : signature visuelle au coin haut-droit de chaque exo -->
+          <figure class="tpl">
+            <div class="tpl-sheet tpl-sheet-watermark">
+              <div class="tpl-header">
+                <div class="tpl-logo"></div>
+                <div class="tpl-titlebar">
+                  <div class="tpl-title-line"></div>
+                  <div class="tpl-badges">
+                    <span></span><span></span><span></span>
+                  </div>
+                </div>
+                <div class="tpl-mascot">M</div>
+              </div>
+              <div class="tpl-exos">
+                <div class="tpl-exo tpl-exo-stamp">
+                  <div class="tpl-exo-num"></div>
+                  <div class="tpl-line"></div><div class="tpl-line short"></div>
+                </div>
+                <div class="tpl-exo tpl-exo-stamp">
+                  <div class="tpl-exo-num"></div>
+                  <div class="tpl-line"></div><div class="tpl-line"></div>
+                </div>
+                <div class="tpl-exo tpl-exo-stamp">
+                  <div class="tpl-exo-num"></div>
+                  <div class="tpl-line"></div><div class="tpl-line short"></div>
+                </div>
+                <div class="tpl-exo tpl-exo-stamp">
+                  <div class="tpl-exo-num"></div>
+                  <div class="tpl-line"></div>
+                </div>
+              </div>
+              <div class="tpl-footer-bar">
+                <span></span><span></span>
+              </div>
+            </div>
+            <figcaption>
+              <strong>Stamps</strong>
+              <span class="tpl-zones">stamp coin haut-droit par exo · watermark</span>
+              <span class="tpl-mood">Mode actuel par défaut. Sobre, signature visuelle légère par exo.</span>
+            </figcaption>
+          </figure>
+
+          <!-- 4. Split : illus colonne droite par exo + stamp coin -->
+          <figure class="tpl">
+            <div class="tpl-sheet tpl-sheet-watermark">
+              <div class="tpl-header">
+                <div class="tpl-logo"></div>
+                <div class="tpl-titlebar">
+                  <div class="tpl-title-line"></div>
+                  <div class="tpl-badges">
+                    <span></span><span></span><span></span>
+                  </div>
+                </div>
+                <div class="tpl-mascot">M</div>
+              </div>
+              <div class="tpl-exos">
+                <div class="tpl-exo tpl-exo-split">
+                  <div class="tpl-exo-content">
+                    <div class="tpl-exo-num"></div>
+                    <div class="tpl-line"></div><div class="tpl-line short"></div>
+                  </div>
+                  <div class="tpl-exo-right"></div>
+                </div>
+                <div class="tpl-exo tpl-exo-split">
+                  <div class="tpl-exo-content">
+                    <div class="tpl-exo-num"></div>
+                    <div class="tpl-line"></div>
+                  </div>
+                  <div class="tpl-exo-right"></div>
+                </div>
+                <div class="tpl-exo tpl-exo-split">
+                  <div class="tpl-exo-content">
+                    <div class="tpl-exo-num"></div>
+                    <div class="tpl-line"></div><div class="tpl-line short"></div>
+                  </div>
+                  <div class="tpl-exo-right"></div>
+                </div>
+              </div>
+              <div class="tpl-footer-bar">
+                <span></span><span></span>
+              </div>
+            </div>
+            <figcaption>
+              <strong>Split</strong>
+              <span class="tpl-zones">colonne illus à droite de chaque exo · watermark</span>
+              <span class="tpl-mood">Une illus par exo, alignée avec le texte. Densité visuelle forte.</span>
+            </figcaption>
+          </figure>
+
+          <!-- 5. Margins : 5 spots dispersés dans les marges -->
+          <figure class="tpl">
+            <div class="tpl-sheet tpl-sheet-watermark">
+              <div class="tpl-header">
+                <div class="tpl-logo"></div>
+                <div class="tpl-titlebar">
+                  <div class="tpl-title-line"></div>
+                  <div class="tpl-badges">
+                    <span></span><span></span><span></span>
+                  </div>
+                </div>
+                <div class="tpl-mascot">M</div>
+              </div>
+              <span class="tpl-spot tpl-spot-1"></span>
+              <span class="tpl-spot tpl-spot-2"></span>
+              <span class="tpl-spot tpl-spot-3"></span>
+              <span class="tpl-spot tpl-spot-4"></span>
+              <span class="tpl-spot tpl-spot-5"></span>
+              <div class="tpl-exos">
+                <div class="tpl-exo">
+                  <div class="tpl-exo-num"></div>
+                  <div class="tpl-line"></div><div class="tpl-line short"></div>
+                </div>
+                <div class="tpl-exo">
+                  <div class="tpl-exo-num"></div>
+                  <div class="tpl-line"></div><div class="tpl-line short"></div>
+                </div>
+                <div class="tpl-exo">
+                  <div class="tpl-exo-num"></div>
+                  <div class="tpl-line"></div><div class="tpl-line"></div>
+                </div>
+                <div class="tpl-exo">
+                  <div class="tpl-exo-num"></div>
+                  <div class="tpl-line"></div><div class="tpl-line short"></div>
+                </div>
+              </div>
+              <div class="tpl-footer-bar">
+                <span></span><span></span>
+              </div>
+            </div>
+            <figcaption>
+              <strong>Margins</strong>
+              <span class="tpl-zones">5 petits spots scattered dans les marges · watermark</span>
+              <span class="tpl-mood">Cahier d'écolier illustré, exos respirent au centre.</span>
+            </figcaption>
+          </figure>
+
+          <!-- 6. Minimal : header + watermark seuls -->
+          <figure class="tpl">
+            <div class="tpl-sheet tpl-sheet-watermark">
+              <div class="tpl-header">
+                <div class="tpl-logo"></div>
+                <div class="tpl-titlebar">
+                  <div class="tpl-title-line"></div>
+                  <div class="tpl-badges">
+                    <span></span><span></span><span></span>
+                  </div>
+                </div>
+                <div class="tpl-mascot">M</div>
+              </div>
+              <div class="tpl-exos">
+                <div class="tpl-exo">
+                  <div class="tpl-exo-num"></div>
+                  <div class="tpl-line"></div><div class="tpl-line short"></div>
+                </div>
+                <div class="tpl-exo">
+                  <div class="tpl-exo-num"></div>
+                  <div class="tpl-line"></div><div class="tpl-line short"></div>
+                </div>
+                <div class="tpl-exo">
+                  <div class="tpl-exo-num"></div>
+                  <div class="tpl-line"></div><div class="tpl-line"></div>
+                </div>
+                <div class="tpl-exo">
+                  <div class="tpl-exo-num"></div>
+                  <div class="tpl-line"></div>
+                </div>
+              </div>
+              <div class="tpl-footer-bar">
+                <span></span><span></span>
+              </div>
+            </div>
+            <figcaption>
+              <strong>Minimal</strong>
+              <span class="tpl-zones">header · watermark</span>
+              <span class="tpl-mood">Le plus sobre, focus contenu. Bon pour révisions / contrôle.</span>
+            </figcaption>
+          </figure>
+
+        </div>
+      </section>
+
+      <!-- ═══ TEMPLATES — vrais rendus ════════════════════════════ -->
+      <section class="format-section">
+        <header class="format-header">
+          <span class="stars">🦕</span>
+          <h2>Templates — rendus réels (thème dinos)</h2>
+          <p>
+            Mêmes templates qu'au-dessus, mais avec la <strong>vraie fiche</strong> rendue : assets dinos, exos du catalogue P1/maths/additions, layout A4 complet. Scaled-down pour tenir dans la grille — clique sur preview pour ouvrir grand dans le générateur.
+          </p>
+        </header>
+
+        @if (sampleSheet) {
+          <div class="tpl-preview-grid">
+            @for (tpl of templatePreviews; track tpl.mode) {
+              <figure class="tpl-preview">
+                <div class="tpl-preview-frame">
+                  <div class="tpl-preview-scaler">
+                    <app-sheet-layout [sheet]="sampleSheet" [decoMode]="tpl.mode" />
+                  </div>
+                </div>
+                <figcaption>
+                  <strong>{{ tpl.name }}</strong>
+                  <span class="tpl-mode-tag">mode <code>{{ tpl.mode }}</code></span>
+                  <span class="tpl-mood">{{ tpl.blurb }}</span>
+                </figcaption>
+              </figure>
+            }
+          </div>
+        } @else {
+          <p class="tpl-preview-empty">Catalogue P1/math/additions/dinos non chargé — preview indisponible.</p>
+        }
+      </section>
+
       <footer class="page-footer">
         <p>Source : <code>docs/formats-exercices.md</code></p>
       </footer>
@@ -558,6 +886,36 @@ interface DemoVariant<T> {
 })
 export class FormatsDemoComponent {
   readonly funTheme: FunTheme = 'dinosaurs';
+
+  // ─── Vraie fiche d'exemple pour les previews de templates ─────
+  // Génère une fiche P1/math/additions/dinos depuis le catalogue réel
+  // pour montrer chaque deco mode appliqué à du contenu authentique.
+  private catalog = inject(CatalogService);
+  readonly sampleSheet: Sheet | null = this.generateSample();
+
+  readonly templatePreviews: TemplatePreview[] = [
+    { mode: 'banner',  name: 'Festival', blurb: 'Wow visuel en haut, fond doux. Idéal couverture / 1ʳᵉ page.' },
+    { mode: 'stamps',  name: 'Stamps',   blurb: 'Mode actuel par défaut. Signature visuelle légère par exo.' },
+    { mode: 'split',   name: 'Split',    blurb: 'Une illus par exo, alignée avec le texte. Densité forte.' },
+    { mode: 'margins', name: 'Margins',  blurb: 'Cahier d\'écolier illustré, exos respirent au centre.' },
+    { mode: 'footer',  name: 'Sandwich', blurb: 'Stamps repositionnés en bas-droit de chaque exo.' },
+    { mode: 'rich',    name: 'Rich',     blurb: 'Margins + illus par exo combinés. Le plus dense.' },
+    { mode: 'custom',  name: 'Délicat',  blurb: 'Mascotte top-droit + uniquement les petites images en marge. Sans panorama ni gros landscapes.' },
+  ];
+
+  private generateSample(): Sheet | null {
+    try {
+      return this.catalog.generate({
+        childName: 'Emma',
+        level: 'P1',
+        subject: 'math',
+        theme: 'additions',
+        funTheme: 'dinosaurs',
+      });
+    } catch {
+      return null;
+    }
+  }
 
   // ─── text-blank variants ─────────────────────────────────────
   readonly textBlankVariants: DemoVariant<TextBlankExercise>[] = [

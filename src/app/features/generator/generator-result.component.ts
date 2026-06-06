@@ -3,8 +3,8 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { SheetLayoutComponent } from './sheet-layout/sheet-layout.component';
 import { CatalogService } from '../../core/services/catalog.service';
 
-type DecoMode = 'stamps' | 'banner' | 'margins' | 'split' | 'footer' | 'rich';
-const DECO_MODES: DecoMode[] = ['stamps', 'banner', 'margins', 'split', 'footer', 'rich'];
+type DecoMode = 'stamps' | 'banner' | 'margins' | 'split' | 'footer' | 'rich' | 'custom';
+const DECO_MODES: DecoMode[] = ['stamps', 'banner', 'margins', 'split', 'footer', 'rich', 'custom'];
 const DECO_LABELS: Record<DecoMode, string> = {
   stamps: 'Stamps',
   banner: 'Banner',
@@ -12,6 +12,7 @@ const DECO_LABELS: Record<DecoMode, string> = {
   split: 'Split',
   footer: 'Footer',
   rich: 'Rich (margins + big chars side)',
+  custom: 'Custom (mascotte + petites marges seulement)',
 };
 
 @Component({

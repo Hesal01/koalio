@@ -22,9 +22,10 @@ import { ImageAdditionExerciseComponent } from './image-addition-exercise.compon
     <div class="sheet sheet-{{ sheet.funTheme }} deco-{{ decoMode }}" id="sheet-pdf"
          [style.--vertical-bg]="verticalBg">
       <!-- Décorations en marges (visibles en modes 'margins' et 'rich').
-           Cycle sur les 'small' du thème courant (manifest data-driven). -->
+           Mix de squares (mr-pos-0/2/3) et landscapes (mr-pos-1/4) selon la
+           position du slot (cf. layout SCSS). -->
       <div class="sheet-margins-decos" aria-hidden="true">
-        @for (deco of smallDecos; track deco.name; let i = $index) {
+        @for (deco of marginDecos; track $index; let i = $index) {
           <img [src]="decoSrc(deco)" class="margin-deco mr-pos-{{ i }}" alt="" />
         }
       </div>
@@ -37,16 +38,21 @@ import { ImageAdditionExerciseComponent } from './image-addition-exercise.compon
         }
       </div>
 
+      <!-- Bandeau panorama plein-largeur (mode banner uniquement). Posé
+           AVANT le header pour qu'il s'étale d'un bord à l'autre de la fiche. -->
+      <div class="sheet-banner-strip" aria-hidden="true"></div>
+
       <div class="sheet-header">
         <div class="sheet-header-left">
           <span class="sheet-logo">🐨 Koalio</span>
         </div>
         <div class="sheet-header-right">
-          <h2 class="sheet-title">Fiche de {{ sheet.childName }}</h2>
-          <div class="sheet-meta">
-            <span class="meta-badge level">{{ sheet.level }}</span>
-            <span class="meta-badge subject">{{ subjectLabel }}</span>
-            <span class="meta-badge theme">{{ themeLabel }}</span>
+          <div class="sheet-eyebrow">
+            <span>{{ sheet.level }}</span>
+            <span class="sep">·</span>
+            <span>{{ subjectLabel }}</span>
+            <span class="sep">·</span>
+            <span>{{ themeLabel }}</span>
           </div>
         </div>
         <span class="theme-mascot">
@@ -59,6 +65,23 @@ import { ImageAdditionExerciseComponent } from './image-addition-exercise.compon
               (error)="mascotFailed.set(true)"
             />
           }
+        </span>
+      </div>
+
+      <!-- Strip d'identification Nom / Prénom / Date — pleine largeur sous
+           le header, façon vraie fiche imprimable. Présente dans tous les modes. -->
+      <div class="sheet-id-row">
+        <span class="sheet-field">
+          <span class="sheet-field-label">Nom :</span>
+          <span class="sheet-field-value sheet-field-blank"></span>
+        </span>
+        <span class="sheet-field">
+          <span class="sheet-field-label">Prénom :</span>
+          <span class="sheet-field-value">{{ sheet.childName }}</span>
+        </span>
+        <span class="sheet-field">
+          <span class="sheet-field-label">Date :</span>
+          <span class="sheet-field-value">{{ sheet.createdAt | date:'dd/MM/yyyy' }}</span>
         </span>
       </div>
 
@@ -119,7 +142,7 @@ export class SheetLayoutComponent {
   @Input({ required: true }) sheet!: Sheet;
   @Input() showAnswers = false;
   /** Mode de disposition des illustrations sur la fiche. Toggle en preview, persisté via ?deco= */
-  @Input() decoMode: 'stamps' | 'banner' | 'margins' | 'split' | 'footer' | 'rich' = 'stamps';
+  @Input() decoMode: 'stamps' | 'banner' | 'margins' | 'split' | 'footer' | 'rich' | 'custom' = 'stamps';
 
   private decoCatalog = inject(DecorationCatalogService);
 
@@ -127,9 +150,35 @@ export class SheetLayoutComponent {
   readonly mascotFailed = signal(false);
 
   // ─── Décorations data-driven (cf. decoration.model.ts) ──────────
-  /** 'small' decos pour le mode margins / rich (scattered en marges). */
-  get smallDecos(): Decoration[] {
-    return this.decoCatalog.bySize(this.sheet.funTheme, 'small');
+  /**
+   * 5 slots de marges :
+   * - modes `margins` / `rich` : mix squares (pos-0/2/3) + landscapes (pos-1/4)
+   *   pour exploiter les 2 ratios différents des slots SCSS.
+   * - mode `custom` : que des squares partout (l'utilisateur trouve les
+   *   landscapes type volcan trop "lourds" en marge — on garde le délicat).
+   */
+  get marginDecos(): Decoration[] {
+    const squares = this.decoCatalog.bySize(this.sheet.funTheme, 'square');
+    if (this.decoMode === 'custom') {
+      // Mode délicat : 4 emplacements le long des marges latérales, remplis
+      // avec des illustrations DISTINCTES (jamais deux fois la même). Créatures
+      // volantes en priorité (dragonfly, pterodactyl), puis les autres squares
+      // les plus fins en complément. Si on ajoute des assets volants au
+      // catalogue, ils prendront naturellement les premiers slots.
+      const flyers = squares.filter(d =>
+        d.name === 'dragonfly' || d.name === 'pterodactyl',
+      );
+      const others = squares.filter(d => !flyers.includes(d));
+      return [...flyers, ...others].slice(0, 4);
+    }
+    const landscapes = this.decoCatalog.bySize(this.sheet.funTheme, 'landscape');
+    return [
+      squares[0],
+      landscapes[0],
+      squares[1],
+      squares[2],
+      landscapes[1],
+    ].filter((d): d is Decoration => !!d);
   }
 
   /**
@@ -145,26 +194,50 @@ export class SheetLayoutComponent {
     return footprint ? Array(10).fill(footprint) : [];
   }
 
-  /** 4 premiers 'big' chars pour la scène du mode banner. */
+  /**
+   * Mode banner — deux stratégies de rendu, exclusives :
+   *
+   * 1. Si le thème a un asset `banner` (panorama 3:1 avec chars intégrés),
+   *    on l'utilise tel quel comme background de `.sheet-banner` et on ne
+   *    superpose rien — le panorama EST le banner.
+   * 2. Sinon, on compose un diorama de 4 figures : 3 grounds (portrait ou
+   *    landscape) + 1 flying (square).
+   *
+   * Ce getter retourne le diorama du cas 2, ou [] dans le cas 1.
+   */
   get bannerScene(): Decoration[] {
-    return this.decoCatalog.bySize(this.sheet.funTheme, 'big').slice(0, 4);
+    const hasPanorama = this.decoCatalog.bySize(this.sheet.funTheme, 'banner').length > 0;
+    if (hasPanorama) return [];
+
+    const grounds = [
+      ...this.decoCatalog.bySize(this.sheet.funTheme, 'portrait'),
+      ...this.decoCatalog.bySize(this.sheet.funTheme, 'landscape'),
+    ].slice(0, 3);
+    const flying = this.decoCatalog.bySize(this.sheet.funTheme, 'square').slice(0, 1);
+    return [...grounds, ...flying];
   }
 
-  /** Background-image (`url(...)`) du 'vertical' asset → side-illu narrow. */
+  /** Background-image (`url(...)`) de l'asset `tall` → side-illu narrow (decompose). */
   get verticalBg(): string {
-    const v = this.decoCatalog.vertical(this.sheet.funTheme);
+    const v = this.decoCatalog.tall(this.sheet.funTheme);
     return v ? this.decoCatalog.bgUrl(v) : '';
   }
 
-  /** Cycle sur les 'big' chars pour le mode rich (par index d'exo). */
+  /** Cycle sur les `landscape` pour le mode rich (par index d'exo). */
   bigDecoBgForIndex(i: number): string {
-    const bigs = this.decoCatalog.bySize(this.sheet.funTheme, 'big');
-    return bigs.length === 0 ? '' : this.decoCatalog.bgUrl(bigs[i % bigs.length]);
+    const ls = this.decoCatalog.bySize(this.sheet.funTheme, 'landscape');
+    return ls.length === 0 ? '' : this.decoCatalog.bgUrl(ls[i % ls.length]);
   }
 
-  /** Cycle sur tous les non-vertical pour le mode split (par index d'exo). */
+  /**
+   * Cycle pour le mode split : tous formats sauf `tall`, `banner` et `silhouette`
+   * (réservés à leurs zones dédiées). Donne du portrait / landscape / square en
+   * alternance par index d'exo.
+   */
   splitDecoBgForIndex(i: number): string {
-    const all = this.decoCatalog.byTheme(this.sheet.funTheme).filter(d => d.size !== 'vertical');
+    const all = this.decoCatalog
+      .byTheme(this.sheet.funTheme)
+      .filter(d => d.size !== 'tall' && d.size !== 'banner' && d.size !== 'silhouette');
     return all.length === 0 ? '' : this.decoCatalog.bgUrl(all[i % all.length]);
   }
 
