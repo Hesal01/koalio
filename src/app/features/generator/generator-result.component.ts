@@ -77,7 +77,9 @@ export class GeneratorResultComponent {
   readonly sheet = computed(() => this.catalog.currentSheet());
   readonly modes = DECO_MODES;
   readonly labels = DECO_LABELS;
-  readonly currentMode = signal<DecoMode>('stamps');
+  // Habillage par défaut de la vraie génération : « Délicat » (custom), le
+  // template retenu (mascotte + petites créatures distinctes en marge).
+  readonly currentMode = signal<DecoMode>('custom');
 
   showAnswers = false;
 

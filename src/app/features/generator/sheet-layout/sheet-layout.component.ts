@@ -314,16 +314,20 @@ export class SheetLayoutComponent {
   get marginDecos(): Decoration[] {
     const squares = this.decoCatalog.bySize(this.sheet.funTheme, 'square');
     if (this.decoMode === 'custom') {
-      // Mode délicat : 4 emplacements le long des marges latérales, remplis
-      // avec des illustrations DISTINCTES (jamais deux fois la même). Créatures
-      // volantes en priorité (dragonfly, pterodactyl), puis les autres squares
-      // les plus fins en complément. Si on ajoute des assets volants au
-      // catalogue, ils prendront naturellement les premiers slots.
+      // Mode délicat : 3 emplacements en marge HAUTE (mr-pos-0/1/2), bas laissé
+      // vide pour rester aéré. Illustrations DISTINCTES (jamais deux fois la
+      // même) : créatures volantes en priorité (dragonfly, pterodactyl), puis
+      // les autres petits squares en complément.
       const flyers = squares.filter(d =>
         d.name === 'dragonfly' || d.name === 'pterodactyl',
       );
-      const others = squares.filter(d => !flyers.includes(d));
-      return [...flyers, ...others].slice(0, 4);
+      // On exclut 'footprint' : c'est déjà la couche ambient (trail au sol) et
+      // une empreinte qui "flotte" en marge n'a pas de sens. On complète avec
+      // les autres petits squares (ammonite, plant).
+      const others = squares.filter(
+        d => !flyers.includes(d) && d.name !== 'footprint',
+      );
+      return [...flyers, ...others].slice(0, 3);
     }
     const landscapes = this.decoCatalog.bySize(this.sheet.funTheme, 'landscape');
     return [
