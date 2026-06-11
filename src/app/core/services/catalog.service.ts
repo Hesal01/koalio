@@ -1,6 +1,9 @@
 import { Injectable, signal } from '@angular/core';
 import {
   CircleExercise,
+  CountItemsExercise,
+  CountItemsExerciseTemplate,
+  CountQuestion,
   DrawItemsExercise,
   Exercise,
   ExerciseTemplate,
@@ -8,6 +11,7 @@ import {
   ImageAdditionExercise,
   ImageAdditionExerciseTemplate,
   ImageAdditionQuestion,
+  isCountItemsGenerator,
   isGeneratorBlock,
   isImageAdditionGenerator,
   Level,
@@ -19,7 +23,11 @@ import {
   TextBlankQuestion,
   Theme,
 } from '../models/exercise.model';
-import { expandGenerator, expandImageAdditionGenerator } from './question-generators';
+import {
+  expandCountItemsGenerator,
+  expandGenerator,
+  expandImageAdditionGenerator,
+} from './question-generators';
 import variant1 from '../../../assets/catalog/P1/math/additions/dinosaurs/variant-1.json';
 
 // Catalogue statique. Pour ajouter une fiche, drop un nouveau JSON
@@ -82,7 +90,29 @@ export class CatalogService {
     if (ex.format === 'circle') return this.personalizeCircle(ex, childName);
     if (ex.format === 'draw-items') return this.personalizeDrawItems(ex, childName);
     if (ex.format === 'image-addition') return this.personalizeImageAddition(ex, childName);
+    if (ex.format === 'count-items') return this.personalizeCountItems(ex, childName);
     return ex as unknown as Exercise;
+  }
+
+  private personalizeCountItems(
+    template: CountItemsExerciseTemplate,
+    childName: string,
+  ): CountItemsExercise {
+    const flatQuestions: CountQuestion[] = [];
+    for (const item of template.questions) {
+      if (isCountItemsGenerator(item)) {
+        flatQuestions.push(...expandCountItemsGenerator(item, template.variant));
+      } else {
+        flatQuestions.push(item);
+      }
+    }
+    return {
+      format: 'count-items',
+      variant: template.variant,
+      instruction: this.replaceTokens(template.instruction, childName),
+      example: template.example,
+      questions: flatQuestions,
+    };
   }
 
   private personalizeImageAddition(

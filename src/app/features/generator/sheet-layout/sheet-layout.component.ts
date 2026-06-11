@@ -18,6 +18,7 @@ import { TextBlankExerciseComponent } from './text-blank-exercise.component';
 import { CircleExerciseComponent } from './circle-exercise.component';
 import { DrawItemsExerciseComponent } from './draw-items-exercise.component';
 import { ImageAdditionExerciseComponent } from './image-addition-exercise.component';
+import { CountItemsExerciseComponent } from './count-items-exercise.component';
 
 @Component({
   selector: 'app-sheet-layout',
@@ -29,6 +30,7 @@ import { ImageAdditionExerciseComponent } from './image-addition-exercise.compon
     CircleExerciseComponent,
     DrawItemsExerciseComponent,
     ImageAdditionExerciseComponent,
+    CountItemsExerciseComponent,
   ],
   template: `
     @if (paginate) {
@@ -191,6 +193,13 @@ import { ImageAdditionExerciseComponent } from './image-addition-exercise.compon
           }
           @case ('image-addition') {
             <app-image-addition-exercise
+              [exercise]="exercise"
+              [funTheme]="sheet.funTheme"
+              [showAnswers]="showAnswers"
+            />
+          }
+          @case ('count-items') {
+            <app-count-items-exercise
               [exercise]="exercise"
               [funTheme]="sheet.funTheme"
               [showAnswers]="showAnswers"

@@ -199,18 +199,68 @@ export interface ImageAdditionExercise {
   questions: ImageAdditionQuestion[];
 }
 
+// ─── Format count-items ──────────────────────────────────────
+export type CountItemsVariant = 'simple' | 'pre-grouped' | 'compare';
+
+/** Un set d'items à compter : `count` items affichés = la réponse à écrire. */
+export interface CountSet {
+  count: number;
+  /** Affichage en paquets de N (typiquement 5) — pédagogie base-10 (pre-grouped). */
+  groupBy?: number;
+}
+
+/** Une question count-items : 1 set (simple/pre-grouped) ou 2 (compare). */
+export interface CountQuestion {
+  sets: CountSet[];
+}
+
+/**
+ * Bloc générateur count-items : produit `count` questions à quantités
+ * aléatoires. Le variant (porté par l'exercice) décide du nombre de sets.
+ */
+export interface CountItemsGen {
+  generate: 'count-items';
+  count: number;
+  min?: number; // count min par set (défaut 4)
+  max?: number; // count max par set (défaut 12)
+}
+
+export type CountItemsItem = CountQuestion | CountItemsGen;
+
+export function isCountItemsGenerator(item: CountItemsItem): item is CountItemsGen {
+  return (item as CountItemsGen).generate !== undefined;
+}
+
+export interface CountItemsExerciseTemplate {
+  format: 'count-items';
+  variant: CountItemsVariant;
+  instruction: string;
+  example?: CountQuestion;
+  questions: CountItemsItem[];
+}
+
+export interface CountItemsExercise {
+  format: 'count-items';
+  variant: CountItemsVariant;
+  instruction: string;
+  example?: CountQuestion;
+  questions: CountQuestion[];
+}
+
 // ─── Discriminated union (s'élargira format par format) ──────
 // Templates et runtimes coïncident pour circle/draw-items (pas de générateurs).
 export type ExerciseTemplate =
   | TextBlankExerciseTemplate
   | CircleExercise
   | DrawItemsExercise
-  | ImageAdditionExerciseTemplate;
+  | ImageAdditionExerciseTemplate
+  | CountItemsExerciseTemplate;
 export type Exercise =
   | TextBlankExercise
   | CircleExercise
   | DrawItemsExercise
-  | ImageAdditionExercise;
+  | ImageAdditionExercise
+  | CountItemsExercise;
 
 // ─── Sheet (template = JSON catalogue, instance = post-perso) ─
 /**

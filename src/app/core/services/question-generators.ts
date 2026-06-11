@@ -1,6 +1,9 @@
 import {
   AdditionComputeGen,
   AdditionReverseGen,
+  CountItemsGen,
+  CountItemsVariant,
+  CountQuestion,
   DecomposeDuGen,
   ImageAdditionPairGen,
   ImageAdditionQuestion,
@@ -212,5 +215,41 @@ function genImageAdditionPair(g: ImageAdditionPairGen): ImageAdditionQuestion[] 
       return { left, right };
     },
     ({ left, right }) => `${left}+${right}`,
+  );
+}
+
+// ─── Dispatcher count-items ──────────────────────────────────
+/**
+ * Le variant (porté par l'exercice) décide de la forme : `compare` → 2 sets de
+ * quantités distinctes ; `simple` / `pre-grouped` → 1 set (paquets de 5 pour
+ * pre-grouped). La quantité affichée EST la réponse.
+ */
+export function expandCountItemsGenerator(
+  g: CountItemsGen,
+  variant: CountItemsVariant,
+): CountQuestion[] {
+  const min = g.min ?? 4;
+  const max = g.max ?? 12;
+
+  if (variant === 'compare') {
+    return pickUnique(
+      g.count,
+      () => {
+        const a = randomInt(min, max);
+        let b = randomInt(min, max);
+        while (b === a) b = randomInt(min, max); // distinct → un plus grand net
+        return { sets: [{ count: a }, { count: b }] };
+      },
+      q => q.sets.map(s => s.count).sort((x, y) => x - y).join('-'),
+    );
+  }
+
+  const groupBy = variant === 'pre-grouped' ? 5 : undefined;
+  return pickUnique(
+    g.count,
+    () => ({
+      sets: [groupBy ? { count: randomInt(min, max), groupBy } : { count: randomInt(min, max) }],
+    }),
+    q => String(q.sets[0].count),
   );
 }

@@ -1,0 +1,157 @@
+@use '../../../styles/variables' as *;
+
+:host {
+  display: block;
+}
+
+.instruction {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: $dark;
+  margin: 0 0 $spacing-md 0;
+}
+
+// ─── Items (œufs) — même rendu qu'image-addition ────────────────
+.ci-item-wrap {
+  display: inline-flex;
+  width: 30px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+    display: block;
+  }
+  .ci-emoji {
+    font-size: 1.25rem;
+    line-height: 1;
+  }
+}
+// petites rotations pour un effet "posé naturellement"
+.ci-items .ci-item-wrap:nth-child(odd) { transform: rotate(-6deg); }
+.ci-items .ci-item-wrap:nth-child(even) { transform: rotate(5deg); }
+
+.ci-letter {
+  font-family: $font-family-display;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: $dark-light;
+  font-style: italic;
+  flex-shrink: 0;
+}
+
+// ─── Lignes (simple / pre-grouped / compare) ────────────────────
+.ci-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ci-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  border: 1.5px solid $gray-medium;
+  border-radius: 8px;
+  background: $white;
+
+  &.example {
+    background: $menthe-light;
+    border-color: $menthe;
+    .ci-answer { color: $menthe-dark; }
+  }
+}
+
+.ci-items {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+
+  &.grouped { gap: 12px; } // air entre les paquets de 5
+}
+
+.ci-group {
+  display: flex;
+  gap: 4px;
+  padding: 4px 6px;
+  border: 1px dashed $gray-medium;
+  border-radius: 6px;
+}
+
+.ci-arrow {
+  color: $gray;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+// ─── Réponse : blanc à remplir / nombre en correction ───────────
+.ci-blank {
+  display: inline-block;
+  width: 46px;
+  border-bottom: 1.5px solid $dark;
+  height: 0;
+  flex-shrink: 0;
+}
+.ci-answer {
+  font-family: $font-family-display;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: $menthe;
+  min-width: 36px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+// ─── Compare : 2 sets côte à côte ───────────────────────────────
+.ci-compare .ci-pair {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  flex: 1;
+}
+.ci-set {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  padding: 6px;
+  border-radius: 8px;
+
+  .ci-items {
+    justify-content: center;
+    flex: none;
+  }
+
+  // set gagnant entouré en mode correction (réponse "le plus grand")
+  &.bigger {
+    outline: 2.5px solid $menthe;
+    outline-offset: 2px;
+  }
+}
+.ci-vs {
+  font-family: $font-family-display;
+  font-weight: 700;
+  color: $gray;
+  align-self: center;
+  flex-shrink: 0;
+}
+
+// ─── Print : forcer fonds + bordures ────────────────────────────
+@media print {
+  .ci-row,
+  .ci-row.example,
+  .ci-group,
+  .ci-set.bigger {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
